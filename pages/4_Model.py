@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 # Train Model
 st.title("Train Model")
 
@@ -11,7 +12,7 @@ problem_type = st.selectbox(
 )
 
 # choose algorithms
-if problem_type is 'regression':
+if problem_type == 'regression':
     algorithms = ['Linear Regression', 'Ridge Regression', 'Lasso Regression', 'SVM', 'Random Forest', 'XGBoost']
 else:
     algorithms = ['Logistic Regression', 'Naive Bayes', 'KNN', 'Random Forest', 'SVM']

@@ -1,20 +1,8 @@
 import streamlit as st
+from PIL import Image
 
-st.set_page_config(
-    page_title="Multipage App",
-    page_icon="👋",
-)
+st.title('Home Page')
 
-st.title("Main Page")
-st.sidebar.success("Select a page above.")
-
-if "my_input" not in st.session_state:  # we check if key is not already in a session_state
-    st.session_state["my_input"] = ""
-
-my_input = st.text_input("Input a text here", st.session_state["my_input"])
-submit = st.button("Submit")
-if submit:
-    st.session_state["my_input"] = my_input
-    st.write("You have entered: ", my_input)
-
-st.write("You can return to some specific step any time you want!")
+st.write('Build a Machine Learning model using SEMMA methodology.')
+st.image(Image.open('79b0e02b-20b7-4017-b56b-92cbd4993ba5.webp'))
+st.write('You can return to some specific step any time you want!')
