@@ -1,7 +1,7 @@
 import streamlit as st
-from src.Model.RegressionTrainer import RegressionTrainer
-from src.Model.ClassificationTrainer import ClassificationTrainer
-from src.Model.Models import regression_models, classification_models
+from src.model.RegressionTrainer import RegressionTrainer
+from src.model.ClassificationTrainer import ClassificationTrainer
+from src.model.Models import regression_models, classification_models
 from sklearn.model_selection import train_test_split
 
 
