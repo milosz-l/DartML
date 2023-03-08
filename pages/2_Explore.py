@@ -1,7 +1,7 @@
 import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
-from src.explore.df_visualizations import plot_corr_heatmap
+from src.explore.df_visualizations import plot_corr_heatmap, plot_pairplot
 import time
 
 # Transform Data
@@ -22,8 +22,13 @@ if 'df' in st.session_state:
     st.write(f'Showing the above plot took {end_time - start_time:.2f}s')
 
     # calculate pairplot if not done yet
-    # if 'pairplot_fig' not in st.session_state:
-    #     # st.session_state['pairplot_fig'] = plt.figure(figsize=(16, 16))
-    #     st.session_state['pairplot_fig'] = sns.pairplot(st.session_state['df'])
-    # st.write('Pairplot:')
-    # st.pyplot(st.session_state['pairplot_fig'])
+    start_time = time.time()
+    if 'pairplot_fig' not in st.session_state:
+        # st.session_state['pairplot_fig'] = sns.pairplot(st.session_state['df'])
+        st.session_state['pairplot_fig'] = plot_pairplot(st.session_state['df'])
+    st.write('Pairplot:')
+    st.pyplot(st.session_state['pairplot_fig'])
+    end_time = time.time()
+    st.write(f'Showing the above plot took {end_time - start_time:.2f}s')
+
+# TODO: add button that clears saved figs from st.session_state. Call it "Rebuild plots"

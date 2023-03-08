@@ -43,8 +43,16 @@ def plot_corr_heatmap(df):
     start_time = time.time()
     fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
     corr = df.corr(numeric_only=True)
-    # sns.heatmap(corr, cmap='coolwarm', annot=True)
     sns.heatmap(corr, square=True, cmap='RdYlGn', annot=True, fmt=".2f", linewidth=0.5)
     end_time = time.time()
     plt.title(f'Correlation Heatmap ({end_time - start_time:.2f} s)')
     return fig
+
+
+def plot_pairplot(df):
+    start_time = time.time()
+    # fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
+    g = sns.pairplot(df)
+    end_time = time.time()
+    g.fig.suptitle(f'Pairplot ({end_time - start_time:.2f} s)')
+    return g.fig
