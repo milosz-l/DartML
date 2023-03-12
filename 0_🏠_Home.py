@@ -1,6 +1,9 @@
 import streamlit as st
 from PIL import Image
 
+# page config
+st.set_page_config(page_title="MotiveML", page_icon="💡", layout="wide")
+
 st.title('Home Page')
 
 st.write('Build a Machine Learning model using SEMMA methodology.')
