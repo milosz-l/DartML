@@ -3,10 +3,17 @@ import pandas as pd
 from io import StringIO
 import matplotlib.pyplot as plt
 import seaborn as sns
+from src.views.sidebar import progress_sidebar
 
 
 # Upload Data
 st.title("Upload Data")
+
+# TODO: issue described in kanban board
+df_info = {}
+df_info['row_num'] = len(st.session_state['df'].index)
+df_info['col_num'] = len(st.session_state['df'].columns)
+progress_sidebar(df_info)
 
 # load uploaded file
 uploaded_file = st.file_uploader("Choose a CSV file", type='csv', accept_multiple_files=False)
