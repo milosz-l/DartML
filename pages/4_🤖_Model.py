@@ -63,5 +63,7 @@ if st.button('train'):
     #     st.write(model.__class__.__name__)
 
     st.write('## Scores')
+    max_score = max(scores_dict.values())
     for model_name, score in scores_dict.items():
-        st.write(f'{model_name}: {score}')
+        # st.write(f'{model_name}: {score}')
+        st.metric(model_name, score, score-max_score)
