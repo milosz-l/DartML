@@ -9,9 +9,21 @@ if 'df' in st.session_state:
     st.write('Uploaded DataFrame:')
     st.write(st.session_state.df)
 
+
     # ask for target column name
-    target_column_name = st.selectbox(
+    columns_list = st.session_state.df.columns.tolist()
+    if "target_column_name" in st.session_state:
+        if st.session_state.target_column_name in columns_list:
+            selectbox_default_index = columns_list.index(st.session_state.target_column_name)
+        else:
+            selectbox_default_index = 0
+        st.experimental_show(selectbox_default_index)
+    else:
+        selectbox_default_index = 0
+    st.session_state.target_column_name = st.selectbox(
         'Please select target column',
-        st.session_state.df.columns.tolist()
-    )   # TODO: add default if any column had been chosen before
-    st.session_state.target_column_name = target_column_name
+        columns_list,
+        index=selectbox_default_index
+    )
+
+    st.write(st.session_state)

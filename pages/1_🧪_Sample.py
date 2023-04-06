@@ -1,8 +1,5 @@
 import streamlit as st
 import pandas as pd
-from io import StringIO
-import matplotlib.pyplot as plt
-import seaborn as sns
 from src.views.sidebar import progress_sidebar
 
 
@@ -27,3 +24,5 @@ if 'df' in st.session_state:
     df_info['row_num'] = len(st.session_state.df.index)
     df_info['col_num'] = len(st.session_state.df.columns)
     progress_sidebar(df_info)
+
+st.write(st.session_state)
