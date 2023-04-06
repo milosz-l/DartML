@@ -28,8 +28,8 @@ chosen_models_names = st.multiselect(
 if st.button('train'):
 
     # prepare data
-    df = st.session_state['df']
-    target_column_name = st.session_state['target_column_name']
+    df = st.session_state.df
+    target_column_name = st.session_state.target_column_name
     y = df[target_column_name]
     X = df.drop(columns=target_column_name)
     X = X.select_dtypes(include='number')  # take only numerical columns
