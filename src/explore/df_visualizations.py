@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import time
+import streamlit as st
+from src.utils.timer import add_timer_note
+
 
 FIG_WIDTH = 16
 FIG_HEIGHT = 16
@@ -38,7 +41,6 @@ def plot_scatterplot(df, x_column_name, y_column_name):
     plt.ylabel(y_column_name)
     return fig
 
-
 def plot_corr_heatmap(df):
     start_time = time.time()
     fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
@@ -47,7 +49,6 @@ def plot_corr_heatmap(df):
     end_time = time.time()
     plt.title(f'Correlation Heatmap ({end_time - start_time:.2f} s)')
     return fig
-
 
 def plot_pairplot(df):
     start_time = time.time()

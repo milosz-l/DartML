@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 
 # page config
-st.set_page_config(page_title="MotiveML", page_icon="💡", layout="wide")
+st.set_page_config(page_title="AutoML", page_icon="💡", layout="wide")
 
 st.title('Home Page')
 

@@ -1,6 +1,4 @@
 import streamlit as st
-import seaborn as sns
-import matplotlib.pyplot as plt
 from src.explore.df_visualizations import plot_corr_heatmap, plot_pairplot
 import time
 
