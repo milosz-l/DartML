@@ -4,6 +4,8 @@ import seaborn as sns
 import time
 import streamlit as st
 from src.utils.timer import add_timer_note
+import numpy as np
+from io import BytesIO
 
 
 FIG_WIDTH = 16
@@ -48,12 +50,31 @@ def plot_corr_heatmap(df):
     sns.heatmap(corr, square=True, cmap='RdYlGn', annot=True, fmt=".2f", linewidth=0.5)
     end_time = time.time()
     plt.title(f'Correlation Heatmap ({end_time - start_time:.2f} s)')
+
+    # i = StringIO()
+    # fig.savefig(i, format="svg")
+    # fig.savefig("testfig.svg")
     return fig
+    # return i.getvalue()
 
 def plot_pairplot(df):
     start_time = time.time()
     # fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
     g = sns.pairplot(df)
+    plt.savefig("pairplottstfast.png")
     end_time = time.time()
     g.fig.suptitle(f'Pairplot ({end_time - start_time:.2f} s)')
+    g.fig.savefig("pairplottest.svg", format="svg")
+    
+    # i = StringIO()
+    # g.fig.savefig(i, format="svg")
     return g.fig
+    # return i.getvalue()
+
+def plot_to_ndarray(fig):
+    # data = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
+    # data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+    i = BytesIO()
+    fig.savefig(i, format="png")
+    data = i.getvalue()
+    return data
