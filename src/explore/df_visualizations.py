@@ -66,7 +66,7 @@ def plot_pairplot(df):
 
 
 def plot_to_ndarray(fig):
-    i = BytesIO()
-    fig.savefig(i, format="png")
-    data = i.getvalue()
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    data = buf.getvalue()
     return data
