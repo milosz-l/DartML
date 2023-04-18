@@ -14,7 +14,7 @@ class RegressionTrainer(BaseEstimator, RegressorMixin):
         self.model.fit(X_train, y_train)
         y_pred = self.model.predict(X_test)
         mse = mean_squared_error(y_test, y_pred)
-        print(f'Mean Squared Error: {mse}')
+        print(f"Mean Squared Error: {mse}")
         return self
 
     def predict(self, X):

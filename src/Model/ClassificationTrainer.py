@@ -14,7 +14,7 @@ class ClassificationTrainer(BaseEstimator, ClassifierMixin):
         self.model.fit(X_train, y_train)
         y_pred = self.model.predict(X_test)
         acc = accuracy_score(y_test, y_pred)
-        print(f'Accuracy: {acc}')
+        print(f"Accuracy: {acc}")
         return self
 
     def predict(self, X):

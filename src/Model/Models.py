@@ -16,7 +16,7 @@ regression_models = {
     "Ridge Regression": Ridge(),
     "Lasso Regression": Lasso(),
     "Linear SVC (Support Vector Regressor)": LinearSVR(),
-    "Random Forest Regressor": RandomForestRegressor()
+    "Random Forest Regressor": RandomForestRegressor(),
 }
 
 classification_models = {
@@ -24,5 +24,5 @@ classification_models = {
     "Naive Bayes Classifier": GaussianNB(),
     "KNN": KNeighborsClassifier(),
     "Random Forest Classifier": RandomForestClassifier(),
-    "SVC (Support Vector Classifier)": SVC()
+    "SVC (Support Vector Classifier)": SVC(),
 }
