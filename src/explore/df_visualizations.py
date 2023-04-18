@@ -17,9 +17,9 @@ def plot_histogram(df, column_name):
     fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
     plt.hist(df[column_name])
     end_time = time.time()
-    plt.title(f'Histogram of {column_name} ({end_time - start_time:.2f} s)')
+    plt.title(f"Histogram of {column_name} ({end_time - start_time:.2f} s)")
     plt.xlabel(column_name)
-    plt.ylabel('Frequency')
+    plt.ylabel("Frequency")
     return fig
 
 
@@ -28,7 +28,7 @@ def plot_boxplot(df, column_name):
     fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
     plt.boxplot(df[column_name])
     end_time = time.time()
-    plt.title(f'Boxplot of {column_name} ({end_time - start_time:.2f} s)')
+    plt.title(f"Boxplot of {column_name} ({end_time - start_time:.2f} s)")
     plt.ylabel(column_name)
     return fig
 
@@ -38,42 +38,34 @@ def plot_scatterplot(df, x_column_name, y_column_name):
     fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
     plt.scatter(df[x_column_name], df[y_column_name])
     end_time = time.time()
-    plt.title(f'Scatterplot of {x_column_name} vs. {y_column_name} ({end_time - start_time:.2f} s)')
+    plt.title(f"Scatterplot of {x_column_name} vs. {y_column_name} ({end_time - start_time:.2f} s)")
     plt.xlabel(x_column_name)
     plt.ylabel(y_column_name)
     return fig
+
 
 def plot_corr_heatmap(df):
     start_time = time.time()
     fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
     corr = df.corr(numeric_only=True)
-    sns.heatmap(corr, square=True, cmap='RdYlGn', annot=True, fmt=".2f", linewidth=0.5)
+    sns.heatmap(corr, square=True, cmap="RdYlGn", annot=True, fmt=".2f", linewidth=0.5)
     end_time = time.time()
-    plt.title(f'Correlation Heatmap ({end_time - start_time:.2f} s)')
+    plt.title(f"Correlation Heatmap ({end_time - start_time:.2f} s)")
 
-    # i = StringIO()
-    # fig.savefig(i, format="svg")
-    # fig.savefig("testfig.svg")
     return fig
-    # return i.getvalue()
+
 
 def plot_pairplot(df):
     start_time = time.time()
     # fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
     g = sns.pairplot(df)
-    plt.savefig("pairplottstfast.png")
     end_time = time.time()
-    g.fig.suptitle(f'Pairplot ({end_time - start_time:.2f} s)')
-    g.fig.savefig("pairplottest.svg", format="svg")
-    
-    # i = StringIO()
-    # g.fig.savefig(i, format="svg")
+    g.fig.suptitle(f"Pairplot ({end_time - start_time:.2f} s)")
+
     return g.fig
-    # return i.getvalue()
+
 
 def plot_to_ndarray(fig):
-    # data = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
-    # data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
     i = BytesIO()
     fig.savefig(i, format="png")
     data = i.getvalue()
