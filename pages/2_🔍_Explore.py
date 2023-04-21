@@ -6,7 +6,9 @@ import time
 st.title("Explore Data")
 
 
-if "df" in st.session_state:
+if "df" not in st.session_state:
+    st.write("You need to upload some data first! Please go to Sample tab.")
+else:
     # show uploaded df
     st.write("Uploaded DataFrame:")
     st.write(st.session_state.df)

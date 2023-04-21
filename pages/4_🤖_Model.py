@@ -8,56 +8,62 @@ from sklearn.model_selection import train_test_split
 # Train Model
 st.title("Train Model")
 
-# choose type of problem
-# problem_type = st.sidebar.selectbox(
-problem_type = st.selectbox("Choose problem type", ("regression", "classification"))
-
-# choose models
-if problem_type == "regression":
-    models_names = list(regression_models.keys())
+if "target_column_name" not in st.session_state:
+    st.write("You need to choose a target columnt first! Please go to Modify tab.")
 else:
-    models_names = list(classification_models.keys())
+    # print selected target column
+    st.write(f"Selected target column = {st.session_state.target_column_name}")
 
-chosen_models_names = st.multiselect("Choose models", models_names, models_names[-4:-2])
+    # choose type of problem
+    # problem_type = st.sidebar.selectbox(
+    problem_type = st.selectbox("Choose problem type", ("regression", "classification"))
 
-if st.button("train"):
-    # prepare data
-    df = st.session_state.df
-    target_column_name = st.session_state.target_column_name
-    y = df[target_column_name]
-    X = df.drop(columns=target_column_name)
-    X = X.select_dtypes(include="number")  # take only numerical columns
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-    # train models
-    scores_dict = {}
+    # choose models
     if problem_type == "regression":
-        models_dict = regression_models
-        models = [models_dict[model_name] for model_name in chosen_models_names]
-        for model in models:
-            trainer = RegressionTrainer(model)
-            trainer.fit(X_train, y_train)
-            scores_dict[model.__class__.__name__] = trainer.score(X_test, y_test)
+        models_names = list(regression_models.keys())
     else:
-        models_dict = classification_models
-        models = [models_dict[model_name] for model_name in chosen_models_names]
-        for model in models:
-            trainer = ClassificationTrainer(model)
-            trainer.fit(X_train, y_train)
-            scores_dict[model.__class__.__name__] = trainer.score(X_test, y_test)
+        models_names = list(classification_models.keys())
 
-    # print results
-    st.write("# Training results")
-    st.write("## Chosen problem type")
-    st.write(f"`{problem_type}`")
-    st.write("## Chosen models")
-    for chosen_model in chosen_models_names:
-        st.write(f"`{chosen_model}`")
-    # for model in models:
-    #     st.write(model.__class__.__name__)
+    chosen_models_names = st.multiselect("Choose models", models_names, models_names[-4:-2])
 
-    st.write("## Scores")
-    max_score = max(scores_dict.values())
-    for model_name, score in scores_dict.items():
-        # st.write(f'{model_name}: {score}')
-        st.metric(model_name, score, score - max_score)
+    if st.button("train"):
+        # prepare data
+        df = st.session_state.df
+        target_column_name = st.session_state.target_column_name
+        y = df[target_column_name]
+        X = df.drop(columns=target_column_name)
+        X = X.select_dtypes(include="number")  # take only numerical columns
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+        # train models
+        scores_dict = {}
+        if problem_type == "regression":
+            models_dict = regression_models
+            models = [models_dict[model_name] for model_name in chosen_models_names]
+            for model in models:
+                trainer = RegressionTrainer(model)
+                trainer.fit(X_train, y_train)
+                scores_dict[model.__class__.__name__] = trainer.score(X_test, y_test)
+        else:
+            models_dict = classification_models
+            models = [models_dict[model_name] for model_name in chosen_models_names]
+            for model in models:
+                trainer = ClassificationTrainer(model)
+                trainer.fit(X_train, y_train)
+                scores_dict[model.__class__.__name__] = trainer.score(X_test, y_test)
+
+        # print results
+        st.write("# Training results")
+        st.write("## Chosen problem type")
+        st.write(f"`{problem_type}`")
+        st.write("## Chosen models")
+        for chosen_model in chosen_models_names:
+            st.write(f"`{chosen_model}`")
+        # for model in models:
+        #     st.write(model.__class__.__name__)
+
+        st.write("## Scores")
+        max_score = max(scores_dict.values())
+        for model_name, score in scores_dict.items():
+            # st.write(f'{model_name}: {score}')
+            st.metric(model_name, score, score - max_score)
