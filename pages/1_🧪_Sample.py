@@ -24,5 +24,3 @@ if "df" in st.session_state:
     df_info["row_num"] = len(st.session_state.df.index)
     df_info["col_num"] = len(st.session_state.df.columns)
     progress_sidebar(df_info)
-
-st.write(st.session_state)

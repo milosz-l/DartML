@@ -20,5 +20,3 @@ if "df" in st.session_state:
     else:
         selectbox_default_index = 0
     st.session_state.target_column_name = st.selectbox("Please select target column", columns_list, index=selectbox_default_index)
-
-    st.write(st.session_state)
