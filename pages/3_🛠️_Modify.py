@@ -16,7 +16,7 @@ if "df" in st.session_state:
             selectbox_default_index = columns_list.index(st.session_state.target_column_name)
         else:
             selectbox_default_index = 0
-        st.experimental_show(selectbox_default_index)
+        # st.experimental_show(selectbox_default_index)
     else:
         selectbox_default_index = 0
     st.session_state.target_column_name = st.selectbox("Please select target column", columns_list, index=selectbox_default_index)
