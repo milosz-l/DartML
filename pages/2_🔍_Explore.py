@@ -5,10 +5,19 @@ import time
 # Transform Data
 st.title("Explore Data")
 
+
 if "df" in st.session_state:
     # show uploaded df
     st.write("Uploaded DataFrame:")
     st.write(st.session_state.df)
+
+    # regenerate plots button
+    st.write("You've just uploaded a new dataframe and the plots didn't change? Then click the following button:")
+    if st.button("Regenerate plots"):
+        if "heatmap" in st.session_state:
+            del st.session_state.heatmap
+        if "pairplot" in st.session_state:
+            del st.session_state.pairplot
 
     # calculate correlation heatmap if not done yet
     start_time = time.time()
