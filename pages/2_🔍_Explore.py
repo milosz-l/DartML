@@ -1,5 +1,5 @@
 import streamlit as st
-from src.explore.df_visualizations import plot_corr_heatmap, plot_pairplot, fig_to_buf
+from src.explore.PlotBuilder import PlotBuilder
 import time
 
 # Transform Data
@@ -25,8 +25,8 @@ else:
     start_time = time.time()
     if "heatmap" not in st.session_state:
         with st.spinner("Generating heatmap"):
-            st.session_state.heatmap = fig_to_buf(plot_corr_heatmap(st.session_state.df))
-            # st.session_state.heatmap = plot_corr_heatmap(st.session_state.df)
+            # st.session_state.heatmap = fig_to_buf(plot_corr_heatmap(st.session_state.df))
+            st.session_state.heatmap = PlotBuilder(st.session_state.df).get_corr_heatmap()
     st.write("Correlation heatmap:")
     st.image(st.session_state.heatmap, channels="RGB")
     end_time = time.time()
@@ -38,9 +38,8 @@ else:
     start_time = time.time()
     if "pairplot" not in st.session_state:
         with st.spinner("Generating pairplot"):
-            # st.session_state.pairplot = sns.pairplot(st.session_state.df)
-            st.session_state.pairplot = fig_to_buf(plot_pairplot(st.session_state.df))
-            # st.session_state.pairplot = plot_pairplot(st.session_state.df)
+            # st.session_state.pairplot = fig_to_buf(plot_pairplot(st.session_state.df))
+            st.session_state.pairplot = PlotBuilder(st.session_state.df).get_pairplot()
     st.write("Pairplot:")
     st.image(st.session_state.pairplot, channels="RGB")
     end_time = time.time()
