@@ -32,6 +32,8 @@ else:
     end_time = time.time()
     st.write(f"Showing the above plot took {end_time - start_time:.2f}s")
 
+    st.divider()
+
     # calculate pairplot if not done yet
     start_time = time.time()
     if "pairplot" not in st.session_state:
