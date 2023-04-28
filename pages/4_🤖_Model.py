@@ -52,17 +52,6 @@ else:
                 trainer.fit(X_train, y_train)
                 scores_dict[model.__class__.__name__] = trainer.score(X_test, y_test)
 
-        # # print results
-        # st.write("# Training results")
-        # st.write("## Chosen problem type")
-        # st.write(f"`{problem_type}`")
-        # st.write("## Chosen models")
-        # for chosen_model in chosen_models_names:
-        #     st.write(f"`{chosen_model}`")
-
-        # for model in models:
-        #     st.write(model.__class__.__name__)
-
         st.write("## Scores")  # TODO: change to automatic
         max_score = max(scores_dict.values())
         for model_name, score in scores_dict.items():

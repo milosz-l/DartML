@@ -25,7 +25,6 @@ else:
     start_time = time.time()
     if "heatmap" not in st.session_state:
         with st.spinner("Generating heatmap"):
-            # st.session_state.heatmap = fig_to_buf(plot_corr_heatmap(st.session_state.df))
             st.session_state.heatmap = PlotBuilder(st.session_state.df).get_corr_heatmap()
     st.write("Correlation heatmap:")
     st.image(st.session_state.heatmap, channels="RGB")
@@ -38,7 +37,6 @@ else:
     start_time = time.time()
     if "pairplot" not in st.session_state:
         with st.spinner("Generating pairplot"):
-            # st.session_state.pairplot = fig_to_buf(plot_pairplot(st.session_state.df))
             st.session_state.pairplot = PlotBuilder(st.session_state.df).get_pairplot()
     st.write("Pairplot:")
     st.image(st.session_state.pairplot, channels="RGB")

@@ -58,5 +58,4 @@ class PlotBuilder:
         return fig_to_buf(g.fig)
 
     def __del__(self):
-        print("cleared cache in destructor")
         clear_fig_cache()
