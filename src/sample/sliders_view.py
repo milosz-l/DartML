@@ -3,8 +3,12 @@ from src.utils.session_state_checks import df_in_session_state, sample_percentag
 
 
 def show_data_sample_slider():
-    # TODO: default value in sliders must come back to already selected
-    st.session_state.data_sample_percentage = st.slider("Sample data:", 1, 100, 100, help="Leave the slider at 100% if you want to use whole data.", disabled=not df_in_session_state()) / 100
+    default_slider_value = 100
+    if sample_percentage_in_session_state():
+        default_slider_value = round(st.session_state.data_sample_percentage * 100)
+    st.session_state.data_sample_percentage = (
+        st.slider("Sample data:", 1, 100, default_slider_value, help="Leave the slider at 100% if you want to use whole data.", disabled=not df_in_session_state()) / 100
+    )
     if df_in_session_state() and sample_percentage_in_session_state():
         all_rows_num = len(st.session_state.df.index)
         subset_rows_num = round(st.session_state.data_sample_percentage * all_rows_num)
@@ -12,8 +16,11 @@ def show_data_sample_slider():
 
 
 def show_train_test_split_slider():
+    default_slider_value = 80
+    if train_test_split_percentage_in_session_state():
+        default_slider_value = round(st.session_state.train_test_split_percentage * 100)
     st.session_state.train_test_split_percentage = (
-        st.slider("Choose train data size:", 1, 100, 80, help="Training data is usually 70-80% of the sampled data.", disabled=not df_in_session_state()) / 100
+        st.slider("Choose train data size:", 1, 100, default_slider_value, help="Training data is usually 70-80% of the sampled data.", disabled=not df_in_session_state()) / 100
     )
     if df_in_session_state() and train_test_split_percentage_in_session_state():
         train_data_size = round(st.session_state.train_test_split_percentage * 100)
