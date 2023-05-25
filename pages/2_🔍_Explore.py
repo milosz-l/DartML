@@ -4,6 +4,7 @@ from src.general_views.uploaded_df_view import show_uploaded_df
 from src.general_views.sidebars_view import show_info_sidebar
 from src.utils.session_state_checks import df_in_session_state
 from src.explore.plots_view import show_heatmap, show_pairplot
+from src.explore.buttons_view import show_regenerate_heatmap_button, show_regenerate_pairplot_button
 import time
 
 
@@ -16,19 +17,11 @@ else:
     show_info_sidebar()
 
     st.divider()
-    # regenerate plots button
-    if st.button("Regenerate plots", help="You've just uploaded a new dataframe and the plots didn't change? Then click this button!"):
-        if "heatmap" in st.session_state:
-            del st.session_state.heatmap
-        if "pairplot" in st.session_state:
-            del st.session_state.pairplot
 
-    # calculate correlation heatmap if not done yet
     with st.expander("Show correlation heatmap", expanded=False):
+        show_regenerate_heatmap_button()
         show_heatmap()
 
-    # calculate pairplot if not done yet
     with st.expander("Show pairplot", expanded=False):
+        show_regenerate_pairplot_button()
         show_pairplot()
-
-# TODO: add button that clears saved figs from st.session_state. Call it "Rebuild plots"
