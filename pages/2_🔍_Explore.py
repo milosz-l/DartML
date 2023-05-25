@@ -1,7 +1,7 @@
 import streamlit as st
 from src.explore.PlotBuilder import PlotBuilder
-from src.general_views.uploaded_df import show_uploaded_df
-from src.general_views.sidebars import show_info_sidebar
+from src.general_views.uploaded_df_view import show_uploaded_df
+from src.general_views.sidebars_view import show_info_sidebar
 from src.utils.session_state_checks import df_in_session_state
 import time
 

@@ -3,6 +3,7 @@ from src.utils.session_state_checks import df_in_session_state, sample_percentag
 
 
 def show_data_sample_slider():
+    # TODO: default value in sliders must come back to already selected
     st.session_state.data_sample_percentage = st.slider("Sample data:", 1, 100, 100, help="Leave the slider at 100% if you want to use whole data.", disabled=not df_in_session_state()) / 100
     if df_in_session_state() and sample_percentage_in_session_state():
         all_rows_num = len(st.session_state.df.index)
