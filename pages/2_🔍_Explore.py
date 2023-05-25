@@ -3,6 +3,7 @@ from src.explore.PlotBuilder import PlotBuilder
 from src.general_views.uploaded_df_view import show_uploaded_df
 from src.general_views.sidebars_view import show_info_sidebar
 from src.utils.session_state_checks import df_in_session_state
+from src.explore.plots_view import show_heatmap, show_pairplot
 import time
 
 
@@ -15,7 +16,7 @@ else:
     show_info_sidebar()
 
     # regenerate plots button
-    st.write("You've just uploaded a new dataframe and the plots didn't change? Then click the following button:")
+    st.write("You've just uploaded a new dataframe and the plots didn't change? Then click the following button:")  # TODO: add this as help tooltip for button
     if st.button("Regenerate plots"):
         if "heatmap" in st.session_state:
             del st.session_state.heatmap
@@ -23,25 +24,13 @@ else:
             del st.session_state.pairplot
 
     # calculate correlation heatmap if not done yet
-    start_time = time.time()
-    if "heatmap" not in st.session_state:
-        with st.spinner("Generating heatmap"):
-            st.session_state.heatmap = PlotBuilder(st.session_state.df).get_corr_heatmap()
-    st.write("Correlation heatmap:")
-    st.image(st.session_state.heatmap, channels="RGB")
-    end_time = time.time()
-    st.write(f"Showing the above plot took {end_time - start_time:.2f}s")
+    with st.expander("Show correlation heatmap", expanded=False):
+        show_heatmap()
 
     st.divider()
 
     # calculate pairplot if not done yet
-    start_time = time.time()
-    if "pairplot" not in st.session_state:
-        with st.spinner("Generating pairplot"):
-            st.session_state.pairplot = PlotBuilder(st.session_state.df).get_pairplot()
-    st.write("Pairplot:")
-    st.image(st.session_state.pairplot, channels="RGB")
-    end_time = time.time()
-    st.write(f"Showing the above plot took {end_time - start_time:.2f}s")
+    with st.expander("Show pairplot", expanded=False):
+        show_pairplot()
 
 # TODO: add button that clears saved figs from st.session_state. Call it "Rebuild plots"
