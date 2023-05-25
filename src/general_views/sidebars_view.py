@@ -1,5 +1,5 @@
 import streamlit as st
-from src.utils.session_state_checks import df_in_session_state, sample_percentage_in_session_state, train_test_split_percentage_in_session_state
+from src.session_state.session_state_checks import df_in_session_state, sample_percentage_in_session_state, train_test_split_percentage_in_session_state
 
 
 def df_info_sidebar(df_info):
