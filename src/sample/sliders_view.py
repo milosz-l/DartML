@@ -1,13 +1,19 @@
 import streamlit as st
 from src.utils.session_state_checks import df_in_session_state, sample_percentage_in_session_state, train_test_split_percentage_in_session_state
 
+SLIDERS_STARTING_VALUE = 0
+SLIDERS_STEP = 5
+
 
 def show_data_sample_slider():
     default_slider_value = 100
     if sample_percentage_in_session_state():
         default_slider_value = round(st.session_state.data_sample_percentage * 100)
     st.session_state.data_sample_percentage = (
-        st.slider("Sample data:", 1, 100, default_slider_value, help="Leave the slider at 100% if you want to use whole data.", disabled=not df_in_session_state()) / 100
+        st.slider(
+            "Sample data:", SLIDERS_STARTING_VALUE, 100, default_slider_value, help="Leave the slider at 100% if you want to use whole data.", disabled=not df_in_session_state(), step=SLIDERS_STEP
+        )
+        / 100
     )
     if df_in_session_state() and sample_percentage_in_session_state():
         all_rows_num = len(st.session_state.df.index)
@@ -20,7 +26,16 @@ def show_train_test_split_slider():
     if train_test_split_percentage_in_session_state():
         default_slider_value = round(st.session_state.train_test_split_percentage * 100)
     st.session_state.train_test_split_percentage = (
-        st.slider("Choose train data size:", 1, 100, default_slider_value, help="Training data is usually 70-80% of the sampled data.", disabled=not df_in_session_state()) / 100
+        st.slider(
+            "Choose train data size:",
+            SLIDERS_STARTING_VALUE,
+            100,
+            default_slider_value,
+            help="Training data is usually 70-80% of the sampled data.",
+            disabled=not df_in_session_state(),
+            step=SLIDERS_STEP,
+        )
+        / 100
     )
     if df_in_session_state() and train_test_split_percentage_in_session_state():
         train_data_size = round(st.session_state.train_test_split_percentage * 100)
