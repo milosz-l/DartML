@@ -1,9 +1,10 @@
 import streamlit as st
 from src.explore.PlotBuilder import PlotBuilder
+from src.views.sidebars import show_info_sidebar
 import time
 
 # Transform Data
-st.title("Explore Data")
+st.title("🔍 Explore")
 
 
 if "df" not in st.session_state:
@@ -12,6 +13,7 @@ else:
     # show uploaded df
     st.write("Uploaded DataFrame:")
     st.write(st.session_state.df)
+    show_info_sidebar()
 
     # regenerate plots button
     st.write("You've just uploaded a new dataframe and the plots didn't change? Then click the following button:")

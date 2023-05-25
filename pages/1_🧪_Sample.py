@@ -1,26 +1,19 @@
 import streamlit as st
-import pandas as pd
-from src.views.sidebar import progress_sidebar
+from src.utils.session_state_checks import df_in_session_state
+from src.views.csv_loader import show_csv_loader
+from src.views.uploaded_df import show_uploaded_df
+from src.views.sidebars import show_info_sidebar
+from src.views.sliders import show_data_sample_slider, show_train_test_split_slider
 
 
-st.title("Upload Data")
+st.title("🧪 Sample")
 
+show_csv_loader()
 
-# load uploaded file
-uploaded_file = st.file_uploader("Choose a CSV file", type="csv", accept_multiple_files=False)
-if uploaded_file is not None:
-    dataframe = pd.read_csv(uploaded_file)
-    st.session_state.df = dataframe
+if df_in_session_state():
+    show_uploaded_df(expanded=True)
 
-# show uploaded df
-if "df" in st.session_state:
-    st.write("")
-    st.write("Uploaded DataFrame:")
-    st.write(st.session_state.df)
+    show_data_sample_slider()
+    show_train_test_split_slider()
 
-# TODO: issue described in kanban board (search for SIDEBAR)
-if "df" in st.session_state:
-    df_info = {}
-    df_info["row_num"] = len(st.session_state.df.index)
-    df_info["col_num"] = len(st.session_state.df.columns)
-    progress_sidebar(df_info)
+show_info_sidebar()

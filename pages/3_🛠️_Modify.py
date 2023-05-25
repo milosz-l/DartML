@@ -2,7 +2,7 @@ import streamlit as st
 
 
 # Transform Data
-st.title("Modify Data")
+st.title("🛠️ Modify")
 
 if "df" not in st.session_state:
     st.write("You need to upload some data first! Please go to Sample tab.")

@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 
 
 # Train Model
-st.title("Train Model")
+st.title("🤖 Model")
 
 if "target_column_name" not in st.session_state:
     st.write("You need to choose a target columnt first! Please go to Modify tab.")
