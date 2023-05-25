@@ -23,3 +23,9 @@ def train_test_split_percentage_in_session_state():
     if "train_test_split_percentage" in st.session_state:
         return True
     return False
+
+
+def target_column_in_session_state():
+    if "target_column_name" in st.session_state:
+        return True
+    return False

@@ -1,5 +1,11 @@
 import streamlit as st
-from src.session_state.session_state_checks import sampled_df_in_session_state, df_in_session_state, sample_percentage_in_session_state, train_test_split_percentage_in_session_state
+from src.session_state.session_state_checks import (
+    sampled_df_in_session_state,
+    df_in_session_state,
+    sample_percentage_in_session_state,
+    train_test_split_percentage_in_session_state,
+    target_column_in_session_state,
+)
 
 
 def df_info_sidebar(df_info):
@@ -22,7 +28,26 @@ def train_test_split_info_sidebar():
     st.sidebar.progress(st.session_state.train_test_split_percentage, text=f"{train_data_size}%/{test_data_size}%")
 
 
-def show_info_sidebar():
+def target_column_info_sidebar():
+    st.sidebar.subheader("Selected target column")
+    st.sidebar.write(st.session_state.target_column_name)
+
+
+def target_column_selectbox_sidebar():
+    columns_list = st.session_state.sampled_df.columns.tolist()
+    # if target_column_in_session_state():  TODO: issue number 1289
+    #     if st.session_state.target_column_name in columns_list:
+    #         selectbox_default_index = columns_list.index(st.session_state.target_column_name)
+    #     else:
+    #         selectbox_default_index = 0
+    #     # st.experimental_show(selectbox_default_index)
+    # else:
+    #     selectbox_default_index = 0
+    selectbox_default_index = len(columns_list) - 1
+    st.session_state.target_column_name = st.sidebar.selectbox("Target column", columns_list, index=selectbox_default_index)
+
+
+def show_info_sidebar(show_target_column=False, target_column_selection=False):
     # if df_in_session_state():
     #     df_info = {}
     #     df_info["row_num"] = len(st.session_state.df.index)
@@ -36,4 +61,15 @@ def show_info_sidebar():
         sampled_df_info_sidebar(sampled_df_info)
 
         if train_test_split_percentage_in_session_state():
+            st.sidebar.divider()
             train_test_split_info_sidebar()
+
+    if show_target_column:
+        if target_column_in_session_state():
+            st.sidebar.divider()
+            target_column_info_sidebar()
+
+    if target_column_selection:
+        if sampled_df_in_session_state():
+            st.sidebar.divider()
+            target_column_selectbox_sidebar()
