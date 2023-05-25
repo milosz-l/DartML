@@ -15,9 +15,9 @@ else:
     show_uploaded_df(expanded=False)
     show_info_sidebar()
 
+    st.divider()
     # regenerate plots button
-    st.write("You've just uploaded a new dataframe and the plots didn't change? Then click the following button:")  # TODO: add this as help tooltip for button
-    if st.button("Regenerate plots"):
+    if st.button("Regenerate plots", help="You've just uploaded a new dataframe and the plots didn't change? Then click this button!"):
         if "heatmap" in st.session_state:
             del st.session_state.heatmap
         if "pairplot" in st.session_state:
@@ -26,8 +26,6 @@ else:
     # calculate correlation heatmap if not done yet
     with st.expander("Show correlation heatmap", expanded=False):
         show_heatmap()
-
-    st.divider()
 
     # calculate pairplot if not done yet
     with st.expander("Show pairplot", expanded=False):
