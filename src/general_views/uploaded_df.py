@@ -1,5 +1,4 @@
 import streamlit as st
-from src.views.sidebars import show_info_sidebar
 
 
 def show_uploaded_df(expanded=False):

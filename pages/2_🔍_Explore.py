@@ -1,18 +1,17 @@
 import streamlit as st
 from src.explore.PlotBuilder import PlotBuilder
-from src.views.sidebars import show_info_sidebar
+from src.general_views.uploaded_df import show_uploaded_df
+from src.general_views.sidebars import show_info_sidebar
+from src.utils.session_state_checks import df_in_session_state
 import time
 
-# Transform Data
+
 st.title("🔍 Explore")
 
-
-if "df" not in st.session_state:
+if not df_in_session_state():
     st.write("You need to upload some data first! Please go to Sample tab.")
 else:
-    # show uploaded df
-    st.write("Uploaded DataFrame:")
-    st.write(st.session_state.df)
+    show_uploaded_df(expanded=False)
     show_info_sidebar()
 
     # regenerate plots button
