@@ -1,6 +1,7 @@
 import streamlit as st
 import time
 from src.explore.PlotBuilder import PlotBuilder
+from src.explore.buttons_view import show_regenerate_heatmap_button, show_regenerate_pairplot_button
 
 
 def show_heatmap():
@@ -21,3 +22,15 @@ def show_pairplot():
     st.image(st.session_state.pairplot, channels="RGB")
     end_time = time.time()
     st.write(f"Showing the above plot took {end_time - start_time:.2f}s")
+
+
+def show_plots():
+    with st.expander("Show correlation heatmap", expanded=False):
+        show_regenerate_heatmap_button()
+        if not st.session_state.sampled_df.empty:
+            show_heatmap()
+
+    with st.expander("Show pairplot", expanded=False):
+        show_regenerate_pairplot_button()
+        if not st.session_state.sampled_df.empty:
+            show_pairplot()
