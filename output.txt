@@ -1,0 +1,21 @@
+AutoML directory: AutoML_14
+The task is regression with evaluation metric rmse
+AutoML will use algorithms: ['Baseline', 'Linear', 'Decision Tree', 'Random Forest', 'Xgboost', 'Neural Network']
+AutoML will ensemble available models
+AutoML steps: ['simple_algorithms', 'default_algorithms', 'ensemble']
+* Step simple_algorithms will try to check up to 3 models
+1_Baseline rmse 0.858938 trained in 0.18 seconds
+2_DecisionTree rmse 0.816534 trained in 1.13 seconds
+Exception while producing SHAP explanations. 'float' object has no attribute 'shape'
+Continuing ...
+3_Linear rmse 0.812175 trained in 0.5 seconds
+* Step default_algorithms will try to check up to 3 models
+Exception while producing SHAP explanations. DataFrame.dtypes for data must be int, float, bool or category. When categorical type is supplied, The experimental DMatrix parameter`enable_categorical` must be set to `True`.  Invalid columns:target: object
+Continuing ...
+4_Default_Xgboost rmse 0.828175 trained in 0.36 seconds
+5_Default_NeuralNetwork rmse 0.817945 trained in 0.4 seconds
+6_Default_RandomForest rmse 0.817826 trained in 1.28 seconds
+* Step ensemble will try to check up to 1 model
+Ensemble rmse 0.810798 trained in 0.09 seconds
+AutoML fit time: 7.42 seconds
+AutoML best model: Ensemble
