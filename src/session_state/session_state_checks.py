@@ -35,3 +35,9 @@ def explain_zip_buffer_in_session_state():
     if "explain_zip_buffer" in st.session_state:
         return True
     return False
+
+
+def redirected_training_output_in_session_state():
+    if "redirected_training_output" in st.session_state:
+        return True
+    return False
