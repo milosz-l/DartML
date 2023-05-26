@@ -29,3 +29,9 @@ def target_column_in_session_state():
     if "target_column_name" in st.session_state:
         return True
     return False
+
+
+def explain_zip_buffer_in_session_state():
+    if "explain_zip_buffer" in st.session_state:
+        return True
+    return False
