@@ -14,6 +14,7 @@ import tempfile
 import os
 import zipfile
 from datetime import datetime
+from src.general_views.mljar_markdown_view import show_mljar_markdown
 
 
 class OutputRedirector:  # TODO: remove it in prod and lower the verbosity level of AutoML
@@ -73,9 +74,10 @@ def show_mljar_explain():
 
                     # show report
                     with st.expander("Report", expanded=True):
-                        with open(f"{tmpdirname}/README.md", "r") as report_file:
-                            st.markdown(report_file.read())
-                            # TODO: issue number 4336
+                        show_mljar_markdown(tmpdirname)
+                        # with open(f"{tmpdirname}/README.md", "r") as report_file:
+                        #     st.markdown(report_file.read())
+                        #     # TODO: issue number 4336
 
                     # show logs
                     with st.expander("Logs", expanded=False):
