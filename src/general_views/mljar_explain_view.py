@@ -7,7 +7,7 @@ import sys
 import io
 
 
-class OutputRedirector:
+class OutputRedirector:  # TODO: remove it in prod and lower the verbosity level of AutoML
     def __enter__(self):
         self.original_stdout = sys.stdout
         sys.stdout = self.output_string = io.StringIO()
@@ -39,15 +39,13 @@ def show_mljar_explain():
                     X_train, X_test, y_train, y_test = perform_train_test_split(st.session_state.sampled_df, target_col_name, st.session_state.train_test_split_percentage)
                     automl = AutoML(mode="Explain")  # TODO: custom filename
 
-                    output_string = io.StringIO()
-                    # with open("output.txt", "w") as sys.stdout:  # TODO: redirect output to buffer and print it
-                    # with output_string as sys.stdout:
                     with OutputRedirector() as output_string:
                         st.text(output_string.getvalue())
                         automl.fit(X_train, y_train)
 
                         predictions = automl.predict(X_test)
                         st.write(predictions)
+
                 st.success("Done!")
                 with st.expander("Logs", expanded=False):
                     st.text(output_string.getvalue())
