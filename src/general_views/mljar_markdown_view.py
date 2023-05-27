@@ -18,10 +18,10 @@ def show_image_from_path(path, header="", caption=""):  # TODO: issue number 433
 
 def show_image_from_archive(archive, filename, header="", caption=""):
     try:
-        img = archive.read(filename)
+        img_bytes = archive.read(filename)
         if header:
             st.markdown(header)
-        st.image(img, caption=caption)
+        st.image(img_bytes, caption=caption)
     except KeyError:
         pass  # there is no such item in the archive
 
@@ -38,21 +38,17 @@ def show_csv_from_archive(archive, filename, header=""):
         pass  # there is no such item in the archive
 
 
-def show_tabs(tmpdirname, leaderboard_df):
+def show_tabs():
     pass  # TODO
 
 
-def show_mljar_markdown(tmpdirname):  # TODO: issue 1840 - use directory zipped into buffer from session_state
+def show_mljar_markdown():  # TODO: issue 1840 - use directory zipped into buffer from session_state
     if explain_zip_buffer_in_session_state():
+        # get access to zipped archive saved in session_state
         archive = zipfile.ZipFile(st.session_state.explain_zip_buffer, "r")
 
-        show_csv_from_archive(archive, "leaderboard.csv", header="# bytes test")
-
-        st.markdown("# AutoML Leaderboard")
-
         # show leaderboard
-        leaderboard_df = pd.read_csv(f"{tmpdirname}/leaderboard.csv")
-        st.write(leaderboard_df)
+        show_csv_from_archive(archive, "leaderboard.csv", header="# AutoML Leaderboard")
 
         # show images
         show_image_from_archive(archive, "ldb_performance.png", header="### AutoML Performance")
@@ -60,4 +56,4 @@ def show_mljar_markdown(tmpdirname):  # TODO: issue 1840 - use directory zipped 
         show_image_from_archive(archive, "features_heatmap.png", header="### Features Importance")
         show_image_from_archive(archive, "correlation_heatmap.png", header="### Spearman Correlation of Models")
 
-        show_tabs(tmpdirname, leaderboard_df)
+        show_tabs()

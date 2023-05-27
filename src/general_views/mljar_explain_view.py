@@ -76,25 +76,30 @@ def show_mljar_explain():
                     st.session_state.explain_zip_buffer = io.BytesIO()
                     zip_directory_into_buffer(tmpdirname, st.session_state.explain_zip_buffer)
 
-                    # show logs
-                    with st.expander("Logs", expanded=False):
-                        if redirected_training_output_in_session_state():
-                            st.text(st.session_state.redirected_training_output)
-
                     # show predictions
                     # with st.expander("Predictions for test data", expanded=False):
                     #     predictions = automl.predict(X_test)
                     #     st.write(predictions)
 
-                    # show report
-                    with st.expander("Report", expanded=True):
-                        show_mljar_markdown(tmpdirname)
-
             st.success("Done!")
+
         if explain_zip_buffer_in_session_state():
+            # show report
+            with st.expander("Report", expanded=True):
+                show_mljar_markdown()
+
+            # show logs
+            with st.expander("Logs", expanded=False):
+                if redirected_training_output_in_session_state():
+                    st.text(st.session_state.redirected_training_output)
+
+            # show zip download button
             current_datetime = datetime.now()
             formatted_datetime = current_datetime.strftime("%H_%M_%S-%d_%m_%Y")
             st.download_button(
-                "Download training data", st.session_state.explain_zip_buffer.getvalue(), f"automl_report-{formatted_datetime}.zip", help="Download data from last training (whole report and models)"
+                "Download data",
+                st.session_state.explain_zip_buffer.getvalue(),
+                f"automl_report-{formatted_datetime}.zip",
+                help="Download data from last experiment (whole report and all trained models)",
             )
         # TODO: show results
