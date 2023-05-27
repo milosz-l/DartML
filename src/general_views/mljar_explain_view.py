@@ -72,9 +72,9 @@ def show_mljar_explain():
                 with tempfile.TemporaryDirectory() as tmpdirname:
                     train_mljar_explain(target_col_name, tmpdirname)
 
-                    # show report
-                    with st.expander("Report", expanded=True):
-                        show_mljar_markdown(tmpdirname)
+                    # save dir as zip to session_state
+                    st.session_state.explain_zip_buffer = io.BytesIO()
+                    zip_directory_into_buffer(tmpdirname, st.session_state.explain_zip_buffer)
 
                     # show logs
                     with st.expander("Logs", expanded=False):
@@ -86,9 +86,9 @@ def show_mljar_explain():
                     #     predictions = automl.predict(X_test)
                     #     st.write(predictions)
 
-                    # save dir as zip to session_state
-                    st.session_state.explain_zip_buffer = io.BytesIO()
-                    zip_directory_into_buffer(tmpdirname, st.session_state.explain_zip_buffer)
+                    # show report
+                    with st.expander("Report", expanded=True):
+                        show_mljar_markdown(tmpdirname)
 
             st.success("Done!")
         if explain_zip_buffer_in_session_state():
