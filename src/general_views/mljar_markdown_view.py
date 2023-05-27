@@ -26,16 +26,17 @@ def show_image_from_archive(archive, filename, header="", caption=""):
         pass  # there is no such item in the archive
 
 
-def show_csv_from_archive(archive, filename, header=""):
-    try:
-        csv_bytes = archive.read(filename)
-        csv_file = io.BytesIO(csv_bytes)
-        df = pd.read_csv(csv_file)
-        if header:
-            st.markdown(header)
-        st.write(df)
-    except KeyError:
-        pass  # there is no such item in the archive
+# def show_csv_from_archive(archive, filename, header=""):
+#     # issue 7373: this function results in changed csv numerical values
+#     try:
+#         csv_bytes = archive.read(filename)
+#         csv_file = io.BytesIO(csv_bytes)
+#         df = pd.read_csv(csv_file)
+#         if header:
+#             st.markdown(header)
+#         st.write(df)
+#     except KeyError:
+#         pass  # there is no such item in the archive
 
 
 def show_tabs(tmpdirname, leaderboard_df):
@@ -45,8 +46,6 @@ def show_tabs(tmpdirname, leaderboard_df):
 def show_mljar_markdown(tmpdirname):  # TODO: issue 1840 - use directory zipped into buffer from session_state
     if explain_zip_buffer_in_session_state():
         archive = zipfile.ZipFile(st.session_state.explain_zip_buffer, "r")
-
-        show_csv_from_archive(archive, "leaderboard.csv", header="# AutoML Leaderboard")
 
         st.markdown("# AutoML Leaderboard")
 
