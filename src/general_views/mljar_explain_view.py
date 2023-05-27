@@ -62,7 +62,7 @@ def train_mljar_explain(target_col_name, tmpdirname):
         st.session_state.redirected_training_output = output_string.getvalue()
 
 
-def show_mljar_explain():
+def show_mljar_model():
     if sampled_df_in_session_state() and train_test_split_percentage_in_session_state():
         with st.form("EDA_form"):
             target_col_name = simple_target_column_selectbox()
@@ -76,13 +76,11 @@ def show_mljar_explain():
                     st.session_state.explain_zip_buffer = io.BytesIO()
                     zip_directory_into_buffer(tmpdirname, st.session_state.explain_zip_buffer)
 
-                    # show predictions
-                    # with st.expander("Predictions for test data", expanded=False):
-                    #     predictions = automl.predict(X_test)
-                    #     st.write(predictions)
+            st.success("Done! Now you can go to Assess tab to see the results!")
 
-            st.success("Done!")
 
+def show_mljar_assess():
+    if sampled_df_in_session_state() and train_test_split_percentage_in_session_state():
         if explain_zip_buffer_in_session_state():
             # show report
             with st.expander("Report", expanded=True):
@@ -102,4 +100,3 @@ def show_mljar_explain():
                 f"automl_report-{formatted_datetime}.zip",
                 help="Download data from last experiment (whole report and all trained models)",
             )
-        # TODO: show results

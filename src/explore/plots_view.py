@@ -24,13 +24,13 @@ def show_pairplot():
     st.write(f"Showing the above plot took {end_time - start_time:.2f}s")
 
 
-def show_plots():
-    with st.expander("Show correlation heatmap", expanded=False):
+def show_plots(expanded=False):
+    with st.expander("Show correlation heatmap", expanded=expanded):
         show_regenerate_heatmap_button()
         if not st.session_state.sampled_df.empty:
             show_heatmap()
 
-    with st.expander("Show pairplot", expanded=False):
+    with st.expander("Show pairplot", expanded=expanded):
         show_regenerate_pairplot_button()
         if not st.session_state.sampled_df.empty:
             show_pairplot()

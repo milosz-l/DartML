@@ -42,7 +42,7 @@ def show_tabs():
     pass  # TODO
 
 
-def show_mljar_markdown():  # TODO: issue 1840 - use directory zipped into buffer from session_state
+def show_mljar_markdown():
     if explain_zip_buffer_in_session_state():
         # get access to zipped archive saved in session_state
         archive = zipfile.ZipFile(st.session_state.explain_zip_buffer, "r")
