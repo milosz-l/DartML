@@ -75,9 +75,6 @@ def show_mljar_explain():
                     # show report
                     with st.expander("Report", expanded=True):
                         show_mljar_markdown(tmpdirname)
-                        # with open(f"{tmpdirname}/README.md", "r") as report_file:
-                        #     st.markdown(report_file.read())
-                        #     # TODO: issue number 4336
 
                     # show logs
                     with st.expander("Logs", expanded=False):

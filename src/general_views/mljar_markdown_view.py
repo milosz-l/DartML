@@ -3,7 +3,9 @@ import pandas as pd
 from PIL import Image
 
 
-def show_image_from_path(path, caption=""):
+def show_image_from_path(path, header="", caption=""):  # TODO: issue number 4336
+    if header:
+        st.markdown(f"### {header}")
     st.image(Image.open(path), caption=caption)
 
 
@@ -14,14 +16,10 @@ def show_mljar_markdown(tmpdirname):  # TODO: issue 1840 - use directory zipped 
     st.write(pd.read_csv(f"{tmpdirname}/leaderboard.csv"))
 
     # show images
-    st.markdown("### AutoML Performance")
-    show_image_from_path(f"{tmpdirname}/ldb_performance.png")
+    show_image_from_path(f"{tmpdirname}/ldb_performance.png", header="AutoML Performance")
 
-    st.markdown("### AutoML Performance Boxplot")
-    show_image_from_path(f"{tmpdirname}/ldb_performance_boxplot.png")
+    show_image_from_path(f"{tmpdirname}/ldb_performance_boxplot.png", header="AutoML Performance Boxplot")
 
-    st.markdown("### Features Importance")
-    show_image_from_path(f"{tmpdirname}/features_heatmap.png")
+    show_image_from_path(f"{tmpdirname}/features_heatmap.png", header="Features Importance")
 
-    st.markdown("### Spearman Correlation of Models")
-    show_image_from_path(f"{tmpdirname}/correlation_heatmap.png")
+    show_image_from_path(f"{tmpdirname}/correlation_heatmap.png", header="Spearman Correlation of Models")
