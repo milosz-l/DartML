@@ -4,9 +4,13 @@ from PIL import Image
 
 
 def show_image_from_path(path, header="", caption=""):  # TODO: issue number 4336
-    if header:
-        st.markdown(f"### {header}")
-    st.image(Image.open(path), caption=caption)
+    try:
+        image = Image.open(path)
+        if header:
+            st.markdown(f"### {header}")
+        st.image(image, caption=caption)
+    except FileNotFoundError:
+        pass
 
 
 def show_mljar_markdown(tmpdirname):  # TODO: issue 1840 - use directory zipped into buffer from session_state
