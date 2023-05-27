@@ -6,7 +6,7 @@ import io
 from src.session_state.session_state_checks import explain_zip_buffer_in_session_state
 
 
-def show_image_from_path(path, header="", caption=""):  # TODO: issue number 4336
+def show_image_from_path(path, header="", caption=""):
     try:
         image = Image.open(path)
         if header:
