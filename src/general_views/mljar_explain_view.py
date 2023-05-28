@@ -61,8 +61,6 @@ def metric_selectbox(problem_type):
     else:  # problem type is auto
         metrics = []
 
-    st.experimental_show(problem_type)
-    st.experimental_show(metrics)
     if metrics:
         return st.selectbox("Choose metric", metrics, index=0, help="Choose evaluation metric.")
     return None
@@ -95,7 +93,6 @@ def show_mljar_model():
     if sampled_df_in_session_state() and train_test_split_percentage_in_session_state():
         target_col_name = simple_target_column_selectbox()
         problem_type = problem_type_selectbox()
-        st.experimental_show(problem_type)
         metric = metric_selectbox(problem_type)
         if st.button("Generate new report"):
             with st.spinner("Generating report..."):
