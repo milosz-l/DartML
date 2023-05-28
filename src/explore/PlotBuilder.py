@@ -43,7 +43,7 @@ class PlotBuilder:
     def get_corr_heatmap(self):
         start_time = time.time()
         fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
-        corr = self.df.corr(numeric_only=True)
+        corr = self.df.corr()
         sns.heatmap(corr, square=True, cmap="RdYlGn", annot=True, fmt=".2f", linewidth=0.5)
         end_time = time.time()
         plt.title(f"Correlation Heatmap ({end_time - start_time:.2f} s)")
