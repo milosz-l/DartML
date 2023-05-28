@@ -83,10 +83,10 @@ def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, 
 
     # create AutoML object
     if problem_type == "auto":
-        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type)
+        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, algorithms=algorithms)
     else:
         problem_type = problem_type.replace(" ", "_")
-        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, eval_metric=eval_metric, algorithms=algorithms)
+        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, algorithms=algorithms, eval_metric=eval_metric)
 
     # perform training with redirected stdout
     with OutputRedirector() as output_string:
