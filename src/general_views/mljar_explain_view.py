@@ -66,13 +66,18 @@ def metric_selectbox(problem_type):
     return None
 
 
+def algorithms_selectbox():
+    algorithms = ["Baseline", "Linear", "Decision Tree", "Random Forest", "Xgboost", "Extra Trees", "LightGBM", "CatBoost", "Neural Network", "Nearest Neighbors"]
+    return st.multiselect("Choose algorithms to train", algorithms, algorithms[0:5])
+
+
 def perform_train_test_split(df, target_label, train_size):
     X = df.drop(columns=target_label)
     y = df[target_label]
     return train_test_split(X, y, train_size=train_size)
 
 
-def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric):
+def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, algorithms):
     # split data into train and test
     X_train, X_test, y_train, y_test = perform_train_test_split(st.session_state.sampled_df, target_col_name, st.session_state.train_test_split_percentage)
 
@@ -81,7 +86,7 @@ def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric):
         automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type)
     else:
         problem_type = problem_type.replace(" ", "_")
-        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, eval_metric=eval_metric)
+        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, eval_metric=eval_metric, algorithms=algorithms)
 
     # perform training with redirected stdout
     with OutputRedirector() as output_string:
@@ -94,11 +99,12 @@ def show_mljar_model():
         target_col_name = simple_target_column_selectbox()
         problem_type = problem_type_selectbox()
         metric = metric_selectbox(problem_type)
+        algorithms = algorithms_selectbox()
         if st.button("Generate new report"):
             with st.spinner("Generating report..."):
                 with tempfile.TemporaryDirectory() as tmpdirname:
                     # run automl training
-                    train_mljar_explain(target_col_name, tmpdirname, problem_type, metric)
+                    train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms)
 
                     # save dir with results as zip to session_state
                     st.session_state.explain_zip_buffer = io.BytesIO()
