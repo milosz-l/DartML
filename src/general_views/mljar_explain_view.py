@@ -43,18 +43,47 @@ def simple_target_column_selectbox():
     return st.selectbox("Choose target column:", columns_list, index=selectbox_default_index)
 
 
+def problem_type_selectbox():
+    problem_types = ["auto", "binary classification", "multiclass classification", "regression"]
+    chosen_problem_type = st.selectbox(
+        "Choose problem type", problem_types, index=0, help="You can choose problem type manually or leave it at auto (then problem type will be guessed based on target values)"
+    )
+    return chosen_problem_type
+
+
+def metric_selectbox(problem_type):
+    if problem_type == "binary classification":
+        metrics = ["logloss", "auc", "f1", "average_precision", "accuracy"]
+    elif problem_type == "multiclass classification":
+        metrics = ["logloss", "f1", "accuracy"]
+    elif problem_type == "regression":
+        metrics = ["rmse", "mse", "mae", "r2", "mape", "spearman", "pearson"]
+    else:  # problem type is auto
+        metrics = []
+
+    st.experimental_show(problem_type)
+    st.experimental_show(metrics)
+    if metrics:
+        return st.selectbox("Choose metric", metrics, index=0, help="Choose evaluation metric.")
+    return None
+
+
 def perform_train_test_split(df, target_label, train_size):
     X = df.drop(columns=target_label)
     y = df[target_label]
     return train_test_split(X, y, train_size=train_size)
 
 
-def train_mljar_explain(target_col_name, tmpdirname):
+def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric):
     # split data into train and test
     X_train, X_test, y_train, y_test = perform_train_test_split(st.session_state.sampled_df, target_col_name, st.session_state.train_test_split_percentage)
 
     # create AutoML object
-    automl = AutoML(results_path=tmpdirname, mode="Explain")
+    if problem_type == "auto":
+        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type)
+    else:
+        problem_type = problem_type.replace(" ", "_")
+        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, eval_metric=eval_metric)
 
     # perform training with redirected stdout
     with OutputRedirector() as output_string:
@@ -64,15 +93,17 @@ def train_mljar_explain(target_col_name, tmpdirname):
 
 def show_mljar_model():
     if sampled_df_in_session_state() and train_test_split_percentage_in_session_state():
-        with st.form("EDA_form"):
-            target_col_name = simple_target_column_selectbox()
-            submitted = st.form_submit_button("Generate new report")
-        if submitted:
+        target_col_name = simple_target_column_selectbox()
+        problem_type = problem_type_selectbox()
+        st.experimental_show(problem_type)
+        metric = metric_selectbox(problem_type)
+        if st.button("Generate new report"):
             with st.spinner("Generating report..."):
                 with tempfile.TemporaryDirectory() as tmpdirname:
-                    train_mljar_explain(target_col_name, tmpdirname)
+                    # run automl training
+                    train_mljar_explain(target_col_name, tmpdirname, problem_type, metric)
 
-                    # save dir as zip to session_state
+                    # save dir with results as zip to session_state
                     st.session_state.explain_zip_buffer = io.BytesIO()
                     zip_directory_into_buffer(tmpdirname, st.session_state.explain_zip_buffer)
 
