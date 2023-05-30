@@ -4,8 +4,10 @@ from src.sample.csv_loader_view import show_csv_loader
 from src.general_views.df_view import show_uploaded_df, show_sampled_df
 from src.general_views.sidebars_view import show_info_sidebar
 from src.sample.sliders_view import show_data_sample_slider, show_train_test_split_slider
+from src.general_views.logo import show_logo
 
 
+show_logo()
 st.title("🧪 Sample")
 
 show_csv_loader()
