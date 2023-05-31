@@ -89,9 +89,9 @@ def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, 
         automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, algorithms=algorithms, eval_metric=eval_metric)
 
     # perform training with redirected stdout
-    with OutputRedirector() as output_string:
-        automl.fit(X_train, y_train)
-        st.session_state.redirected_training_output = output_string.getvalue()
+    # with OutputRedirector() as output_string:
+    automl.fit(X_train, y_train)
+    # st.session_state.redirected_training_output = output_string.getvalue()
 
 
 def show_mljar_model():
@@ -121,9 +121,9 @@ def show_mljar_assess():
                 show_mljar_markdown()
 
             # show logs
-            with st.expander("Logs", expanded=False):
-                if redirected_training_output_in_session_state():
-                    st.text(st.session_state.redirected_training_output)
+            # with st.expander("Logs", expanded=False):
+            #     if redirected_training_output_in_session_state():
+            #         st.text(st.session_state.redirected_training_output)
 
             # show zip download button
             current_datetime = datetime.now()
