@@ -102,7 +102,7 @@ def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, 
         if X_test is not None:
             predictions = automl.predict(X_test)
             predictions_df = pd.DataFrame(predictions)
-            predictions_df.to_csv(f"{tmpdirname}/{TEST_PREDICTIONS_FILENAME}", index=False)
+            predictions_df.to_csv(f"{tmpdirname}/{TEST_PREDICTIONS_FILENAME}", index=False, columns=["predictions"])
 
         # save redirected logs to session_state
         st.session_state.redirected_training_output = output_string.getvalue()
