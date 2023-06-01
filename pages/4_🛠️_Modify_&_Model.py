@@ -5,6 +5,7 @@ from src.session_state.session_state_checks import sampled_df_in_session_state
 from src.general_views.mljar_explain_view import show_mljar_model
 from src.general_views.sidebars_view import show_info_sidebar
 from src.general_views.logo import show_logo
+from supervised.exceptions import AutoMLException
 
 
 show_logo()
@@ -15,4 +16,7 @@ if not sampled_df_in_session_state():
 else:
     show_info_sidebar()
     show_sampled_df()
-    show_mljar_model()
+    try:
+        show_mljar_model()
+    except AutoMLException:
+        st.warning("Something went wrong. 😔 Please make sure if sampled dataframe isn't too small.")
