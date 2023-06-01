@@ -1,3 +1,8 @@
 SLIDERS_STARTING_VALUE = 0
 SLIDERS_STEP = 1
 RANDOM_STATE = 42
+
+
+X_TEST_DF_FILENAME = "X_test_df.csv"
+Y_TEST_DF_FILENAME = "y_test_df.csv"
+TEST_PREDICTIONS_FILENAME = "predictions_df.csv"

@@ -15,6 +15,8 @@ import os
 import zipfile
 from datetime import datetime
 from src.general_views.mljar_markdown_view import show_mljar_markdown
+from src.config import X_TEST_DF_FILENAME, Y_TEST_DF_FILENAME, TEST_PREDICTIONS_FILENAME
+import pandas as pd
 
 
 class OutputRedirector:  # TODO: remove it in prod and lower the verbosity level of AutoML
@@ -74,7 +76,10 @@ def algorithms_selectbox():
 def perform_train_test_split(df, target_label, train_size):
     X = df.drop(columns=target_label)
     y = df[target_label]
-    return train_test_split(X, y, train_size=train_size)
+    if train_size < 1:
+        return train_test_split(X, y, train_size=train_size)
+    else:  # when train_size is 100%
+        return X, None, y, None
 
 
 def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, algorithms):
@@ -90,8 +95,24 @@ def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, 
 
     # perform training with redirected stdout
     with OutputRedirector() as output_string:
+        # perform training
         automl.fit(X_train, y_train)
+
+        # save predictions
+        if X_test is not None:
+            predictions = automl.predict(X_test)
+            predictions_df = pd.DataFrame(predictions)
+            predictions_df.to_csv(f"{tmpdirname}/{TEST_PREDICTIONS_FILENAME}", index=False)
+
+        # save redirected logs to session_state
         st.session_state.redirected_training_output = output_string.getvalue()
+
+    return X_test, y_test
+
+
+def save_test_data_to_dir(X_test, y_test, path):
+    X_test.to_csv(f"{path}/{X_TEST_DF_FILENAME}", index=False)
+    y_test.to_csv(f"{path}/{Y_TEST_DF_FILENAME}", index=False)
 
 
 def show_mljar_model():
@@ -104,7 +125,11 @@ def show_mljar_model():
             with st.spinner("Generating report..."):
                 with tempfile.TemporaryDirectory() as tmpdirname:
                     # run automl training
-                    train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms)
+                    X_test, y_test = train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms)
+
+                    # save test predictions to directory with results
+                    if X_test is not None and y_test is not None:
+                        save_test_data_to_dir(X_test, y_test, tmpdirname)
 
                     # save dir with results as zip to session_state
                     st.session_state.explain_zip_buffer = io.BytesIO()
