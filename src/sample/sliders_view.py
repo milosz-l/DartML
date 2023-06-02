@@ -28,7 +28,7 @@ def show_train_test_split_slider(disabled=False):
     #     default_slider_value = round(st.session_state.train_test_split_percentage * 100)
     st.session_state.train_test_split_percentage = (
         st.slider(
-            "Choose train data size:",
+            "Choose train data size for train/test split method:",
             TRAIN_SPLIT_SLIDER_STARTING_VALUE,
             TRAIN_SPLIT_SLIDER_MAX_VALUE,
             default_slider_value,

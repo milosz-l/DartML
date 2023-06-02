@@ -6,6 +6,8 @@ from src.session_state.session_state_checks import (
     train_test_split_percentage_in_session_state,
     target_column_in_session_state,
     validation_type_in_session_state,
+    shuffle_in_session_state,
+    stratify_in_session_state,
 )
 
 
@@ -24,12 +26,13 @@ def sampled_df_info_sidebar(sampled_df_info):
 
 def train_test_split_info_sidebar():
     st.sidebar.subheader("Train/test split info")
-    if st.session_state.validation_type == "split":
-        train_data_size = round(st.session_state.train_test_split_percentage * 100)
-        test_data_size = 100 - train_data_size
-        st.sidebar.progress(st.session_state.train_test_split_percentage, text=f"{train_data_size}%/{test_data_size}%")
-    elif st.session_state.validation_type == "kfold":
-        st.sidebar.caption("5-fold cross validation chosen")
+    if validation_type_in_session_state:
+        if st.session_state.validation_type == "split":
+            train_data_size = round(st.session_state.train_test_split_percentage * 100)
+            test_data_size = 100 - train_data_size
+            st.sidebar.progress(st.session_state.train_test_split_percentage, text=f"{train_data_size}%/{test_data_size}%")
+        elif st.session_state.validation_type == "kfold":
+            st.sidebar.caption("5-fold cross validation chosen")
 
 
 def target_column_selectbox_sidebar():
@@ -44,6 +47,18 @@ def target_column_selectbox_sidebar():
     #     selectbox_default_index = 0
     selectbox_default_index = len(columns_list) - 1
     st.session_state.target_column_name = st.sidebar.selectbox("Target column", columns_list, index=selectbox_default_index)
+
+
+def stratify_and_shuffle_info_sidebar():
+    if st.session_state.shuffle:
+        st.sidebar.subheader("Shuffle turned :green[on]")
+    else:
+        st.sidebar.subheader("Shuffle turned :red[off]")
+
+    if st.session_state.stratify:
+        st.sidebar.subheader("Stratify turned :green[on]")
+    else:
+        st.sidebar.subheader("Stratify turned :red[off]")
 
 
 def show_info_sidebar(target_column_selection=False):
@@ -62,6 +77,10 @@ def show_info_sidebar(target_column_selection=False):
         if train_test_split_percentage_in_session_state():
             st.sidebar.divider()
             train_test_split_info_sidebar()
+
+        if shuffle_in_session_state() and stratify_in_session_state():
+            st.sidebar.divider()
+            stratify_and_shuffle_info_sidebar()
 
     if target_column_selection:
         if sampled_df_in_session_state():

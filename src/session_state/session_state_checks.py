@@ -47,3 +47,15 @@ def validation_type_in_session_state():
     if "validation_type" in st.session_state:
         return True
     return False
+
+
+def shuffle_in_session_state():
+    if "shuffle" in st.session_state:
+        return True
+    return False
+
+
+def stratify_in_session_state():
+    if "stratify" in st.session_state:
+        return True
+    return False
