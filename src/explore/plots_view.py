@@ -115,8 +115,8 @@ def get_binned(df, columns_to_drop):
 
     # Use the function for each combination of variables.
     value_columns = df.columns.drop(columns_to_drop)
-    knmi_data_2dbinned = pd.concat([compute_2d_histogram(var1, var2, df) for var1 in value_columns for var2 in value_columns])
-    return knmi_data_2dbinned
+    data_2dbinned = pd.concat([compute_2d_histogram(var1, var2, df) for var1 in value_columns for var2 in value_columns])
+    return data_2dbinned
 
 
 def get_corr_data(df):
@@ -130,20 +130,9 @@ def get_corr_data(df):
     return cor_data
 
 
-def altair_interactive_corr_heatmap(df, knmi_data_2dbinned, var1, var2):
-    relhumid_vs_preciphrmax = knmi_data_2dbinned.query(f'(variable == "{var1}") & (variable2 == "{var2}")')
-    scat_plot = (
-        at.Chart(relhumid_vs_preciphrmax)
-        .mark_rect()
-        .encode(
-            at.X("value:N", sort=at.EncodingSortField(field="raw_left_value")),
-            at.Y("value2:N", sort=at.EncodingSortField(field="raw_left_value2", order="descending")),
-            at.Color("count:Q", scale=at.Scale(scheme="blues")),
-        )
-    )
-    # -----------------
+def altair_interactive_corr_heatmap(df, knmi_data_2dbinned):
     # Define selector
-    var_sel_cor = at.selection_single(fields=["variable", "variable2"], clear=False, init={"variable": "Evaporation", "variable2": "T_max"})
+    var_sel_cor = at.selection_single(fields=["variable", "variable2"], clear=False, init={"variable": "mock_col1", "variable2": "mock_col2"})
 
     cor_data = get_corr_data(df)
     # Define correlation heatmap
@@ -166,7 +155,7 @@ def altair_interactive_corr_heatmap(df, knmi_data_2dbinned, var1, var2):
     )
 
     # Combine all plots. hconcat plots both side-by-side
-    return at.hconcat((cor_plot + text).properties(width=350, height=350), scat_plot.properties(width=350, height=350)).resolve_scale(color="independent")
+    return at.vconcat((cor_plot + text).properties(width=350, height=350), scat_plot.properties(width=350, height=350)).resolve_scale(color="independent")
 
 
 def show_altair_plots():
@@ -175,4 +164,4 @@ def show_altair_plots():
     # interactive_corr_altair_heatmap(sampled_df_copy, ["target"])
 
     knmi_data_2dbinned = get_binned(sampled_df_copy, ["target"])
-    st.write(altair_interactive_corr_heatmap(sampled_df_copy, knmi_data_2dbinned, "f1", "f2"))
+    st.write(altair_interactive_corr_heatmap(sampled_df_copy, knmi_data_2dbinned))
