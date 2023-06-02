@@ -110,6 +110,7 @@ def altair_interactive_corr_heatmap(df, data_2dbinned):
     ).resolve_scale(color="independent")
 
 
+@st.cache_data
 def generate_interactive_altair_corr_heatmap(df):
     def get_non_numeric_columns_names(df):
         non_numeric_cols = [col for col in df.columns if not pd.api.types.is_numeric_dtype(df[col])]
