@@ -120,6 +120,10 @@ def generate_interactive_altair_corr_heatmap(df):
     return altair_interactive_corr_heatmap(df, data_2dbinned)
 
 
-def show_altair_plots():
+def show_altair_plot(show_time=False):
+    start_time = time.time()
     df = st.session_state.sampled_df
     st.altair_chart(generate_interactive_altair_corr_heatmap(df))
+    end_time = time.time()
+    if show_time:
+        st.write(f"Showing the above plot took {end_time - start_time:.2f}s")

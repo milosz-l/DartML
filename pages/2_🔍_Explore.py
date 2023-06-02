@@ -2,9 +2,8 @@ import streamlit as st
 from src.general_views.df_view import show_sampled_df
 from src.general_views.sidebars_view import show_info_sidebar
 from src.session_state.session_state_checks import sampled_df_in_session_state
-from src.explore.plots_view import show_plots, show_altair_plots
+from src.explore.plots_view import show_plots, show_altair_plot
 from src.general_views.logo import show_logo
-import time
 
 
 # use style.css
@@ -26,9 +25,6 @@ else:
 
     st.divider()
 
-    start_time = time.time()
-    show_altair_plots()
-    end_time = time.time()
-    st.write(f"Showing the above plots took {end_time - start_time:.2f}s")
+    show_altair_plot(show_time=True)
 
     # show_plots(expanded=True)
