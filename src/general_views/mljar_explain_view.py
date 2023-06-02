@@ -95,7 +95,7 @@ def get_shuffle_and_stratify_settings():
         return True, True
 
 
-def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, algorithms):
+def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, algorithms, total_time_limit, mode):
     # X_train, X_test, y_train, y_test = perform_train_test_split(st.session_state.sampled_df, target_col_name, st.session_state.train_test_split_percentage)
     X, y = perform_X_y_split(st.session_state.sampled_df, target_col_name)
 
@@ -114,15 +114,39 @@ def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, 
 
     # create AutoML object
     if problem_type == "auto":
-        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, algorithms=algorithms, validation_strategy=configured_validation_strategy)
+        automl = AutoML(results_path=tmpdirname, mode=mode, ml_task=problem_type, algorithms=algorithms, validation_strategy=configured_validation_strategy, total_time_limit=total_time_limit)
     else:
         problem_type = problem_type.replace(" ", "_")
-        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, algorithms=algorithms, validation_strategy=configured_validation_strategy, eval_metric=eval_metric)
+        automl = AutoML(
+            results_path=tmpdirname,
+            mode=mode,
+            ml_task=problem_type,
+            algorithms=algorithms,
+            validation_strategy=configured_validation_strategy,
+            total_time_limit=total_time_limit,
+            eval_metric=eval_metric,
+        )
 
     # perform training with redirected stdout
     with OutputRedirector() as output_string:
         automl.fit(X, y)
         st.session_state.redirected_training_output = output_string.getvalue()
+
+
+def total_time_limit_slider():
+    def get_minutes_and_seconds(seconds):
+        minutes = seconds // 60
+        seconds = seconds % 60
+        return minutes, seconds
+
+    total_time_limit = st.slider("Total time limit (in seconds)", 60, 1800, 300, 15)
+    minutes, seconds = get_minutes_and_seconds(total_time_limit)
+    st.caption(f"The maximum training time will be {minutes} minutes and {seconds} seconds.")
+    return total_time_limit
+
+
+def mode_selectbox():
+    return st.selectbox("Choose training mode", ["Explain", "Perform"], help="Explain mode generates more visualizations (e.g. SHAP plots). Perform mode is dedicated for training best models.")
 
 
 def show_mljar_model():
@@ -131,12 +155,14 @@ def show_mljar_model():
         problem_type = problem_type_selectbox()
         metric = metric_selectbox(problem_type)
         algorithms = algorithms_selectbox()
+        total_time_limit = total_time_limit_slider()
+        mode = mode_selectbox()
         if st.button("Generate new report"):
             try:
                 with st.spinner("Generating report..."):
                     with tempfile.TemporaryDirectory() as tmpdirname:
                         # run automl training
-                        train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms)
+                        train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms, total_time_limit, mode)
 
                         # save dir with results as zip to session_state
                         st.session_state.explain_zip_buffer = io.BytesIO()
