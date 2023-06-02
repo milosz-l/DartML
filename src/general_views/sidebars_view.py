@@ -5,6 +5,7 @@ from src.session_state.session_state_checks import (
     sample_percentage_in_session_state,
     train_test_split_percentage_in_session_state,
     target_column_in_session_state,
+    validation_type_in_session_state,
 )
 
 
@@ -23,9 +24,12 @@ def sampled_df_info_sidebar(sampled_df_info):
 
 def train_test_split_info_sidebar():
     st.sidebar.subheader("Train/test split info")
-    train_data_size = round(st.session_state.train_test_split_percentage * 100)
-    test_data_size = 100 - train_data_size
-    st.sidebar.progress(st.session_state.train_test_split_percentage, text=f"{train_data_size}%/{test_data_size}%")
+    if st.session_state.validation_type == "split":
+        train_data_size = round(st.session_state.train_test_split_percentage * 100)
+        test_data_size = 100 - train_data_size
+        st.sidebar.progress(st.session_state.train_test_split_percentage, text=f"{train_data_size}%/{test_data_size}%")
+    elif st.session_state.validation_type == "kfold":
+        st.sidebar.caption("5-fold cross validation chosen")
 
 
 def target_column_selectbox_sidebar():

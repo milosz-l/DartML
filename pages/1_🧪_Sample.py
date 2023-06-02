@@ -21,6 +21,7 @@ if df_in_session_state():
         show_sampled_df()
 
     st.divider()
-    show_train_test_split_slider()
+    st.session_state.validation_type = st.selectbox("Use simple train/test split or 5-fold cross validation?", ("split", "kfold"), help="Choosing split is a faster option.")
+    show_train_test_split_slider(disabled=True if st.session_state.validation_type == "kfold" else False)
 
 show_info_sidebar()

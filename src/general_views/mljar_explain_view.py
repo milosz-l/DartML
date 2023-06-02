@@ -6,6 +6,7 @@ from src.session_state.session_state_checks import (
     train_test_split_percentage_in_session_state,
     explain_zip_buffer_in_session_state,
     redirected_training_output_in_session_state,
+    validation_type_in_session_state,
 )
 from sklearn.model_selection import train_test_split
 import sys
@@ -16,6 +17,7 @@ import zipfile
 from datetime import datetime
 from src.general_views.mljar_markdown_view import show_mljar_markdown
 from supervised.exceptions import AutoMLException
+from src import config
 
 
 class OutputRedirector:  # TODO: remove it in prod and lower the verbosity level of AutoML
@@ -78,25 +80,42 @@ def perform_train_test_split(df, target_label, train_size):
     return train_test_split(X, y, train_size=train_size)
 
 
+def perform_X_y_split(df, target_label):
+    X = df.drop(columns=target_label)
+    y = df[target_label]
+    return X, y
+
+
 def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, algorithms):
-    # split data into train and test
-    X_train, X_test, y_train, y_test = perform_train_test_split(st.session_state.sampled_df, target_col_name, st.session_state.train_test_split_percentage)
+    # X_train, X_test, y_train, y_test = perform_train_test_split(st.session_state.sampled_df, target_col_name, st.session_state.train_test_split_percentage)
+    X, y = perform_X_y_split(st.session_state.sampled_df, target_col_name)
+
+    if st.session_state.validation_type == "split":
+        configured_validation_strategy = {
+            "validation_type": "split",
+            "train_ratio": st.session_state.train_test_split_percentage,
+            "shuffle": True,
+            "stratify": True,
+            "random_seed": config.RANDOM_STATE,
+        }
+    else:  # validation type is kfold
+        configured_validation_strategy = {"validation_type": "kfold", "k_folds": 5, "shuffle": True, "stratify": True, "random_seed": config.RANDOM_STATE}
 
     # create AutoML object
     if problem_type == "auto":
-        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, algorithms=algorithms)
+        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, algorithms=algorithms, validation_strategy=configured_validation_strategy)
     else:
         problem_type = problem_type.replace(" ", "_")
-        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, algorithms=algorithms, eval_metric=eval_metric)
+        automl = AutoML(results_path=tmpdirname, mode="Explain", ml_task=problem_type, algorithms=algorithms, validation_strategy=configured_validation_strategy, eval_metric=eval_metric)
 
     # perform training with redirected stdout
     with OutputRedirector() as output_string:
-        automl.fit(X_train, y_train)
+        automl.fit(X, y)
         st.session_state.redirected_training_output = output_string.getvalue()
 
 
 def show_mljar_model():
-    if sampled_df_in_session_state() and train_test_split_percentage_in_session_state():
+    if sampled_df_in_session_state() and train_test_split_percentage_in_session_state() and validation_type_in_session_state():
         target_col_name = simple_target_column_selectbox()
         problem_type = problem_type_selectbox()
         metric = metric_selectbox(problem_type)
@@ -112,8 +131,9 @@ def show_mljar_model():
                         st.session_state.explain_zip_buffer = io.BytesIO()
                         zip_directory_into_buffer(tmpdirname, st.session_state.explain_zip_buffer)
                 st.success("Done! Now you can go to Assess tab to see the results!")
-            except AutoMLException:
-                st.warning("Something went wrong. 😔 Please make sure if sampled dataframe isn't too small.")
+            except AutoMLException as error:
+                st.warning("Something went wrong. 😔 Please check if sampled dataframe isn't too small or if train data percentage isn't too high or too low.")
+                st.write(error)
 
 
 def show_mljar_assess():

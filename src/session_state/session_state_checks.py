@@ -41,3 +41,9 @@ def redirected_training_output_in_session_state():
     if "redirected_training_output" in st.session_state:
         return True
     return False
+
+
+def validation_type_in_session_state():
+    if "validation_type" in st.session_state:
+        return True
+    return False
