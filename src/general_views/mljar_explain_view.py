@@ -15,6 +15,7 @@ import os
 import zipfile
 from datetime import datetime
 from src.general_views.mljar_markdown_view import show_mljar_markdown
+from supervised.exceptions import AutoMLException
 
 
 class OutputRedirector:  # TODO: remove it in prod and lower the verbosity level of AutoML
@@ -101,16 +102,18 @@ def show_mljar_model():
         metric = metric_selectbox(problem_type)
         algorithms = algorithms_selectbox()
         if st.button("Generate new report"):
-            with st.spinner("Generating report..."):
-                with tempfile.TemporaryDirectory() as tmpdirname:
-                    # run automl training
-                    train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms)
+            try:
+                with st.spinner("Generating report..."):
+                    with tempfile.TemporaryDirectory() as tmpdirname:
+                        # run automl training
+                        train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms)
 
-                    # save dir with results as zip to session_state
-                    st.session_state.explain_zip_buffer = io.BytesIO()
-                    zip_directory_into_buffer(tmpdirname, st.session_state.explain_zip_buffer)
-
-            st.success("Done! Now you can go to Assess tab to see the results!")
+                        # save dir with results as zip to session_state
+                        st.session_state.explain_zip_buffer = io.BytesIO()
+                        zip_directory_into_buffer(tmpdirname, st.session_state.explain_zip_buffer)
+                st.success("Done! Now you can go to Assess tab to see the results!")
+            except AutoMLException:
+                st.warning("Something went wrong. 😔 Please make sure if sampled dataframe isn't too small.")
 
 
 def show_mljar_assess():
