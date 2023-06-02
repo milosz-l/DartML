@@ -7,6 +7,8 @@ from src.session_state.session_state_checks import (
     explain_zip_buffer_in_session_state,
     redirected_training_output_in_session_state,
     validation_type_in_session_state,
+    shuffle_in_session_state,
+    stratify_in_session_state,
 )
 from sklearn.model_selection import train_test_split
 import sys
@@ -86,20 +88,29 @@ def perform_X_y_split(df, target_label):
     return X, y
 
 
+def get_shuffle_and_stratify_settings():
+    if shuffle_in_session_state() and stratify_in_session_state():
+        return st.session_state.shuffle, st.session_state.stratify
+    else:
+        return True, True
+
+
 def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, algorithms):
     # X_train, X_test, y_train, y_test = perform_train_test_split(st.session_state.sampled_df, target_col_name, st.session_state.train_test_split_percentage)
     X, y = perform_X_y_split(st.session_state.sampled_df, target_col_name)
+
+    shuffle_setting, stratify_setting = get_shuffle_and_stratify_settings()
 
     if st.session_state.validation_type == "split":
         configured_validation_strategy = {
             "validation_type": "split",
             "train_ratio": st.session_state.train_test_split_percentage,
-            "shuffle": True,
-            "stratify": True,
+            "shuffle": shuffle_setting,
+            "stratify": stratify_setting,
             "random_seed": config.RANDOM_STATE,
         }
     else:  # validation type is kfold
-        configured_validation_strategy = {"validation_type": "kfold", "k_folds": 5, "shuffle": True, "stratify": True, "random_seed": config.RANDOM_STATE}
+        configured_validation_strategy = {"validation_type": "kfold", "k_folds": 5, "shuffle": shuffle_setting, "stratify": stratify_setting, "random_seed": config.RANDOM_STATE}
 
     # create AutoML object
     if problem_type == "auto":

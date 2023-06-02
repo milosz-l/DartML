@@ -51,14 +51,14 @@ def target_column_selectbox_sidebar():
 
 def stratify_and_shuffle_info_sidebar():
     if st.session_state.shuffle:
-        st.sidebar.subheader("Shuffle turned :green[on]")
+        st.sidebar.subheader("Shuffle :green[on]")
     else:
-        st.sidebar.subheader("Shuffle turned :red[off]")
+        st.sidebar.subheader("Shuffle :red[off]")
 
     if st.session_state.stratify:
-        st.sidebar.subheader("Stratify turned :green[on]")
+        st.sidebar.subheader("Stratify :green[on]")
     else:
-        st.sidebar.subheader("Stratify turned :red[off]")
+        st.sidebar.subheader("Stratify :red[off]")
 
 
 def show_info_sidebar(target_column_selection=False):
