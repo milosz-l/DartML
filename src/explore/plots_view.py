@@ -110,8 +110,16 @@ def altair_interactive_corr_heatmap(df, data_2dbinned):
     ).resolve_scale(color="independent")
 
 
-def show_altair_plots():
+def generate_interactive_altair_corr_heatmap():
+    def get_non_numeric_columns_names(df):
+        non_numeric_cols = [col for col in df.columns if not pd.api.types.is_numeric_dtype(df[col])]
+        return non_numeric_cols
+
     sampled_df_copy = st.session_state.sampled_df.copy()
 
-    data_2dbinned = get_binned(sampled_df_copy, ["target"])
-    st.write(altair_interactive_corr_heatmap(sampled_df_copy, data_2dbinned))
+    data_2dbinned = get_binned(sampled_df_copy, get_non_numeric_columns_names(sampled_df_copy))
+    return altair_interactive_corr_heatmap(sampled_df_copy, data_2dbinned)
+
+
+def show_altair_plots():
+    st.altair_chart(generate_interactive_altair_corr_heatmap())
