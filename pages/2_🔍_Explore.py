@@ -24,5 +24,10 @@ else:
     show_sampled_df()
 
     st.divider()
+
+    sampled_df_before_plotting = st.session_state.sampled_df.copy()
     show_altair_plots()
+    sampled_df_after_plotting = st.session_state.sampled_df.copy()
+    is_same = sampled_df_before_plotting.equals(sampled_df_after_plotting)
+    st.experimental_show(is_same)
     # show_plots(expanded=True)
