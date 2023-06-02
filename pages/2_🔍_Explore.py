@@ -6,6 +6,14 @@ from src.explore.plots_view import show_plots, show_altair_plots
 from src.general_views.logo import show_logo
 
 
+# use style.css
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
+local_css("src/explore/style.css")
+
 show_logo()
 st.title("🔍 Explore")
 
