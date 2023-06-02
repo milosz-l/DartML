@@ -106,7 +106,7 @@ def altair_interactive_corr_heatmap(df, data_2dbinned):
 
     # Combine all plots. hconcat plots both side-by-side
     return at.vconcat(
-        (cor_plot + text).properties(width=config.ALTAIR_PLOTS_SIZE, height=config.ALTAIR_PLOTS_SIZE), scat_plot.properties(width=config.ALTAIR_PLOTS_SIZE, height=config.ALTAIR_PLOTS_SIZE)
+        (cor_plot + text).properties(width=config.ALTAIR_PLOTS_WIDTH, height=config.ALTAIR_PLOTS_HEIGHT), scat_plot.properties(width=config.ALTAIR_PLOTS_WIDTH, height=config.ALTAIR_PLOTS_HEIGHT)
     ).resolve_scale(color="independent")
 
 
@@ -123,7 +123,7 @@ def generate_interactive_altair_corr_heatmap(df):
 def show_altair_plot(show_time=False):
     start_time = time.time()
     df = st.session_state.sampled_df
-    st.altair_chart(generate_interactive_altair_corr_heatmap(df))
+    st.altair_chart(generate_interactive_altair_corr_heatmap(df), use_container_width=True)
     end_time = time.time()
     if show_time:
         st.write(f"Showing the above plot took {end_time - start_time:.2f}s")
