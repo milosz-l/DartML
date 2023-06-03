@@ -95,7 +95,7 @@ def get_shuffle_and_stratify_settings():
         return True, True
 
 
-def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, algorithms, total_time_limit, mode):
+def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, algorithms, total_time_limit, mode, redirect_logs):
     # X_train, X_test, y_train, y_test = perform_train_test_split(st.session_state.sampled_df, target_col_name, st.session_state.train_test_split_percentage)
     X, y = perform_X_y_split(st.session_state.sampled_df, target_col_name)
 
@@ -127,10 +127,13 @@ def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, 
             eval_metric=eval_metric,
         )
 
-    # perform training with redirected stdout
-    with OutputRedirector() as output_string:
+    if redirect_logs:  # perform training with logs redirected to string
+        with OutputRedirector() as output_string:
+            automl.fit(X, y)
+            st.session_state.redirected_training_output = output_string.getvalue()
+    else:  # perform training without redirecting logs
         automl.fit(X, y)
-        st.session_state.redirected_training_output = output_string.getvalue()
+        st.session_state.redirected_training_output = None
 
 
 def total_time_limit_slider():
@@ -153,7 +156,7 @@ def mode_selectbox():
     )
     if mode == "Explain" or mode == "Perform":
         st.caption(
-            "Note: Visualizations generated for Explain and Perform modes may break if the app is under heavy load. If the app may be used by many users, is is advised to use the Compete mode."
+            "Note: Visualizations generated for Explain and Perform modes may be incorrect if the app is under heavy load. If the app may be used by many users, is is advised to use the Compete mode."
         )
     return mode
 
@@ -168,20 +171,37 @@ def clean_up_directory_from_png_files(tmpdirname):
                 os.remove(os.path.join(root, file))
 
 
+def logs_visable_checkbox():
+    """
+    Checkbox that determins whether logs after training should be shown.
+    """
+    logs_visable = st.checkbox("Show training logs", value=False, help="Determin whether logs should be shown after training.")
+    if logs_visable:
+        st.caption("Note: Logs generated may be incorrect if the app is under heavy load. If the app may be used by many users, is is advised to leave it unchecked.")
+    return logs_visable
+
+
 def show_mljar_model():
     if sampled_df_in_session_state() and train_test_split_percentage_in_session_state() and validation_type_in_session_state():
+        st.divider()
         target_col_name = simple_target_column_selectbox()
+        st.divider()
         problem_type = problem_type_selectbox()
         metric = metric_selectbox(problem_type)
+        st.divider()
         algorithms = algorithms_selectbox()
+        st.divider()
         total_time_limit = total_time_limit_slider()
+        st.divider()
         mode = mode_selectbox()
+        st.divider()
+        redirect_logs = logs_visable_checkbox()
         if st.button("Generate new report"):
             try:
                 with st.spinner("Generating report..."):
                     with tempfile.TemporaryDirectory() as tmpdirname:
                         # run automl training
-                        train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms, total_time_limit, mode)
+                        train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms, total_time_limit, mode, redirect_logs)
 
                         # clean up directory if the mode is Compete
                         if mode == "Compete":
@@ -206,7 +226,8 @@ def show_mljar_assess():
             # show logs
             with st.expander("Logs", expanded=False):
                 if redirected_training_output_in_session_state():
-                    st.text(st.session_state.redirected_training_output)
+                    if st.session_state.redirected_training_output is not None:
+                        st.text(st.session_state.redirected_training_output)
 
             # show zip download button
             current_datetime = datetime.now()
