@@ -13,11 +13,12 @@ show_logo()
 st.title("🧪 Sample")
 
 show_csv_loader()
-st.caption("Or use example dataset by clicking the following button:")
+st.markdown("OR")
 show_use_example_data_button()
-st.divider()
+st.markdown("The example `Hotel Reservations` dataset comes from [here](https://www.kaggle.com/datasets/ahsan81/hotel-reservations-classification-dataset).")
 
 if df_in_session_state():
+    st.divider()
     show_uploaded_df(expanded=True)
 
     st.divider()
