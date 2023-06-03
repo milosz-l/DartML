@@ -146,7 +146,26 @@ def total_time_limit_slider():
 
 
 def mode_selectbox():
-    return st.selectbox("Choose training mode", ["Explain", "Perform"], help="Explain mode generates more visualizations (e.g. SHAP plots). Perform mode is dedicated for training best models.")
+    mode = st.selectbox(
+        "Choose training mode",
+        ["Compete", "Perform", "Explain"],
+        help="Compete mode is dedicated for training best models. Explain mode is for generating visualizations (e.g. SHAP plots). Perform mode is something in between.",
+    )
+    if mode == "Explain" or mode == "Perform":
+        st.caption(
+            "Note: Visualizations generated for Explain and Perform modes may break if the app is under heavy load. If the app may be used by many users, is is advised to use the Compete mode."
+        )
+    return mode
+
+
+def clean_up_directory_from_png_files(tmpdirname):
+    """
+    Remove all png files for given directory and its subdirectories.
+    """
+    for root, dirs, files in os.walk(tmpdirname):
+        for file in files:
+            if file.endswith(".png"):
+                os.remove(os.path.join(root, file))
 
 
 def show_mljar_model():
@@ -163,6 +182,10 @@ def show_mljar_model():
                     with tempfile.TemporaryDirectory() as tmpdirname:
                         # run automl training
                         train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms, total_time_limit, mode)
+
+                        # clean up directory if the mode is Compete
+                        if mode == "Compete":
+                            clean_up_directory_from_png_files(tmpdirname)
 
                         # save dir with results as zip to session_state
                         st.session_state.explain_zip_buffer = io.BytesIO()
