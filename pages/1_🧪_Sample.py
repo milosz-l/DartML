@@ -1,6 +1,6 @@
 import streamlit as st
 from src.session_state.session_state_checks import df_in_session_state, sampled_df_in_session_state
-from src.sample.csv_loader_view import show_csv_loader
+from src.sample.csv_loader_view import show_csv_loader, show_use_example_data_button
 from src.general_views.df_view import show_uploaded_df, show_sampled_df
 from src.general_views.sidebars_view import show_info_sidebar
 from src.sample.sliders_view import show_data_sample_slider, show_train_test_split_slider
@@ -13,6 +13,9 @@ show_logo()
 st.title("🧪 Sample")
 
 show_csv_loader()
+st.caption("Or use example dataset by clicking the following button:")
+show_use_example_data_button()
+st.divider()
 
 if df_in_session_state():
     show_uploaded_df(expanded=True)

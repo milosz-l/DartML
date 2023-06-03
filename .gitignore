@@ -3,7 +3,6 @@
 
 .vscode/
 .vscode
-*.csv
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
