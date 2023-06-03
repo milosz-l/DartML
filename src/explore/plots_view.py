@@ -150,11 +150,12 @@ def generate_categorical_columns_visualizations(df):
     return charts
 
 
-def show_categorical_columns_visualizations():
+def show_categorical_columns_visualizations(show_time=False):
     start_time = time.time()
     df = st.session_state.sampled_df
     charts = generate_categorical_columns_visualizations(df)
     end_time = time.time()
     for chart in charts:
         st.altair_chart(chart, use_container_width=False)
-    st.write(f"Showing the above plots took {end_time - start_time:.2f}s")
+    if show_time:
+        st.write(f"Showing the above plots took {end_time - start_time:.2f}s")
