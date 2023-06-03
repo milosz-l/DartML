@@ -123,7 +123,38 @@ def generate_interactive_altair_corr_heatmap(df):
 def show_altair_plot(show_time=False):
     start_time = time.time()
     df = st.session_state.sampled_df
-    st.altair_chart(generate_interactive_altair_corr_heatmap(df), use_container_width=True)
+    st.altair_chart(generate_interactive_altair_corr_heatmap(df), use_container_width=False)
     end_time = time.time()
     if show_time:
         st.write(f"Showing the above plot took {end_time - start_time:.2f}s")
+
+
+# categorical columns visualizations
+@st.cache_data
+def generate_categorical_columns_visualizations(df):
+    categorical_columns = df.select_dtypes(include=["object"]).columns
+
+    charts = []
+
+    # create bar charts for each categorical column
+    for column in categorical_columns:
+        # count the occurrences of each unique value
+        value_counts = df[column].value_counts().reset_index()
+        value_counts.columns = [column, "Count"]
+
+        # create the bar chart using Altair
+        chart = at.Chart(value_counts).mark_bar().encode(x=column, y="Count").properties(title=f"Bar Chart - {column}", width=config.ALTAIR_PLOTS_WIDTH)
+
+        # append created chart to the list of charts
+        charts.append(chart)
+    return charts
+
+
+def show_categorical_columns_visualizations():
+    start_time = time.time()
+    df = st.session_state.sampled_df
+    charts = generate_categorical_columns_visualizations(df)
+    end_time = time.time()
+    for chart in charts:
+        st.altair_chart(chart, use_container_width=False)
+    st.write(f"Showing the above plots took {end_time - start_time:.2f}s")
