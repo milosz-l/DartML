@@ -19,6 +19,6 @@ else:
 
     st.divider()
 
-    show_altair_plot(show_time=True)
+    show_altair_plot(show_time=False)
 
     # show_plots(expanded=True)

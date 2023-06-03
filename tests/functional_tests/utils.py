@@ -4,6 +4,9 @@ import cv2
 def assert_identical_images(current_image_path, expected_image_path):
     """
     Asserts that two images are identical.
+
+    Based on the following article:
+    Based on https://blog.streamlit.io/testing-streamlit-apps-using-seleniumbase/.
     """
     # load images
     current = cv2.imread(current_image_path)

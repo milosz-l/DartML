@@ -3,8 +3,11 @@ BaseCase.main(__name__, __file__)
 from tests.functional_tests.utils import assert_identical_images
 import time
 
+
 EXPLORE_PAGE_VISUALIZATION_TIME_SLEEP = 3
+
 MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME = 90
+DOWNLOAD_REPORTS_FROM_ASSESS_PAGE = True
 
 
 class MyTestClass(BaseCase):
@@ -55,3 +58,6 @@ class MyTestClass(BaseCase):
 
         # assert that there is Download data button
         self.assert_element('p:contains("Download data")')
+
+        if DOWNLOAD_REPORTS_FROM_ASSESS_PAGE:
+            self.click('p:contains("Download data")')

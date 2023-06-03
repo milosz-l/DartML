@@ -48,9 +48,9 @@ Run single test (`test_explore_page` in this example):
 pytest tests/functional_tests/functional_tests.py --chrome --headless -k test_explore_page
 ```
 
+- You can specify the number of concurrent users by adding `-n=<number_of_users>` flag.
 - You can remove the `--headless` flag if you want to make the testing browser visible.
 - You can change `--edge` to any browser you like, for example `--chrome` or `--firefox`.
 - You can make it slower by adding `--slow` flag.
 - You can highlight assertions by adding `--demo` flag.
-
-Based on https://blog.streamlit.io/testing-streamlit-apps-using-seleniumbase/.
+- You can add `-k <test_name>` flag to run only specific test.
