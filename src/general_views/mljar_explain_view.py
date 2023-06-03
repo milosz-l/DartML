@@ -142,7 +142,7 @@ def total_time_limit_slider():
         seconds = seconds % 60
         return minutes, seconds
 
-    total_time_limit = st.slider("Total time limit (in seconds)", 60, 1800, 150, 15)
+    total_time_limit = st.slider("Total time limit (in seconds)", 60, 1800, 60, 15)
     minutes, seconds = get_minutes_and_seconds(total_time_limit)
     st.caption(f"The maximum training time will be {minutes} minutes and {seconds} seconds.")
     return total_time_limit

@@ -1,9 +1,11 @@
 from seleniumbase import BaseCase
 BaseCase.main(__name__, __file__)
+from tests.functional_tests.utils import assert_identical_images
 import time
-import cv2
 
 EXPLORE_PAGE_VISUALIZATION_TIME_SLEEP = 3
+MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME = 90
+
 
 class MyTestClass(BaseCase):
     
@@ -11,23 +13,45 @@ class MyTestClass(BaseCase):
         """
         Test whether visualizations on Explore page are rendered correctly
         """
+        # Load example data and go to Explore page
         self.open("http://localhost:8501")
         self.click_partial_link("Sample")
-        # self.click('//button[text()="Browse files"]')
         self.click('p:contains("Use example data")')
         self.assert_element('p:contains("36275 rows")')
         self.assert_element('p:contains("19 columns")')
         self.click_partial_link("Explore")
+
+        # wait for the visualizations to be rendered
         time.sleep(EXPLORE_PAGE_VISUALIZATION_TIME_SLEEP)
-        self.save_screenshot("tests/functional_tests/current_data/current_explore_page.png")
+        # save screenshot of the page
+        current_image_path = "tests/functional_tests/current_data/current_explore_page.png"
+        self.save_screenshot(current_image_path)
 
-        current = cv2.imread("tests/functional_tests/current_data/current_explore_page.png")
-        expected = cv2.imread("tests/functional_tests/expected_data/expected_explore_page.png")
+        expected_image_path = "tests/functional_tests/expected_data/expected_explore_page.png"
 
-        # check if the size of the pictures are identical
-        assert current.shape == expected.shape
+        # assert that the pages are identical
+        assert_identical_images(current_image_path, expected_image_path)
 
-        # check if all three BGR channels are identical
-        difference = cv2.subtract(current, expected)
-        b, g, r = cv2.split(difference)
-        assert cv2.countNonZero(b) == cv2.countNonZero(g) == cv2.countNonZero(r) == 0
+
+    def test_assess_page(self):
+        """
+        Tests whether results of example training are correct.
+        Can be also used to simulate a user that is training models.
+        """
+        # Load example data and go to Modify & Model page
+        self.open("http://localhost:8501")
+        self.click_partial_link("Sample")
+        self.click('p:contains("Use example data")')
+        self.click('span:contains("Modify & Model")')
+
+        # click Generate new report button
+        self.click('p:contains("Generate new report")')
+
+        # wait for the report to be generated
+        self.wait_for_element('p:contains("Done! Now you can go to Assess tab to see the results!")', timeout=MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME)
+
+        # go to Assess page
+        self.click_partial_link("Assess")
+
+        # assert that there is Download data button
+        self.assert_element('p:contains("Download data")')

@@ -38,10 +38,16 @@ You can start the locust and simultaneously use the app yourself (or run functio
 - Used package: [seleniumbase](https://seleniumbase.io/).
 
 ### Run functional tests
-Example for `functional_tests.py` file:
+Run all tests:
 ```bash
 pytest tests/functional_tests/functional_tests.py --chrome --headless
 ```
+
+Run single test (`test_explore_page` in this example):
+```bash
+pytest tests/functional_tests/functional_tests.py --chrome --headless -k test_explore_page
+```
+
 - You can remove the `--headless` flag if you want to make the testing browser visible.
 - You can change `--edge` to any browser you like, for example `--chrome` or `--firefox`.
 - You can make it slower by adding `--slow` flag.
