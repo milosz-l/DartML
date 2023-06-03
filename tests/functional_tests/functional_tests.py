@@ -1,13 +1,8 @@
 from seleniumbase import BaseCase
 BaseCase.main(__name__, __file__)
 from tests.functional_tests.utils import assert_identical_images
+from tests.functional_tests import config
 import time
-
-
-EXPLORE_PAGE_VISUALIZATION_TIME_SLEEP = 3
-
-MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME = 90
-DOWNLOAD_REPORTS_FROM_ASSESS_PAGE = True
 
 
 class MyTestClass(BaseCase):
@@ -25,7 +20,7 @@ class MyTestClass(BaseCase):
         self.click_partial_link("Explore")
 
         # wait for the visualizations to be rendered
-        time.sleep(EXPLORE_PAGE_VISUALIZATION_TIME_SLEEP)
+        time.sleep(config.EXPLORE_PAGE_VISUALIZATION_TIME_SLEEP)
         # save screenshot of the page
         current_image_path = "tests/functional_tests/current_data/current_explore_page.png"
         self.save_screenshot(current_image_path)
@@ -51,7 +46,7 @@ class MyTestClass(BaseCase):
         self.click('p:contains("Generate new report")')
 
         # wait for the report to be generated
-        self.wait_for_element('p:contains("Done! Now you can go to Assess tab to see the results!")', timeout=MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME)
+        self.wait_for_element('p:contains("Done! Now you can go to Assess tab to see the results!")', timeout=config.MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME)
 
         # go to Assess page
         self.click_partial_link("Assess")
@@ -59,5 +54,5 @@ class MyTestClass(BaseCase):
         # assert that there is Download data button
         self.assert_element('p:contains("Download data")')
 
-        if DOWNLOAD_REPORTS_FROM_ASSESS_PAGE:
+        if config.DOWNLOAD_REPORTS_FROM_ASSESS_PAGE:
             self.click('p:contains("Download data")')
