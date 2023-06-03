@@ -26,3 +26,5 @@ ipython                     # 8.13.2
 # testing requirements
 pytest==7.3.1
 locust==2.15.1
+selenium==4.9.1
+seleniumbase==4.14.12
