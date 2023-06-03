@@ -22,3 +22,7 @@ mljar-supervised==0.11.5
 streamlit==1.22.0
 altair==4.2.2
 ipython                     # 8.13.2
+
+# testing requirements
+pytest==7.3.1
+locust==2.15.1
