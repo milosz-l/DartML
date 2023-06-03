@@ -186,17 +186,29 @@ def show_mljar_model():
         st.divider()
         target_col_name = simple_target_column_selectbox()
         st.divider()
+
         problem_type = problem_type_selectbox()
         metric = metric_selectbox(problem_type)
         st.divider()
+
         algorithms = algorithms_selectbox()
         st.divider()
+
         total_time_limit = total_time_limit_slider()
         st.divider()
-        mode = mode_selectbox()
-        st.divider()
-        redirect_logs = logs_visable_checkbox()
-        st.divider()
+
+        if config.SINGLE_USER_ADVANCED_APP_VERSION:
+            mode = mode_selectbox()
+            st.divider()
+        else:
+            mode = "Compete"
+
+        if config.SINGLE_USER_ADVANCED_APP_VERSION:
+            redirect_logs = logs_visable_checkbox()
+            st.divider()
+        else:
+            redirect_logs = False
+
         if st.button("Generate new report"):
             try:
                 with st.spinner("Generating report..."):

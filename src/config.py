@@ -1,3 +1,4 @@
+# non-adjustable variables (change at your own risk)
 SLIDERS_STARTING_VALUE = 1
 SLIDERS_STEP = 1
 RANDOM_STATE = 42
@@ -6,3 +7,6 @@ TRAIN_SPLIT_SLIDER_MAX_VALUE = 90
 ALTAIR_PLOTS_HEIGHT = 400
 ALTAIR_PLOTS_WIDTH = 400
 APP_FAVICON = "🎯"
+
+# adjustable variables
+SINGLE_USER_ADVANCED_APP_VERSION = True
