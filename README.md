@@ -38,13 +38,13 @@ You can start the locust and simultaneously use the app yourself (or run functio
 - Used package: [seleniumbase](https://seleniumbase.io/).
 
 ### Run functional tests
-Example for `sample_tests.py` file:
+Example for `functional_tests.py` file:
 ```bash
-pytest tests/functional_tests/sample_tests.py --chrome
+pytest tests/functional_tests/functional_tests.py --chrome --headless
 ```
+- You can remove the `--headless` flag if you want to make the testing browser visible.
 - You can change `--edge` to any browser you like, for example `--chrome` or `--firefox`.
 - You can make it slower by adding `--slow` flag.
-- You can make it headless (run in invisible browser) by adding `--headless` flag.
 - You can highlight assertions by adding `--demo` flag.
 
 Based on https://blog.streamlit.io/testing-streamlit-apps-using-seleniumbase/.
