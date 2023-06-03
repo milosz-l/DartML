@@ -6,7 +6,7 @@ def show_logo():
         """
         <style>
             [data-testid="stSidebarNav"]::before {
-                content: "EasyML";
+                content: "🎯 DartML";
                 margin-left: 20px;
                 margin-top: 20px;
                 font-size: 30px;

@@ -1,9 +1,9 @@
 import streamlit as st
 from PIL import Image
 from src.general_views.logo import show_logo
+from src import config
 
-# page config
-st.set_page_config(page_title="AutoML", page_icon="💡", layout="wide")
+st.set_page_config(page_title="AutoML", page_icon=config.APP_FAVICON, layout="wide")
 
 show_logo()
 st.title("🏠 Home")

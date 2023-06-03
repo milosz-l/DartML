@@ -4,7 +4,9 @@ from src.general_views.sidebars_view import show_info_sidebar
 from src.session_state.session_state_checks import sampled_df_in_session_state
 from src.explore.plots_view import show_plots, show_altair_plot
 from src.general_views.logo import show_logo
+from src import config
 
+st.set_page_config(page_title="AutoML", page_icon=config.APP_FAVICON, layout="wide")
 
 show_logo()
 st.title("🔍 Explore")
