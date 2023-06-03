@@ -8,7 +8,7 @@ catboost>=0.24.4            # 1.2
 joblib>=1.0.1               # 1.2.0
 tabulate>=0.8.7             # 0.9.0
 matplotlib>=3.2.2           # 3.7.1
-dtreeviz>=2.0.0             # 2.2.1
+dtreeviz==2.0.0
 numba==0.56.4
 shap>=0.36.0                # 0.41.0
 seaborn>=0.11.1             # 0.12.2
