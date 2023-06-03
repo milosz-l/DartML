@@ -196,6 +196,7 @@ def show_mljar_model():
         mode = mode_selectbox()
         st.divider()
         redirect_logs = logs_visable_checkbox()
+        st.divider()
         if st.button("Generate new report"):
             try:
                 with st.spinner("Generating report..."):
