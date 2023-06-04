@@ -12,7 +12,7 @@ class MyTestClass(BaseCase):
         Test whether visualizations on Explore page are rendered correctly
         """
         # Load example data and go to Explore page
-        self.open("http://localhost:8501")
+        self.open(config.HOST_URL)
         self.click_partial_link("Sample")
         self.click('p:contains("Use example data")')
         self.assert_element('p:contains("36275 rows")')
@@ -37,7 +37,7 @@ class MyTestClass(BaseCase):
         Can be also used to simulate a user that is training models.
         """
         # Load example data and go to Modify & Model page
-        self.open("http://localhost:8501")
+        self.open(config.HOST_URL)
         self.click_partial_link("Sample")
         self.click('p:contains("Use example data")')
         self.click('span:contains("Modify & Model")')
