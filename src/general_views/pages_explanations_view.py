@@ -1,4 +1,5 @@
 import streamlit as st
+from typing import Literal
 
 
 def show_sample_page_explanation():
@@ -43,3 +44,16 @@ def show_assess_page_explanation():
         Whole generated report with visualizations and trained models can be downloaded as a *zip* file.
         """
     )
+
+def show_page_explanation_in_expander(page_title: Literal["sample", "explore", "modify_and_model", "assess"], expanded=False):
+    with st.expander("Info", expanded=expanded):
+        if page_title == "sample":
+            show_sample_page_explanation()
+        elif page_title == "explore":
+            show_explore_page_explanation()
+        elif page_title == "modify_and_model":
+            show_modify_and_model_page_explanation()
+        elif page_title == "assess":
+            show_assess_page_explanation()
+        else:
+            raise ValueError(f"Unknown page title: {page_title}")

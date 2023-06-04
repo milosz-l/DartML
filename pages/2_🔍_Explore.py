@@ -5,11 +5,13 @@ from src.session_state.session_state_checks import sampled_df_in_session_state
 from src.explore.plots_view import show_plots, show_altair_plot, show_categorical_columns_visualizations
 from src.general_views.logo import show_logo
 from src import config
+from src.general_views.pages_explanations_view import show_page_explanation_in_expander
 
 st.set_page_config(page_title="AutoML", page_icon=config.APP_FAVICON, layout="wide")
 
 show_logo()
 st.title(config.EXPLORE_PAGE_TITLE)
+show_page_explanation_in_expander("explore")
 
 if not sampled_df_in_session_state():
     st.write("You need to upload some data first! Please go to Sample tab.")

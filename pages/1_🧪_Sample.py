@@ -6,11 +6,14 @@ from src.general_views.sidebars_view import show_info_sidebar
 from src.sample.sliders_view import show_data_sample_slider, show_train_test_split_slider
 from src.general_views.logo import show_logo
 from src import config
+from src.general_views.pages_explanations_view import show_page_explanation_in_expander
 
 st.set_page_config(page_title="AutoML", page_icon=config.APP_FAVICON, layout="wide")
 
 show_logo()
 st.title(config.SAMPLE_PAGE_TITLE)
+show_page_explanation_in_expander("sample")
+
 
 show_csv_loader()
 st.markdown("OR")

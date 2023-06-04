@@ -6,11 +6,13 @@ from src.general_views.mljar_explain_view import show_mljar_model
 from src.general_views.sidebars_view import show_info_sidebar
 from src.general_views.logo import show_logo
 from src import config
+from src.general_views.pages_explanations_view import show_page_explanation_in_expander
 
 st.set_page_config(page_title="AutoML", page_icon=config.APP_FAVICON, layout="wide")
 
 show_logo()
 st.title(config.MODIFY_AND_MODEL_PAGE_TITLE)
+show_page_explanation_in_expander("modify_and_model")
 
 if not sampled_df_in_session_state():
     st.write("You need to upload some data first! Please go to Sample tab.")
