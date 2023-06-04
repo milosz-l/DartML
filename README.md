@@ -5,19 +5,26 @@
 Welcome to **DartML**! This app lets you build Machine Learning models **without writing a single line of code**!
 
 
-# Installation
+# How to install and run the app
 
-## Using pip
+## Install requirements
+
+### Using pip
 ```bash
 pip install -r requirements.txt
 ```
 
-## Using conda
+### Using conda
 You can change `new_env_name` to any name you like.
 
 ```bash
 conda create --name new_env_name python=3.9
 pip install -r requirements.txt
+```
+
+## Run the app
+```bash
+streamlit run 0_🏠_Home.py
 ```
 
 # Testing
