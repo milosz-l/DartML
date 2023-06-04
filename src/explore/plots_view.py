@@ -81,6 +81,8 @@ def get_corr_data(df):
 
 
 def altair_interactive_corr_heatmap(df, data_2dbinned):
+    # Based on https://towardsdatascience.com/altair-plot-deconstruction-visualizing-the-correlation-structure-of-weather-data-38fb5668c5b1
+
     # Define selector
     var_sel_cor = at.selection_single(fields=["variable", "variable2"], clear=False, init={"variable": "mock_col1", "variable2": "mock_col2"})
 
