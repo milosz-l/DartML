@@ -38,6 +38,8 @@ You can start the locust and simultaneously use the app yourself (or run functio
 - Used package: [seleniumbase](https://seleniumbase.io/).
 
 ### Run functional tests
+First you need to specify the `HOST_URL` in `tests/functional_tests/config.py` file. By default it's set to `http://localhost:8501`.
+
 Run all tests:
 ```bash
 pytest tests/functional_tests/functional_tests.py --chrome --headless
