@@ -7,7 +7,7 @@ from src.general_views.logo import show_logo
 from src import config
 from src.general_views.pages_explanations_view import show_page_explanation_in_expander
 
-st.set_page_config(page_title="AutoML", page_icon=config.APP_FAVICON, layout="wide")
+st.set_page_config(page_title=config.APP_TITLE, page_icon=config.APP_FAVICON, layout="wide")
 
 show_logo()
 st.title(config.EXPLORE_PAGE_TITLE)

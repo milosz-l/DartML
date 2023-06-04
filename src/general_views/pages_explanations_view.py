@@ -5,7 +5,9 @@ from typing import Literal
 def show_sample_page_explanation():
     st.markdown(
         """
-        In this tab, you can upload your own dataset or use an example **dataset**. After that, you will be able to sample the data and specify the train/test split. All options chosen in this tab will be shown in the sidebar on the left. If you want to restore the default options, just go back to the Explore tab.
+        In this tab, you can upload your own dataset or use an example **dataset**. After that, you will be able to sample the data and specify the train/test split method.
+        - All options chosen in this tab will be shown in the sidebar on the left.
+        - Going back to this tab will restore the default options.
         """
     )
 
