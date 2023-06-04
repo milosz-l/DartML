@@ -18,7 +18,7 @@ show_page_explanation_in_expander("sample")
 show_csv_loader()
 st.markdown("OR")
 show_use_example_data_button()
-st.markdown("The example `Hotel Reservations` dataset comes from [here](https://www.kaggle.com/datasets/ahsan81/hotel-reservations-classification-dataset).")
+st.markdown("The example *Hotel Reservations* dataset comes from [here](https://www.kaggle.com/datasets/ahsan81/hotel-reservations-classification-dataset).")
 
 if df_in_session_state():
     st.divider()
