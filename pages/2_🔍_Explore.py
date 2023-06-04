@@ -9,7 +9,7 @@ from src import config
 st.set_page_config(page_title="AutoML", page_icon=config.APP_FAVICON, layout="wide")
 
 show_logo()
-st.title("🔍 Explore")
+st.title(config.EXPLORE_PAGE_TITLE)
 
 if not sampled_df_in_session_state():
     st.write("You need to upload some data first! Please go to Sample tab.")

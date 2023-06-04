@@ -10,7 +10,7 @@ from src import config
 st.set_page_config(page_title="AutoML", page_icon=config.APP_FAVICON, layout="wide")
 
 show_logo()
-st.title("🧪 Sample")
+st.title(config.SAMPLE_PAGE_TITLE)
 
 show_csv_loader()
 st.markdown("OR")
