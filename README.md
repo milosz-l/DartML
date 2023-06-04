@@ -1,8 +1,16 @@
-# thesis
-Engineering thesis app in streamlit
+<!-- Python 3.9 badge -->
+[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
+
+# DartML
+Welcome to **DartML**! This app lets you build Machine Learning models **without writing a single line of code**!
 
 
 # Installation
+
+## Using pip
+```bash
+pip install -r requirements.txt
+```
 
 ## Using conda
 You can change `new_env_name` to any name you like.
