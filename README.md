@@ -27,6 +27,9 @@ pip install -r requirements.txt
 streamlit run 0_🏠_Home.py
 ```
 
+## Change the app mode (single-user to multi-user)
+You can change the app mode by toggling the `SINGLE_USER_ADVANCED_APP_VERSION` variable in src/config.py file.
+
 # Testing
 
 ## Load tests

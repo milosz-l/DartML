@@ -8,9 +8,10 @@ ALTAIR_PLOTS_HEIGHT = 500
 ALTAIR_PLOTS_WIDTH = 500
 
 # adjustable variables
+## app version
 SINGLE_USER_ADVANCED_APP_VERSION = True
 
-# emojis
+## emojis
 APP_TITLE = "DartML"
 APP_FAVICON = "🎯"
 HOME_PAGE_EMOJI = "🏠"
@@ -19,7 +20,7 @@ EXPLORE_PAGE_EMOJI = "🔍"
 MODIFY_AND_MODEL_PAGE_EMOJI = "🛠️"
 ASSESS_PAGE_EMOJI = "📊"
 
-# pages titles
+## pages titles
 SEMMA_COLOR = "red"
 HOME_PAGE_TITLE = f"{HOME_PAGE_EMOJI} Home"
 SAMPLE_PAGE_TITLE = f"{SAMPLE_PAGE_EMOJI} Sample"
