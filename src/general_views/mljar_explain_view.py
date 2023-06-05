@@ -1,6 +1,6 @@
 import streamlit as st
 from supervised.automl import AutoML
-from src.modify.target_select_view import show_target_column_selectbox
+from src.modify_and_model.target_select_view import show_target_column_selectbox
 from src.session_state.session_state_checks import (
     sampled_df_in_session_state,
     train_test_split_percentage_in_session_state,
