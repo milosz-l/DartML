@@ -1,0 +1,23 @@
+# Doxyfile
+
+# Project settings
+PROJECT_NAME           = DartML
+OUTPUT_DIRECTORY       = docs
+INPUT                  = .
+RECURSIVE              = YES
+
+# File patterns
+FILE_PATTERNS          = *.py
+
+# HTML output settings
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+
+# Configuration options
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+# Other options
+WARN_IF_UNDOCUMENTED   = YES
+WARN_NO_PARAMDOC       = YES

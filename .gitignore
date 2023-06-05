@@ -4,6 +4,8 @@
 .vscode/
 .vscode
 latest_logs/
+docs/
+.coverage*
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
