@@ -1,8 +1,21 @@
 import streamlit as st
 from typing import Literal
+from src import config
 
+def show_home_page_explanation() -> None:
+    """
+    Shows the Home page explanation.
+    """
+    st.markdown(f"""
+                Welcome to **DartML**! This app lets you build Machine Learning models using :{config.SEMMA_COLOR}[**SEMMA**] methodology **without writing a single line of code**!
+                
+                Below there are explanations of each tab's functionality. But don't worry! You don't have to read it now, as the same explanations are available at the top of each tab.
+                """)
 
-def show_sample_page_explanation():
+def show_sample_page_explanation() -> None:
+    """
+    Shows the Sample page explanation.
+    """
     st.markdown(
         """
         In this tab, you can upload your own or use an example **dataset**. After that, you will be able to sample the data and specify the train/test split method.
@@ -11,7 +24,10 @@ def show_sample_page_explanation():
         """
     )
 
-def show_explore_page_explanation():
+def show_explore_page_explanation() -> None:
+    """
+    Shows the Explore page explanation.
+    """
     st.markdown(
         """
         In this tab, you can perform the **Exploratory Data Analysis (EDA)** on your dataset.
@@ -22,7 +38,10 @@ def show_explore_page_explanation():
         """
     )
 
-def show_modify_and_model_page_explanation():
+def show_modify_and_model_page_explanation() -> None:
+    """
+    Shows the Modify & Model page explanation.
+    """
     st.markdown(
         """
         In this tab, you define the AutoML **model training** configuration:
@@ -34,7 +53,10 @@ def show_modify_and_model_page_explanation():
         """
     )
 
-def show_assess_page_explanation():
+def show_assess_page_explanation() -> None:
+    """
+    Shows the Assess page explanation.
+    """
     st.markdown(
         """
         In this tab you can **evaluate** the trained models. You can see the **leaderboard** with the models ranked by the chosen metric. Depending on the training mode you chose in previous tab, there may be visualizations like:
@@ -47,7 +69,13 @@ def show_assess_page_explanation():
         """
     )
 
-def show_page_explanation_in_expander(page_title: Literal["sample", "explore", "modify_and_model", "assess"], expanded=False):
+def show_page_explanation_in_expander(page_title: Literal["sample", "explore", "modify_and_model", "assess"], expanded: bool = False) -> None:
+    """
+    Shows given page explanation in an expander.
+    args:
+        page_title: the title of the page to show the explanation for.
+        expanded: whether the expander should be expanded by default.
+    """
     with st.expander("Info", expanded=expanded):
         if page_title == "sample":
             show_sample_page_explanation()
