@@ -5,7 +5,7 @@ from src.session_state.session_state_checks import (
     train_test_split_percentage_in_session_state,
     explain_zip_buffer_in_session_state,
     redirected_training_output_in_session_state,
-    validation_type_in_session_state,
+    split_type_in_session_state,
     shuffle_in_session_state,
     stratify_in_session_state,
 )
@@ -150,16 +150,16 @@ def train_mljar(
 
     shuffle_setting, stratify_setting = get_shuffle_and_stratify_settings()
 
-    if st.session_state.validation_type == "split":
+    if st.session_state.split_type == "split":
         configured_validation_strategy = {
-            "validation_type": "split",
+            "split_type": "split",
             "train_ratio": st.session_state.train_test_split_percentage,
             "shuffle": shuffle_setting,
             "stratify": stratify_setting,
             "random_seed": config.RANDOM_STATE,
         }
     else:  # validation type is kfold
-        configured_validation_strategy = {"validation_type": "kfold", "k_folds": 5, "shuffle": shuffle_setting, "stratify": stratify_setting, "random_seed": config.RANDOM_STATE}
+        configured_validation_strategy = {"split_type": "kfold", "k_folds": 5, "shuffle": shuffle_setting, "stratify": stratify_setting, "random_seed": config.RANDOM_STATE}
 
     # create AutoML object
     if problem_type == "auto":
@@ -231,7 +231,7 @@ def logs_visable_checkbox():
 
 
 def show_mljar_model():
-    if sampled_df_in_session_state() and train_test_split_percentage_in_session_state() and validation_type_in_session_state():
+    if sampled_df_in_session_state() and train_test_split_percentage_in_session_state() and split_type_in_session_state():
         st.divider()
         target_col_name = simple_target_column_selectbox()
         st.divider()

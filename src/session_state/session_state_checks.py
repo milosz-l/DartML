@@ -43,8 +43,8 @@ def redirected_training_output_in_session_state():
     return False
 
 
-def validation_type_in_session_state():
-    if "validation_type" in st.session_state:
+def split_type_in_session_state():
+    if "split_type" in st.session_state:
         return True
     return False
 

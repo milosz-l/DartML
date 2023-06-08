@@ -30,7 +30,7 @@ if df_in_session_state():
         show_sampled_df()
 
     st.divider()
-    st.session_state.validation_type = st.selectbox("Use simple train/test split or 5-fold cross validation?", ("split", "kfold"), help="Choosing split is a faster option.")
+    st.session_state.split_type = st.selectbox("Use simple train/test split or 5-fold cross validation?", ("split", "kfold"), help="Choosing split is a faster option.")
     col1, col2 = st.columns(2)
     st.session_state.shuffle = col1.checkbox(
         "Shuffle", value=True, help="Shuffle means splitting the data randomly. It's advised to leave it turned on. But you may want to turn it off e.g. for time series analysis problems."
@@ -39,6 +39,6 @@ if df_in_session_state():
         "Stratify", value=True, help="Stratify ensures that both the train and test sets have the same proportion of examples in each class. It's advised to leave it on."
     )
 
-    show_train_test_split_slider(disabled=True if st.session_state.validation_type == "kfold" else False)
+    show_train_test_split_slider(disabled=True if st.session_state.split_type == "kfold" else False)
 
 show_info_sidebar()
