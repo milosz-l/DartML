@@ -4,7 +4,11 @@ from src.config import SLIDERS_STARTING_VALUE, SLIDERS_STEP, TRAIN_SPLIT_SLIDER_
 from src.session_state.session_state_updates import update_sampled_df
 
 
-def show_data_sample_slider():
+def show_data_sample_slider() -> None:
+    """
+    Shows the slider for sampling uploaded data.
+    Value chosen by the user is saved in the session_state.
+    """
     default_slider_value = 100
     # if sample_percentage_in_session_state():  # TODO: issue number 1289
     #     default_slider_value = round(st.session_state.data_sample_percentage * 100)
@@ -18,14 +22,16 @@ def show_data_sample_slider():
         st.caption(f"You sampled {round(st.session_state.data_sample_percentage * 100)}% of data, which is {subset_rows_num} rows out of {all_rows_num} rows in the whole dataset.")
 
 
-def show_train_test_split_slider(disabled=False):
+def show_train_test_split_slider(disabled=False) -> None:
     """
     Shows the train test split slider.
-    Value chosen by the user is saved in session_state
+    Value chosen by the user is saved in the session_state.
     """
     default_slider_value = 75
     # if train_test_split_percentage_in_session_state():    # TODO: issue number 1289
     #     default_slider_value = round(st.session_state.train_test_split_percentage * 100)
+
+    # show slider
     st.session_state.train_test_split_percentage = (
         st.slider(
             "Choose train data size for train/test split method:",
@@ -38,6 +44,8 @@ def show_train_test_split_slider(disabled=False):
         )
         / 100
     )
+
+    # show caption with train/test split percentage info
     if df_in_session_state() and train_test_split_percentage_in_session_state():
         train_data_size = round(st.session_state.train_test_split_percentage * 100)
         test_data_size = 100 - train_data_size
