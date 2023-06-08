@@ -106,7 +106,7 @@ pytest tests/functional_tests/functional_tests.py --chrome --headless -k test_ex
     └── config.toml                 # configurations for streamlit (theme)
 ```
 
-### in Polish
+<!-- ### in Polish
 ```
 .
 ├── 0_🏠_Home.py                    # Widok definiujący wygląd strony Home.
@@ -127,13 +127,13 @@ pytest tests/functional_tests/functional_tests.py --chrome --headless -k test_ex
 │   ├── functional_tests            # Testy funkcjonalne.
 │   └── load_tests                  # Testy obciążeniowe.
 │   └── unit_tests                  # Testy jednostkowe.
-├── docs                            # Dokumentacja aplikacji.
+├── docs                            # Dokumentacja wygenerowana z komentarzy w kodzie.
 ├── example_data                    # Przykładowe dane używane w aplikacji.
 ├── README.md                       # Opis projektu, który właśnie czytasz.
 ├── requirements.txt                # Zależności dla pip.
 └── .streamlit                      # Konfiguracja streamlit (motyw).
     └── config.toml                 # Konfiguracja streamlit (motyw).
-```
+``` -->
 
 ## Generate documentation from docstrings
 ```bash
