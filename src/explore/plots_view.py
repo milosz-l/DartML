@@ -9,7 +9,10 @@ from src import config
 
 
 # matplotlib and seaborn
-def show_heatmap():
+def show_heatmap() -> None:
+    """
+    Shows the correlation heatmap.
+    """
     start_time = time.time()
     if "heatmap" not in st.session_state:
         with st.spinner("Generating heatmap"):
@@ -19,7 +22,10 @@ def show_heatmap():
     st.write(f"Showing the above plot took {end_time - start_time:.2f}s")
 
 
-def show_pairplot():
+def show_pairplot() -> None:
+    """
+    Shows the pairplot.
+    """
     start_time = time.time()
     if "pairplot" not in st.session_state:
         with st.spinner("Generating pairplot"):
@@ -29,7 +35,10 @@ def show_pairplot():
     st.write(f"Showing the above plot took {end_time - start_time:.2f}s")
 
 
-def show_plots(expanded=False):
+def show_plots(expanded: bool = False) -> None:
+    """
+    Shows the matplotlib and seaborn plots (correlation heatmap and pairplot).
+    """
     with st.expander("Show correlation heatmap", expanded=expanded):
         show_regenerate_heatmap_button()
         if not st.session_state.sampled_df.empty:
@@ -42,7 +51,14 @@ def show_plots(expanded=False):
 
 
 # altair
-def get_binned(df, columns_to_drop):
+## numerical columns visualizations
+def get_binned(df: pd.DataFrame, columns_to_drop: list[str]) -> pd.DataFrame:
+    """
+    Returns a dataframe with the binned data.
+    args:
+        df: the dataframe
+        columns_to_drop: list of the columns to drop
+    """
     def compute_2d_histogram(var1, var2, df, density=True):
         H, xedges, yedges = np.histogram2d(df[var1], df[var2], density=density)
         H[H == 0] = np.nan
@@ -69,7 +85,12 @@ def get_binned(df, columns_to_drop):
     return data_2dbinned
 
 
-def get_corr_data(df):
+def get_corr_data(df : pd.DataFrame) -> pd.DataFrame:
+    """
+    Returns a dataframe with the correlation data.
+    args:
+        df: the dataframe
+    """
     cor_data = (
         df.corr()
         .stack()
@@ -80,7 +101,13 @@ def get_corr_data(df):
     return cor_data
 
 
-def altair_interactive_corr_heatmap(df, data_2dbinned):
+def altair_interactive_corr_heatmap(df: pd.DataFrame, data_2dbinned: pd.DataFrame) -> None:
+    """
+    Returns an interactive correlation heatmap.
+    args:
+        df: the dataframe
+        data_2dbinned: the 2d binned dataframe
+    """
     # Based on https://towardsdatascience.com/altair-plot-deconstruction-visualizing-the-correlation-structure-of-weather-data-38fb5668c5b1
 
     # Define selector
@@ -113,7 +140,12 @@ def altair_interactive_corr_heatmap(df, data_2dbinned):
 
 
 @st.cache_data
-def generate_interactive_altair_corr_heatmap(df):
+def generate_interactive_altair_corr_heatmap(df: pd.DataFrame) -> at.Chart:
+    """
+    Generates the interactive altair plot.
+    args:
+        df: the dataframe to use
+    """
     def get_non_numeric_columns_names(df):
         non_numeric_cols = [col for col in df.columns if not pd.api.types.is_numeric_dtype(df[col])]
         return non_numeric_cols
@@ -122,7 +154,12 @@ def generate_interactive_altair_corr_heatmap(df):
     return altair_interactive_corr_heatmap(df, data_2dbinned)
 
 
-def show_altair_plot(show_time=False):
+def show_numerical_columns_visualizations(show_time: bool = False) -> None:
+    """
+    Shows the interactive altair plot.
+    args:
+        show_time: whether to show the time it took to generate the plot
+    """
     start_time = time.time()
     df = st.session_state.sampled_df
     st.altair_chart(generate_interactive_altair_corr_heatmap(df), use_container_width=False)
@@ -131,9 +168,15 @@ def show_altair_plot(show_time=False):
         st.write(f"Showing the above plot took {end_time - start_time:.2f}s")
 
 
-# categorical columns visualizations
+## categorical columns visualizations
 @st.cache_data
-def generate_categorical_columns_visualizations(df):
+def generate_categorical_columns_visualizations(df: pd.DataFrame) -> list[at.Chart]:
+    """
+    Generates bar charts for each categorical column in the dataframe.
+    Returns a list of Altair charts.
+    args:
+        df: dataframe to generate the plots for
+    """
     categorical_columns = df.select_dtypes(include=["object"]).columns
 
     charts = []
@@ -152,7 +195,12 @@ def generate_categorical_columns_visualizations(df):
     return charts
 
 
-def show_categorical_columns_visualizations(show_time=False):
+def show_categorical_columns_visualizations(show_time: bool = False) -> None:
+    """
+    Show bar charts for each categorical column in the dataframe.
+    args:
+        show_time: if True, show the time it took to generate the plots
+    """
     start_time = time.time()
     df = st.session_state.sampled_df
     charts = generate_categorical_columns_visualizations(df)
