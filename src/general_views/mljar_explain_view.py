@@ -19,9 +19,14 @@ from datetime import datetime
 from src.general_views.mljar_markdown_view import show_mljar_markdown
 from supervised.exceptions import AutoMLException
 from src import config
+from typing import Optional, Literal
+import pandas as pd
 
 
-class OutputRedirector:  # TODO: remove it in prod and lower the verbosity level of AutoML
+class OutputRedirector:
+    """
+    Class used to redirect the output of the training process to a string.
+    """
     def __enter__(self):
         self.original_stdout = sys.stdout
         sys.stdout = self.output_string = io.StringIO()
@@ -31,7 +36,13 @@ class OutputRedirector:  # TODO: remove it in prod and lower the verbosity level
         sys.stdout = self.original_stdout
 
 
-def zip_directory_into_buffer(directory_path, buffer):
+def zip_directory_into_buffer(directory_path: str, buffer: io.BytesIO) -> None:
+    """
+    Zips the directory into given buffer.
+    args:
+        directory_path: path to the directory to zip
+        buffer: buffer to zip the directory into
+    """
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zipf:
         # Iterate over all the files and subdirectories in the directory
         for root, _, files in os.walk(directory_path):
@@ -41,13 +52,21 @@ def zip_directory_into_buffer(directory_path, buffer):
                 zipf.write(file_path, os.path.relpath(file_path, directory_path))
 
 
-def simple_target_column_selectbox():
+def simple_target_column_selectbox() -> str:
+    """
+    Shows a target column selectbox with the last column selected by default.
+    Returns the selected target column.
+    args: None"""
     columns_list = st.session_state.sampled_df.columns.tolist()
     selectbox_default_index = len(columns_list) - 1
     return st.selectbox("Choose target column:", columns_list, index=selectbox_default_index)
 
 
-def problem_type_selectbox():
+def problem_type_selectbox() -> str:
+    """
+    Shows a problem type selectbox with auto selected by default.
+    Returns the selected problem type.
+    """
     problem_types = ["auto", "binary classification", "multiclass classification", "regression"]
     chosen_problem_type = st.selectbox(
         "Choose problem type", problem_types, index=0, help="You can choose problem type manually or leave it at auto (then problem type will be guessed based on target values)"
@@ -55,7 +74,11 @@ def problem_type_selectbox():
     return chosen_problem_type
 
 
-def metric_selectbox(problem_type):
+def metric_selectbox(problem_type: Literal["binary classification", "multiclass classification", "regression", "auto"]) -> Optional[str]:
+    """
+    If problem_type is not auto, shows a metric selectbox with the first metric selected by default.
+    Returns the selected metric.
+    """
     if problem_type == "binary classification":
         metrics = ["logloss", "auc", "f1", "average_precision", "accuracy"]
     elif problem_type == "multiclass classification":
@@ -70,32 +93,59 @@ def metric_selectbox(problem_type):
     return None
 
 
-def algorithms_selectbox():
+def algorithms_selectbox() -> list[str]:
+    """
+    Shows a multiselectbox with first five algorithms selected by default.
+    Returns list with selected algorithms.
+    """
     algorithms = ["Baseline", "Linear", "Decision Tree", "Random Forest", "Xgboost", "Extra Trees", "LightGBM", "CatBoost", "Neural Network", "Nearest Neighbors"]
     return st.multiselect("Choose algorithms to train", algorithms, algorithms[0:5])
 
 
-def perform_train_test_split(df, target_label, train_size):
-    X = df.drop(columns=target_label)
-    y = df[target_label]
-    return train_test_split(X, y, train_size=train_size)
-
-
-def perform_X_y_split(df, target_label):
+def perform_X_y_split(df: pd.DataFrame, target_label: str):
+    """
+    Performs X y split on given dataframe.
+    args:
+        df: dataframe to split
+        target_label: name of the target column
+    """
     X = df.drop(columns=target_label)
     y = df[target_label]
     return X, y
 
 
-def get_shuffle_and_stratify_settings():
+def get_shuffle_and_stratify_settings() -> tuple[bool, bool]:
+    """
+    Returns shuffle and stratify settings from session state.
+    """
     if shuffle_in_session_state() and stratify_in_session_state():
         return st.session_state.shuffle, st.session_state.stratify
     else:
         return True, True
 
 
-def train_mljar_explain(target_col_name, tmpdirname, problem_type, eval_metric, algorithms, total_time_limit, mode, redirect_logs):
-    # X_train, X_test, y_train, y_test = perform_train_test_split(st.session_state.sampled_df, target_col_name, st.session_state.train_test_split_percentage)
+def train_mljar(
+        target_col_name: str,
+        tmpdirname: str,
+        problem_type: Literal["binary classification", "multiclass classification", "regression", "auto"],
+        eval_metric: str,
+        algorithms: list[str],
+        total_time_limit: int,
+        mode: Literal["Explain", "Perform", "Compete"],
+        redirect_logs: bool
+    ) -> None:
+    """
+    Trains MLJAR model.
+    args:
+        target_col_name: name of the target column
+        tmpdirname: path to the temporary directory, where all the results are saved
+        problem_type: problem type
+        eval_metric: evaluation metric
+        algorithms: list of algorithms to train
+        total_time_limit: total time limit for training in seconds
+        mode: mode of training
+        redirect_logs: whether to redirect logs to a string
+    """
     X, y = perform_X_y_split(st.session_state.sampled_df, target_col_name)
 
     shuffle_setting, stratify_setting = get_shuffle_and_stratify_settings()
@@ -213,7 +263,7 @@ def show_mljar_model():
                 with st.spinner("Generating report..."):
                     with tempfile.TemporaryDirectory() as tmpdirname:
                         # run automl training
-                        train_mljar_explain(target_col_name, tmpdirname, problem_type, metric, algorithms, total_time_limit, mode, redirect_logs)
+                        train_mljar(target_col_name, tmpdirname, problem_type, metric, algorithms, total_time_limit, mode, redirect_logs)
 
                         # clean up directory if the mode is Compete
                         if mode == "Compete":

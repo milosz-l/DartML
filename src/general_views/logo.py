@@ -1,7 +1,10 @@
 import streamlit as st
 
 
-def show_logo():
+def show_logo() -> None:
+    """
+    Shows the app logo on top of the sidebar.
+    """
     st.markdown(
         """
         <style>
