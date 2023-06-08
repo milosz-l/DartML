@@ -1,6 +1,5 @@
 import streamlit as st
 from src.general_views.df_view import show_sampled_df
-
 from src.session_state.session_state_checks import sampled_df_in_session_state
 from src.general_views.mljar_explain_view import show_mljar_model
 from src.general_views.sidebars_view import show_info_sidebar
