@@ -1,4 +1,4 @@
-from src.general_views.mljar_markdown_view import show_mljar_markdown
+from src.assess.report_view import show_report
 from src.session_state.session_state_checks import explain_zip_buffer_in_session_state, redirected_training_output_in_session_state, sampled_df_in_session_state, train_test_split_percentage_in_session_state
 import streamlit as st
 from datetime import datetime
@@ -30,16 +30,9 @@ def show_zip_download_button() -> None:
 
 def show_logs() -> None:
     """
-    Shows logs from training.
+    Shows logs from training in expander.
     """
     with st.expander("Logs", expanded=False):
         if redirected_training_output_in_session_state():
             if st.session_state.redirected_training_output is not None:
                 st.text(st.session_state.redirected_training_output)
-
-def show_report() -> None:
-    """
-    Shows report from training.
-    """
-    with st.expander("Report", expanded=True):
-        show_mljar_markdown()

@@ -2,7 +2,7 @@ import streamlit as st
 from src.general_views.df_view import show_sampled_df
 from src.session_state.session_state_checks import sampled_df_in_session_state
 from src.general_views.sidebars_view import show_info_sidebar
-from src.assess.training_results_view import show_training_results
+from src.assess.assess_view import show_training_results
 from src.general_views.logo import show_logo
 from src import config
 from src.general_views.pages_explanations_view import show_page_explanation_in_expander

@@ -1,30 +1,41 @@
 import streamlit as st
 from src.session_state.session_state_checks import (
     sampled_df_in_session_state,
-    df_in_session_state,
     sample_percentage_in_session_state,
     train_test_split_percentage_in_session_state,
-    target_column_in_session_state,
     split_type_in_session_state,
     shuffle_in_session_state,
     stratify_in_session_state,
 )
 
 
-def df_info_sidebar(df_info):
+def df_info_sidebar(df_info: dict) -> None:
+    """
+    Shows the DataFrame info in the sidebar (number of columns and rows).
+    args:
+        df_info: dictionary with the number of columns and rows of the df
+    """
     st.sidebar.subheader("Uploaded data info")
     st.sidebar.write(f'{df_info["col_num"]} columns')
     st.sidebar.write(f'{df_info["row_num"]} rows')
 
 
-def sampled_df_info_sidebar(sampled_df_info):
+def sampled_df_info_sidebar(sampled_df_info: dict) -> None:
+    """
+    Shows the sampled DataFrame info in the sidebar (number of columns and rows).
+    args:
+        sampled_df_info: dictionary with the number of columns and rows of the sampled DataFrame
+    """
     st.sidebar.subheader("Sampled data info")
     st.sidebar.progress(st.session_state.data_sample_percentage, text=f"{round(st.session_state.data_sample_percentage * 100)}% of uploaded data")
     st.sidebar.write(f'{sampled_df_info["col_num"]} columns')
     st.sidebar.write(f'{sampled_df_info["row_num"]} rows')
 
 
-def train_test_split_info_sidebar():
+def train_test_split_info_sidebar() -> None:
+    """
+    Shows the train/test split info in the sidebar.
+    """
     st.sidebar.subheader("Train/test split info")
     if split_type_in_session_state:
         if st.session_state.split_type == "split":
@@ -35,7 +46,10 @@ def train_test_split_info_sidebar():
             st.sidebar.caption("5-fold cross validation chosen")
 
 
-def target_column_selectbox_sidebar():
+def target_column_selectbox_sidebar() -> None:
+    """
+    Shows the target column selectbox in the sidebar.
+    """
     columns_list = st.session_state.sampled_df.columns.tolist()
     # if target_column_in_session_state():  TODO: issue number 1289
     #     if st.session_state.target_column_name in columns_list:
@@ -49,7 +63,10 @@ def target_column_selectbox_sidebar():
     st.session_state.target_column_name = st.sidebar.selectbox("Target column", columns_list, index=selectbox_default_index)
 
 
-def stratify_and_shuffle_info_sidebar():
+def stratify_and_shuffle_info_sidebar() -> None:
+    """
+    Shows the stratify and shuffle info in the sidebar.
+    """
     if st.session_state.shuffle:
         st.sidebar.subheader("Shuffle :green[on]")
     else:
@@ -61,7 +78,12 @@ def stratify_and_shuffle_info_sidebar():
         st.sidebar.subheader("Stratify :red[off]")
 
 
-def show_info_sidebar(target_column_selection=False):
+def show_info_sidebar(target_column_selection: bool = False) -> None:
+    """
+    Shows all the info in the sidebar.
+    args:
+        target_column_selection: boolean that indicates if the target column selection should be shown
+    """
     # if df_in_session_state():
     #     df_info = {}
     #     df_info["row_num"] = len(st.session_state.df.index)
