@@ -136,6 +136,13 @@ pytest tests/functional_tests/functional_tests.py --chrome --headless -k test_ex
 ``` -->
 
 ## Generate documentation from docstrings
+
+### using doxygen
 ```bash
 doxygen
+```
+
+### using pdoc
+```bash
+pdoc src
 ```
