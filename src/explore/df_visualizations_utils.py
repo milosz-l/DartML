@@ -1,5 +1,6 @@
-import matplotlib.pyplot as plt
 from io import BytesIO
+
+import matplotlib.pyplot as plt
 
 
 def clear_fig_cache() -> None:

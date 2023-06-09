@@ -1,17 +1,17 @@
-import streamlit as st
-from src.session_state.session_state_checks import (
-    sampled_df_in_session_state,
-    train_test_split_percentage_in_session_state,
-    split_type_in_session_state
-)
 import io
-import tempfile
 import os
+import tempfile
 import zipfile
 from typing import Literal, Optional
+
+import streamlit as st
 from supervised.exceptions import AutoMLException
+
 from src import config
 from src.modify_and_model.train_automl import train_automl
+from src.session_state.session_state_checks import (
+    sampled_df_in_session_state, split_type_in_session_state,
+    train_test_split_percentage_in_session_state)
 
 
 def zip_directory_into_buffer(directory_path: str, buffer: io.BytesIO) -> None:
@@ -37,7 +37,9 @@ def simple_target_column_selectbox() -> str:
     args: None"""
     columns_list = st.session_state.sampled_df.columns.tolist()
     selectbox_default_index = len(columns_list) - 1
-    return st.selectbox("Choose target column:", columns_list, index=selectbox_default_index)
+    return st.selectbox(
+        "Choose target column:", columns_list, index=selectbox_default_index
+    )
 
 
 def problem_type_selectbox() -> str:
@@ -45,9 +47,17 @@ def problem_type_selectbox() -> str:
     Shows a problem type selectbox with auto selected by default.
     Returns the selected problem type.
     """
-    problem_types = ["auto", "binary classification", "multiclass classification", "regression"]
+    problem_types = [
+        "auto",
+        "binary classification",
+        "multiclass classification",
+        "regression",
+    ]
     chosen_problem_type = st.selectbox(
-        "Choose problem type", problem_types, index=0, help="You can choose problem type manually or leave it at auto (then problem type will be guessed based on target values)"
+        "Choose problem type",
+        problem_types,
+        index=0,
+        help="You can choose problem type manually or leave it at auto (then problem type will be guessed based on target values)",
     )
     return chosen_problem_type
 
@@ -57,11 +67,26 @@ def algorithms_selectbox() -> list[str]:
     Shows a multiselectbox with first five algorithms selected by default.
     Returns list with selected algorithms.
     """
-    algorithms = ["Baseline", "Linear", "Decision Tree", "Random Forest", "Xgboost", "Extra Trees", "LightGBM", "CatBoost", "Neural Network", "Nearest Neighbors"]
+    algorithms = [
+        "Baseline",
+        "Linear",
+        "Decision Tree",
+        "Random Forest",
+        "Xgboost",
+        "Extra Trees",
+        "LightGBM",
+        "CatBoost",
+        "Neural Network",
+        "Nearest Neighbors",
+    ]
     return st.multiselect("Choose algorithms to train", algorithms, algorithms[0:5])
 
 
-def metric_selectbox(problem_type: Literal["binary classification", "multiclass classification", "regression", "auto"]) -> Optional[str]:
+def metric_selectbox(
+    problem_type: Literal[
+        "binary classification", "multiclass classification", "regression", "auto"
+    ]
+) -> Optional[str]:
     """
     If problem_type is not auto, shows a metric selectbox with the first metric selected by default.
     Returns the selected metric.
@@ -76,7 +101,9 @@ def metric_selectbox(problem_type: Literal["binary classification", "multiclass 
         metrics = []
 
     if metrics:
-        return st.selectbox("Choose metric", metrics, index=0, help="Choose evaluation metric.")
+        return st.selectbox(
+            "Choose metric", metrics, index=0, help="Choose evaluation metric."
+        )
     return None
 
 
@@ -85,6 +112,7 @@ def total_time_limit_slider() -> int:
     Shows the total time limit slider.
     Returns selected total time limit in seconds.
     """
+
     def get_minutes_and_seconds(seconds: int) -> tuple[int, int]:
         """
         Returns minutes and seconds from given seconds.
@@ -97,7 +125,9 @@ def total_time_limit_slider() -> int:
 
     total_time_limit = st.slider("Total time limit (in seconds)", 60, 1800, 60, 15)
     minutes, seconds = get_minutes_and_seconds(total_time_limit)
-    st.caption(f"The maximum training time will be {minutes} minutes and {seconds} seconds.")
+    st.caption(
+        f"The maximum training time will be {minutes} minutes and {seconds} seconds."
+    )
     return total_time_limit
 
 
@@ -136,9 +166,15 @@ def logs_visable_checkbox() -> bool:
     Shows checkbox that determins whether logs after training should be shown.
     Returns True if logs should be shown, False otherwise.
     """
-    logs_visable = st.checkbox("Show training logs", value=False, help="Determin whether logs should be shown after training.")
+    logs_visable = st.checkbox(
+        "Show training logs",
+        value=False,
+        help="Determin whether logs should be shown after training.",
+    )
     if logs_visable:
-        st.caption("Note: Logs generated may be incorrect if the app is under heavy load. If the app may be used by many users, is is advised to leave it unchecked.")
+        st.caption(
+            "Note: Logs generated may be incorrect if the app is under heavy load. If the app may be used by many users, is is advised to leave it unchecked."
+        )
     return logs_visable
 
 
@@ -146,7 +182,11 @@ def show_training_config() -> None:
     """
     Shows whole AutoML training configuration.
     """
-    if sampled_df_in_session_state() and train_test_split_percentage_in_session_state() and split_type_in_session_state():
+    if (
+        sampled_df_in_session_state()
+        and train_test_split_percentage_in_session_state()
+        and split_type_in_session_state()
+    ):
         st.divider()
         target_col_name = simple_target_column_selectbox()
         st.divider()
@@ -178,7 +218,16 @@ def show_training_config() -> None:
                 with st.spinner("Generating report..."):
                     with tempfile.TemporaryDirectory() as tmpdirname:
                         # run automl training
-                        train_automl(target_col_name, tmpdirname, problem_type, metric, algorithms, total_time_limit, mode, redirect_logs)
+                        train_automl(
+                            target_col_name,
+                            tmpdirname,
+                            problem_type,
+                            metric,
+                            algorithms,
+                            total_time_limit,
+                            mode,
+                            redirect_logs,
+                        )
 
                         # clean up directory if the mode is Compete
                         if mode == "Compete":
@@ -186,8 +235,12 @@ def show_training_config() -> None:
 
                         # save dir with results as zip to session_state
                         st.session_state.explain_zip_buffer = io.BytesIO()
-                        zip_directory_into_buffer(tmpdirname, st.session_state.explain_zip_buffer)
+                        zip_directory_into_buffer(
+                            tmpdirname, st.session_state.explain_zip_buffer
+                        )
                 st.success("Done! Now you can go to Assess tab to see the results!")
             except AutoMLException as error:
-                st.warning("Something went wrong. 😔 Please check if sampled dataframe isn't too small or if train data percentage isn't too high or too low.")
+                st.warning(
+                    "Something went wrong. 😔 Please check if sampled dataframe isn't too small or if train data percentage isn't too high or too low."
+                )
                 st.write(error)

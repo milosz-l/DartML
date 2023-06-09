@@ -1,9 +1,12 @@
-import streamlit as st
-import pandas as pd
-from PIL import Image
-import zipfile
 import io
-from src.session_state.session_state_checks import explain_zip_buffer_in_session_state
+import zipfile
+
+import pandas as pd
+import streamlit as st
+from PIL import Image
+
+from src.session_state.session_state_checks import \
+    explain_zip_buffer_in_session_state
 
 
 def show_image_from_path(path: str, header: str = "", caption: str = "") -> None:
@@ -24,7 +27,9 @@ def show_image_from_path(path: str, header: str = "", caption: str = "") -> None
         pass
 
 
-def show_image_from_archive(archive: zipfile.ZipFile, filename: str, header: str = "", caption: str = "") -> None:
+def show_image_from_archive(
+    archive: zipfile.ZipFile, filename: str, header: str = "", caption: str = ""
+) -> None:
     """
     Shows image from given archive.
     If there is no file with given name in given archive, does nothing.
@@ -43,7 +48,9 @@ def show_image_from_archive(archive: zipfile.ZipFile, filename: str, header: str
         pass  # there is no such item in the archive
 
 
-def show_csv_from_archive(archive: zipfile.ZipFile, filename: str, header: str = "") -> None:
+def show_csv_from_archive(
+    archive: zipfile.ZipFile, filename: str, header: str = ""
+) -> None:
     """
     Shows csv from given archive.
     If there is no file with given name in given archive, does nothing.
@@ -77,12 +84,26 @@ def show_report() -> None:
             archive = zipfile.ZipFile(st.session_state.explain_zip_buffer, "r")
 
             # show leaderboard
-            show_csv_from_archive(archive, "leaderboard.csv", header="# AutoML Leaderboard")
+            show_csv_from_archive(
+                archive, "leaderboard.csv", header="# AutoML Leaderboard"
+            )
 
             # show images
-            show_image_from_archive(archive, "ldb_performance.png", header="### AutoML Performance")
-            show_image_from_archive(archive, "ldb_performance_boxplot.png", header="### AutoML Performance Boxplot")
-            show_image_from_archive(archive, "features_heatmap.png", header="### Features Importance")
-            show_image_from_archive(archive, "correlation_heatmap.png", header="### Spearman Correlation of Models")
+            show_image_from_archive(
+                archive, "ldb_performance.png", header="### AutoML Performance"
+            )
+            show_image_from_archive(
+                archive,
+                "ldb_performance_boxplot.png",
+                header="### AutoML Performance Boxplot",
+            )
+            show_image_from_archive(
+                archive, "features_heatmap.png", header="### Features Importance"
+            )
+            show_image_from_archive(
+                archive,
+                "correlation_heatmap.png",
+                header="### Spearman Correlation of Models",
+            )
 
             show_tabs()

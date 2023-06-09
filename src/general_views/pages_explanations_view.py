@@ -1,16 +1,22 @@
-import streamlit as st
 from typing import Literal
+
+import streamlit as st
+
 from src import config
+
 
 def show_home_page_explanation() -> None:
     """
     Shows the Home page explanation.
     """
-    st.markdown(f"""
+    st.markdown(
+        f"""
                 Welcome to **DartML**! This app lets you build Machine Learning models using :{config.SEMMA_COLOR}[**SEMMA**] methodology **without writing a single line of code**!
                 
                 Below there are explanations of each tab's functionality. But don't worry! You don't have to read it now, as the same explanations are available at the top of each tab.
-                """)
+                """
+    )
+
 
 def show_sample_page_explanation() -> None:
     """
@@ -23,6 +29,7 @@ def show_sample_page_explanation() -> None:
         - Going back to this tab will restore the default options.
         """
     )
+
 
 def show_explore_page_explanation() -> None:
     """
@@ -38,6 +45,7 @@ def show_explore_page_explanation() -> None:
         """
     )
 
+
 def show_modify_and_model_page_explanation() -> None:
     """
     Shows the Modify & Model page explanation.
@@ -52,6 +60,7 @@ def show_modify_and_model_page_explanation() -> None:
         - **Total time limit** - the total time limit for the AutoML training.
         """
     )
+
 
 def show_assess_page_explanation() -> None:
     """
@@ -69,7 +78,11 @@ def show_assess_page_explanation() -> None:
         """
     )
 
-def show_page_explanation_in_expander(page_title: Literal["sample", "explore", "modify_and_model", "assess"], expanded: bool = False) -> None:
+
+def show_page_explanation_in_expander(
+    page_title: Literal["sample", "explore", "modify_and_model", "assess"],
+    expanded: bool = False,
+) -> None:
     """
     Shows given page explanation in an expander.
     args:

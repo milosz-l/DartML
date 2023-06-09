@@ -1,12 +1,14 @@
-from seleniumbase import BaseCase
-BaseCase.main(__name__, __file__)
-from tests.functional_tests.utils import assert_identical_images
-from tests.functional_tests import config
 import time
+
+from seleniumbase import BaseCase
+
+from tests.functional_tests import config
+from tests.functional_tests.utils import assert_identical_images
+
+BaseCase.main(__name__, __file__)
 
 
 class MyTestClass(BaseCase):
-    
     def test_explore_page(self):
         """
         Test whether visualizations on Explore page are rendered correctly
@@ -22,14 +24,17 @@ class MyTestClass(BaseCase):
         # wait for the visualizations to be rendered
         time.sleep(config.EXPLORE_PAGE_VISUALIZATION_TIME_SLEEP)
         # save screenshot of the page
-        current_image_path = "tests/functional_tests/current_data/current_explore_page.png"
+        current_image_path = (
+            "tests/functional_tests/current_data/current_explore_page.png"
+        )
         self.save_screenshot(current_image_path)
 
-        expected_image_path = "tests/functional_tests/expected_data/expected_explore_page.png"
+        expected_image_path = (
+            "tests/functional_tests/expected_data/expected_explore_page.png"
+        )
 
         # assert that the pages are identical
         assert_identical_images(current_image_path, expected_image_path)
-
 
     def test_assess_page(self):
         """
@@ -46,7 +51,10 @@ class MyTestClass(BaseCase):
         self.click('p:contains("Generate new report")')
 
         # wait for the report to be generated
-        self.wait_for_element('p:contains("Done! Now you can go to Assess tab to see the results!")', timeout=config.MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME)
+        self.wait_for_element(
+            'p:contains("Done! Now you can go to Assess tab to see the results!")',
+            timeout=config.MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME,
+        )
 
         # go to Assess page
         self.click_partial_link("Assess")

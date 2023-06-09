@@ -1,7 +1,9 @@
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
 import time
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
 from src.explore.df_visualizations_utils import clear_fig_cache, fig_to_buf
 
 FIG_WIDTH = 16
@@ -12,6 +14,7 @@ class PlotBuilder:
     """
     Class used for building matplotlib and seaborn plots for given dataframe.
     """
+
     def __init__(self, df: pd.DataFrame):
         self.df = df
 
@@ -48,7 +51,9 @@ class PlotBuilder:
         fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
         plt.scatter(self.df[x_column_name], self.df[y_column_name])
         end_time = time.time()
-        plt.title(f"Scatterplot of {x_column_name} vs. {y_column_name} ({end_time - start_time:.2f} s)")
+        plt.title(
+            f"Scatterplot of {x_column_name} vs. {y_column_name} ({end_time - start_time:.2f} s)"
+        )
         plt.xlabel(x_column_name)
         plt.ylabel(y_column_name)
         return fig_to_buf(fig)
@@ -60,7 +65,9 @@ class PlotBuilder:
         start_time = time.time()
         fig = plt.figure(figsize=(FIG_WIDTH, FIG_HEIGHT))
         corr = self.df.corr()
-        sns.heatmap(corr, square=True, cmap="RdYlGn", annot=True, fmt=".2f", linewidth=0.5)
+        sns.heatmap(
+            corr, square=True, cmap="RdYlGn", annot=True, fmt=".2f", linewidth=0.5
+        )
         end_time = time.time()
         plt.title(f"Correlation Heatmap ({end_time - start_time:.2f} s)")
         return fig_to_buf(fig)

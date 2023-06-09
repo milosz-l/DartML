@@ -1,4 +1,4 @@
-from locust import HttpUser, task, between
+from locust import HttpUser, between, task
 
 
 class WebsiteUser(HttpUser):
@@ -12,19 +12,19 @@ class WebsiteUser(HttpUser):
     @task
     def home_page(self):
         self.client.get(url="")
-    
+
     @task
     def sample_page(self):
         self.client.get(url="/Sample")
-    
+
     @task
     def explore_page(self):
         self.client.get(url="/Explore")
-    
+
     @task
     def modify_and_model_page(self):
         self.client.get(url="/Modify_&_Model")
-    
+
     @task
     def assess_page(self):
         self.client.get(url="/Assess")

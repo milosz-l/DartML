@@ -146,3 +146,8 @@ doxygen
 ```bash
 pdoc src
 ```
+
+## Manually run autoformat and code quality check
+```bash
+pre-commit run --all-files
+```

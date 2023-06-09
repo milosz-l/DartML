@@ -1,6 +1,6 @@
-import pytest
-from src.explore.plots_view import generate_interactive_altair_corr_heatmap
 import pandas as pd
+
+from src.explore.plots_view import generate_interactive_altair_corr_heatmap
 
 
 def test_df_after_generating_altair_plot_is_the_same():

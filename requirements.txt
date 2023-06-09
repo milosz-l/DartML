@@ -29,3 +29,7 @@ locust==2.15.1
 selenium==4.9.1
 seleniumbase==4.14.12
 opencv-python==4.7.0.72
+
+# dev requirements
+pdoc                        # 13.1.1
+pre-commit                  # 3.3.2

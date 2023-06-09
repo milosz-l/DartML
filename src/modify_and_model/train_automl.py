@@ -1,20 +1,21 @@
+import io
+import sys
+from typing import Literal
+
+import pandas as pd
 import streamlit as st
 from supervised.automl import AutoML
-from src.session_state.session_state_checks import (
-    shuffle_in_session_state,
-    stratify_in_session_state,
-)
-import sys
-import io
+
 from src import config
-from typing import Literal
-import pandas as pd
+from src.session_state.session_state_checks import (shuffle_in_session_state,
+                                                    stratify_in_session_state)
 
 
 class OutputRedirector:
     """
     Class used to redirect the output of the training process to a string.
     """
+
     def __enter__(self):
         self.original_stdout = sys.stdout
         sys.stdout = self.output_string = io.StringIO()
@@ -47,15 +48,17 @@ def get_shuffle_and_stratify_settings() -> tuple[bool, bool]:
 
 
 def train_automl(
-        target_col_name: str,
-        tmpdirname: str,
-        problem_type: Literal["binary classification", "multiclass classification", "regression", "auto"],
-        eval_metric: str,
-        algorithms: list[str],
-        total_time_limit: int,
-        mode: Literal["Explain", "Perform", "Compete"],
-        redirect_logs: bool
-    ) -> None:
+    target_col_name: str,
+    tmpdirname: str,
+    problem_type: Literal[
+        "binary classification", "multiclass classification", "regression", "auto"
+    ],
+    eval_metric: str,
+    algorithms: list[str],
+    total_time_limit: int,
+    mode: Literal["Explain", "Perform", "Compete"],
+    redirect_logs: bool,
+) -> None:
     """
     Trains AutoML model.
     args:
@@ -81,11 +84,24 @@ def train_automl(
             "random_seed": config.RANDOM_STATE,
         }
     else:  # validation type is kfold
-        configured_validation_strategy = {"validation_type": "kfold", "k_folds": 5, "shuffle": shuffle_setting, "stratify": stratify_setting, "random_seed": config.RANDOM_STATE}
+        configured_validation_strategy = {
+            "validation_type": "kfold",
+            "k_folds": 5,
+            "shuffle": shuffle_setting,
+            "stratify": stratify_setting,
+            "random_seed": config.RANDOM_STATE,
+        }
 
     # create AutoML object
     if problem_type == "auto":
-        automl = AutoML(results_path=tmpdirname, mode=mode, ml_task=problem_type, algorithms=algorithms, validation_strategy=configured_validation_strategy, total_time_limit=total_time_limit)
+        automl = AutoML(
+            results_path=tmpdirname,
+            mode=mode,
+            ml_task=problem_type,
+            algorithms=algorithms,
+            validation_strategy=configured_validation_strategy,
+            total_time_limit=total_time_limit,
+        )
     else:
         problem_type = problem_type.replace(" ", "_")
         automl = AutoML(

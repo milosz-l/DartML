@@ -1,13 +1,18 @@
 import streamlit as st
+
+from src import config
+from src.explore.plots_view import (show_categorical_columns_visualizations,
+                                    show_numerical_columns_visualizations)
 from src.general_views.df_view import show_sampled_df
+from src.general_views.logo import show_logo
+from src.general_views.pages_explanations_view import \
+    show_page_explanation_in_expander
 from src.general_views.sidebars_view import show_info_sidebar
 from src.session_state.session_state_checks import sampled_df_in_session_state
-from src.explore.plots_view import show_plots, show_numerical_columns_visualizations, show_categorical_columns_visualizations
-from src.general_views.logo import show_logo
-from src import config
-from src.general_views.pages_explanations_view import show_page_explanation_in_expander
 
-st.set_page_config(page_title=config.APP_TITLE, page_icon=config.APP_FAVICON, layout="wide")
+st.set_page_config(
+    page_title=config.APP_TITLE, page_icon=config.APP_FAVICON, layout="wide"
+)
 
 show_logo()
 st.title(config.EXPLORE_PAGE_TITLE)
