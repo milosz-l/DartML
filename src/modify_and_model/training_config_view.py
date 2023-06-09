@@ -1,39 +1,17 @@
 import streamlit as st
-from supervised.automl import AutoML
 from src.session_state.session_state_checks import (
     sampled_df_in_session_state,
     train_test_split_percentage_in_session_state,
-    explain_zip_buffer_in_session_state,
-    redirected_training_output_in_session_state,
-    split_type_in_session_state,
-    shuffle_in_session_state,
-    stratify_in_session_state,
+    split_type_in_session_state
 )
-from sklearn.model_selection import train_test_split
-import sys
 import io
 import tempfile
 import os
 import zipfile
-from datetime import datetime
-from src.general_views.mljar_markdown_view import show_mljar_markdown
+from typing import Literal, Optional
 from supervised.exceptions import AutoMLException
 from src import config
-from typing import Optional, Literal
-import pandas as pd
-
-
-class OutputRedirector:
-    """
-    Class used to redirect the output of the training process to a string.
-    """
-    def __enter__(self):
-        self.original_stdout = sys.stdout
-        sys.stdout = self.output_string = io.StringIO()
-        return self.output_string
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        sys.stdout = self.original_stdout
+from src.modify_and_model.train_automl import train_automl
 
 
 def zip_directory_into_buffer(directory_path: str, buffer: io.BytesIO) -> None:
@@ -74,6 +52,15 @@ def problem_type_selectbox() -> str:
     return chosen_problem_type
 
 
+def algorithms_selectbox() -> list[str]:
+    """
+    Shows a multiselectbox with first five algorithms selected by default.
+    Returns list with selected algorithms.
+    """
+    algorithms = ["Baseline", "Linear", "Decision Tree", "Random Forest", "Xgboost", "Extra Trees", "LightGBM", "CatBoost", "Neural Network", "Nearest Neighbors"]
+    return st.multiselect("Choose algorithms to train", algorithms, algorithms[0:5])
+
+
 def metric_selectbox(problem_type: Literal["binary classification", "multiclass classification", "regression", "auto"]) -> Optional[str]:
     """
     If problem_type is not auto, shows a metric selectbox with the first metric selected by default.
@@ -93,100 +80,17 @@ def metric_selectbox(problem_type: Literal["binary classification", "multiclass 
     return None
 
 
-def algorithms_selectbox() -> list[str]:
+def total_time_limit_slider() -> int:
     """
-    Shows a multiselectbox with first five algorithms selected by default.
-    Returns list with selected algorithms.
+    Shows the total time limit slider.
+    Returns selected total time limit in seconds.
     """
-    algorithms = ["Baseline", "Linear", "Decision Tree", "Random Forest", "Xgboost", "Extra Trees", "LightGBM", "CatBoost", "Neural Network", "Nearest Neighbors"]
-    return st.multiselect("Choose algorithms to train", algorithms, algorithms[0:5])
-
-
-def perform_X_y_split(df: pd.DataFrame, target_label: str):
-    """
-    Performs X y split on given dataframe.
-    args:
-        df: dataframe to split
-        target_label: name of the target column
-    """
-    X = df.drop(columns=target_label)
-    y = df[target_label]
-    return X, y
-
-
-def get_shuffle_and_stratify_settings() -> tuple[bool, bool]:
-    """
-    Returns shuffle and stratify settings from session state.
-    """
-    if shuffle_in_session_state() and stratify_in_session_state():
-        return st.session_state.shuffle, st.session_state.stratify
-    else:
-        return True, True
-
-
-def train_mljar(
-        target_col_name: str,
-        tmpdirname: str,
-        problem_type: Literal["binary classification", "multiclass classification", "regression", "auto"],
-        eval_metric: str,
-        algorithms: list[str],
-        total_time_limit: int,
-        mode: Literal["Explain", "Perform", "Compete"],
-        redirect_logs: bool
-    ) -> None:
-    """
-    Trains MLJAR model.
-    args:
-        target_col_name: name of the target column
-        tmpdirname: path to the temporary directory, where all the results are saved
-        problem_type: problem type
-        eval_metric: evaluation metric
-        algorithms: list of algorithms to train
-        total_time_limit: total time limit for training in seconds
-        mode: mode of training
-        redirect_logs: whether to redirect logs to a string
-    """
-    X, y = perform_X_y_split(st.session_state.sampled_df, target_col_name)
-
-    shuffle_setting, stratify_setting = get_shuffle_and_stratify_settings()
-
-    if st.session_state.split_type == "split":
-        configured_validation_strategy = {
-            "split_type": "split",
-            "train_ratio": st.session_state.train_test_split_percentage,
-            "shuffle": shuffle_setting,
-            "stratify": stratify_setting,
-            "random_seed": config.RANDOM_STATE,
-        }
-    else:  # validation type is kfold
-        configured_validation_strategy = {"split_type": "kfold", "k_folds": 5, "shuffle": shuffle_setting, "stratify": stratify_setting, "random_seed": config.RANDOM_STATE}
-
-    # create AutoML object
-    if problem_type == "auto":
-        automl = AutoML(results_path=tmpdirname, mode=mode, ml_task=problem_type, algorithms=algorithms, validation_strategy=configured_validation_strategy, total_time_limit=total_time_limit)
-    else:
-        problem_type = problem_type.replace(" ", "_")
-        automl = AutoML(
-            results_path=tmpdirname,
-            mode=mode,
-            ml_task=problem_type,
-            algorithms=algorithms,
-            validation_strategy=configured_validation_strategy,
-            total_time_limit=total_time_limit,
-            eval_metric=eval_metric,
-        )
-
-    if redirect_logs:  # perform training with logs redirected to string
-        with OutputRedirector() as output_string:
-            automl.fit(X, y)
-            st.session_state.redirected_training_output = output_string.getvalue()
-    else:  # perform training without redirecting logs
-        automl.fit(X, y)
-        st.session_state.redirected_training_output = None
-
-
-def total_time_limit_slider():
-    def get_minutes_and_seconds(seconds):
+    def get_minutes_and_seconds(seconds: int) -> tuple[int, int]:
+        """
+        Returns minutes and seconds from given seconds.
+        args:
+            seconds: seconds to convert
+        """
         minutes = seconds // 60
         seconds = seconds % 60
         return minutes, seconds
@@ -197,7 +101,11 @@ def total_time_limit_slider():
     return total_time_limit
 
 
-def mode_selectbox():
+def mode_selectbox() -> str:
+    """
+    Shows the mode selectbox.
+    Returns selected mode.
+    """
     mode = st.selectbox(
         "Choose training mode",
         ["Compete", "Perform", "Explain"],
@@ -210,9 +118,12 @@ def mode_selectbox():
     return mode
 
 
-def clean_up_directory_from_png_files(tmpdirname):
+def clean_up_directory_from_png_files(tmpdirname: str) -> None:
     """
-    Remove all png files for given directory and its subdirectories.
+    Removes all png files for given directory and its subdirectories.
+    Used in Compete mode (png files are removed for multi-user purposes).
+    args:
+        tmpdirname: path to the directory to clean up
     """
     for root, dirs, files in os.walk(tmpdirname):
         for file in files:
@@ -220,9 +131,10 @@ def clean_up_directory_from_png_files(tmpdirname):
                 os.remove(os.path.join(root, file))
 
 
-def logs_visable_checkbox():
+def logs_visable_checkbox() -> bool:
     """
-    Checkbox that determins whether logs after training should be shown.
+    Shows checkbox that determins whether logs after training should be shown.
+    Returns True if logs should be shown, False otherwise.
     """
     logs_visable = st.checkbox("Show training logs", value=False, help="Determin whether logs should be shown after training.")
     if logs_visable:
@@ -230,7 +142,10 @@ def logs_visable_checkbox():
     return logs_visable
 
 
-def show_mljar_model():
+def show_training_config() -> None:
+    """
+    Shows whole AutoML training configuration.
+    """
     if sampled_df_in_session_state() and train_test_split_percentage_in_session_state() and split_type_in_session_state():
         st.divider()
         target_col_name = simple_target_column_selectbox()
@@ -263,7 +178,7 @@ def show_mljar_model():
                 with st.spinner("Generating report..."):
                     with tempfile.TemporaryDirectory() as tmpdirname:
                         # run automl training
-                        train_mljar(target_col_name, tmpdirname, problem_type, metric, algorithms, total_time_limit, mode, redirect_logs)
+                        train_automl(target_col_name, tmpdirname, problem_type, metric, algorithms, total_time_limit, mode, redirect_logs)
 
                         # clean up directory if the mode is Compete
                         if mode == "Compete":
@@ -276,27 +191,3 @@ def show_mljar_model():
             except AutoMLException as error:
                 st.warning("Something went wrong. 😔 Please check if sampled dataframe isn't too small or if train data percentage isn't too high or too low.")
                 st.write(error)
-
-
-def show_mljar_assess():
-    if sampled_df_in_session_state() and train_test_split_percentage_in_session_state():
-        if explain_zip_buffer_in_session_state():
-            # show report
-            with st.expander("Report", expanded=True):
-                show_mljar_markdown()
-
-            # show logs
-            with st.expander("Logs", expanded=False):
-                if redirected_training_output_in_session_state():
-                    if st.session_state.redirected_training_output is not None:
-                        st.text(st.session_state.redirected_training_output)
-
-            # show zip download button
-            current_datetime = datetime.now()
-            formatted_datetime = current_datetime.strftime("%H_%M_%S-%d_%m_%Y")
-            st.download_button(
-                "Download data",
-                st.session_state.explain_zip_buffer.getvalue(),
-                f"automl_report-{formatted_datetime}.zip",
-                help="Download data from last experiment (whole report and all trained models)",
-            )
