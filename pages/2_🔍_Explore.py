@@ -1,12 +1,13 @@
 import streamlit as st
 
 from src import config
-from src.explore.plots_view import (show_categorical_columns_visualizations,
-                                    show_numerical_columns_visualizations)
+from src.explore.plots_view import (
+    show_categorical_columns_visualizations,
+    show_numerical_columns_visualizations,
+)
 from src.general_views.df_view import show_sampled_df
 from src.general_views.logo import show_logo
-from src.general_views.pages_explanations_view import \
-    show_page_explanation_in_expander
+from src.general_views.pages_explanations_view import show_page_explanation_in_expander
 from src.general_views.sidebars_view import show_info_sidebar
 from src.session_state.session_state_checks import sampled_df_in_session_state
 

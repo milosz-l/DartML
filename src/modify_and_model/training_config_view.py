@@ -10,8 +10,10 @@ from supervised.exceptions import AutoMLException
 from src import config
 from src.modify_and_model.train_automl import train_automl
 from src.session_state.session_state_checks import (
-    sampled_df_in_session_state, split_type_in_session_state,
-    train_test_split_percentage_in_session_state)
+    sampled_df_in_session_state,
+    split_type_in_session_state,
+    train_test_split_percentage_in_session_state,
+)
 
 
 def zip_directory_into_buffer(directory_path: str, buffer: io.BytesIO) -> None:

@@ -1,11 +1,16 @@
 import streamlit as st
 
-from src.config import (SLIDERS_STARTING_VALUE, SLIDERS_STEP,
-                        TRAIN_SPLIT_SLIDER_MAX_VALUE,
-                        TRAIN_SPLIT_SLIDER_STARTING_VALUE)
+from src.config import (
+    SLIDERS_STARTING_VALUE,
+    SLIDERS_STEP,
+    TRAIN_SPLIT_SLIDER_MAX_VALUE,
+    TRAIN_SPLIT_SLIDER_STARTING_VALUE,
+)
 from src.session_state.session_state_checks import (
-    df_in_session_state, sample_percentage_in_session_state,
-    train_test_split_percentage_in_session_state)
+    df_in_session_state,
+    sample_percentage_in_session_state,
+    train_test_split_percentage_in_session_state,
+)
 from src.session_state.session_state_updates import update_sampled_df
 
 

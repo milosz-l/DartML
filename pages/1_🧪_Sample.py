@@ -3,15 +3,17 @@ import streamlit as st
 from src import config
 from src.general_views.df_view import show_sampled_df, show_uploaded_df
 from src.general_views.logo import show_logo
-from src.general_views.pages_explanations_view import \
-    show_page_explanation_in_expander
+from src.general_views.pages_explanations_view import show_page_explanation_in_expander
 from src.general_views.sidebars_view import show_info_sidebar
-from src.sample.csv_loader_view import (show_csv_loader,
-                                        show_use_example_data_button)
-from src.sample.sliders_view import (show_data_sample_slider,
-                                     show_train_test_split_slider)
+from src.sample.csv_loader_view import show_csv_loader, show_use_example_data_button
+from src.sample.sliders_view import (
+    show_data_sample_slider,
+    show_train_test_split_slider,
+)
 from src.session_state.session_state_checks import (
-    df_in_session_state, sampled_df_in_session_state)
+    df_in_session_state,
+    sampled_df_in_session_state,
+)
 
 st.set_page_config(
     page_title=config.APP_TITLE, page_icon=config.APP_FAVICON, layout="wide"

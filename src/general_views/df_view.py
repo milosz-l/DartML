@@ -1,7 +1,9 @@
 import streamlit as st
 
 from src.session_state.session_state_checks import (
-    df_in_session_state, sampled_df_in_session_state)
+    df_in_session_state,
+    sampled_df_in_session_state,
+)
 
 
 def show_uploaded_df(expanded: bool = False) -> None:

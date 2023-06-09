@@ -1,9 +1,13 @@
 import streamlit as st
 
 from src.session_state.session_state_checks import (
-    sample_percentage_in_session_state, sampled_df_in_session_state,
-    shuffle_in_session_state, split_type_in_session_state,
-    stratify_in_session_state, train_test_split_percentage_in_session_state)
+    sample_percentage_in_session_state,
+    sampled_df_in_session_state,
+    shuffle_in_session_state,
+    split_type_in_session_state,
+    stratify_in_session_state,
+    train_test_split_percentage_in_session_state,
+)
 
 
 def df_info_sidebar(df_info: dict) -> None:

@@ -5,8 +5,7 @@ import pandas as pd
 import streamlit as st
 from PIL import Image
 
-from src.session_state.session_state_checks import \
-    explain_zip_buffer_in_session_state
+from src.session_state.session_state_checks import explain_zip_buffer_in_session_state
 
 
 def show_image_from_path(path: str, header: str = "", caption: str = "") -> None:

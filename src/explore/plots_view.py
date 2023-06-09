@@ -6,8 +6,10 @@ import pandas as pd
 import streamlit as st
 
 from src import config
-from src.explore.buttons_view import (show_regenerate_heatmap_button,
-                                      show_regenerate_pairplot_button)
+from src.explore.buttons_view import (
+    show_regenerate_heatmap_button,
+    show_regenerate_pairplot_button,
+)
 from src.explore.PlotBuilder import PlotBuilder
 
 

@@ -7,8 +7,10 @@ import streamlit as st
 from supervised.automl import AutoML
 
 from src import config
-from src.session_state.session_state_checks import (shuffle_in_session_state,
-                                                    stratify_in_session_state)
+from src.session_state.session_state_checks import (
+    shuffle_in_session_state,
+    stratify_in_session_state,
+)
 
 
 class OutputRedirector:

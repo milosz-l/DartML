@@ -5,8 +5,10 @@ import streamlit as st
 from src.assess.report_view import show_report
 from src.session_state.session_state_checks import (
     explain_zip_buffer_in_session_state,
-    redirected_training_output_in_session_state, sampled_df_in_session_state,
-    train_test_split_percentage_in_session_state)
+    redirected_training_output_in_session_state,
+    sampled_df_in_session_state,
+    train_test_split_percentage_in_session_state,
+)
 
 
 def show_training_results() -> None:
