@@ -1,16 +1,10 @@
-import io
+import json
 import sys
 from typing import Literal
 
 import pandas as pd
 from supervised.automl import AutoML
 
-from src import config
-from src.session_state.session_state_checks import (
-    shuffle_in_session_state,
-    stratify_in_session_state,
-)
-import json
 from src import config
 
 
@@ -106,18 +100,18 @@ def main():
     # get parameters from json file
     with open(f"{tempdirname}/{config.TRAINING_PARAMETERS_FILENAME}") as f:
         training_parameters = json.load(f)
-    
+
     # access the parameters
-    target_col_name = training_parameters['target_col_name']
-    problem_type = training_parameters['problem_type']
-    metric = training_parameters['metric']
-    algorithms = training_parameters['algorithms']
-    total_time_limit = training_parameters['total_time_limit']
-    mode = training_parameters['mode']
-    shuffle = training_parameters['shuffle']
-    stratify = training_parameters['stratify']
-    split_type = training_parameters['split_type']
-    train_ratio = training_parameters['train_ratio']
+    target_col_name = training_parameters["target_col_name"]
+    problem_type = training_parameters["problem_type"]
+    metric = training_parameters["metric"]
+    algorithms = training_parameters["algorithms"]
+    total_time_limit = training_parameters["total_time_limit"]
+    mode = training_parameters["mode"]
+    shuffle = training_parameters["shuffle"]
+    stratify = training_parameters["stratify"]
+    split_type = training_parameters["split_type"]
+    train_ratio = training_parameters["train_ratio"]
 
     # get data from csv file
     df = pd.read_csv(f"{tempdirname}/{config.DATA_FILENAME}")
