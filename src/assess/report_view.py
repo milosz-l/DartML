@@ -1,12 +1,8 @@
-import io
-import zipfile
-
-from src import config
 import pandas as pd
 import streamlit as st
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
-from src.session_state.session_state_checks import explain_zip_buffer_in_session_state
+from src import config
 
 
 def show_image_from_path(path: str, header: str = "", caption: str = "") -> None:
@@ -23,8 +19,8 @@ def show_image_from_path(path: str, header: str = "", caption: str = "") -> None
         if header:
             st.markdown(header)
         st.image(image, caption=caption)
-    except FileNotFoundError as err:
-        pass    # there is no such file
+    except (FileNotFoundError, UnidentifiedImageError):
+        pass  # there is no such file
 
 
 def show_csv_from_path(path: str, header: str = "") -> None:
@@ -40,8 +36,8 @@ def show_csv_from_path(path: str, header: str = "") -> None:
         if header:
             st.markdown(header)
         st.write(df)
-    except FileNotFoundError as err:
-        pass    # there is no such file
+    except FileNotFoundError:
+        pass  # there is no such file
 
 
 def show_tabs() -> None:
@@ -57,23 +53,24 @@ def show_report(path: str) -> None:
     with st.expander("Report", expanded=True):
         # show leaderboard
         show_csv_from_path(
-            f"{path}/{config.REPORT_DIRECTORY_NAME}/leaderboard.csv", header="# AutoML Leaderboard"
+            f"{path}/{config.REPORT_DIRECTORY_NAME}/leaderboard.csv",
+            header="# AutoML Leaderboard",
         )
 
         # show images
         show_image_from_path(
-            f"{path}/{config.REPORT_DIRECTORY_NAME}/ldb_performance.png", header="### AutoML Performance"
+            f"{path}/{config.REPORT_DIRECTORY_NAME}/ldb_performance.png",
+            header="### AutoML Performance",
         )
         show_image_from_path(
-            
             f"{path}/{config.REPORT_DIRECTORY_NAME}/ldb_performance_boxplot.png",
             header="### AutoML Performance Boxplot",
         )
         show_image_from_path(
-            f"{path}/{config.REPORT_DIRECTORY_NAME}/features_heatmap.png", header="### Features Importance"
+            f"{path}/{config.REPORT_DIRECTORY_NAME}/features_heatmap.png",
+            header="### Features Importance",
         )
         show_image_from_path(
-            
             f"{path}/{config.REPORT_DIRECTORY_NAME}/correlation_heatmap.png",
             header="### Spearman Correlation of Models",
         )

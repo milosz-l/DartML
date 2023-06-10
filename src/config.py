@@ -38,3 +38,6 @@ ASSESS_PAGE_TITLE_WITH_COLOR = f"{ASSESS_PAGE_EMOJI} :{SEMMA_COLOR}[A]ssess"
 DATA_FILENAME = "sampled_df.csv"
 TRAINING_PARAMETERS_FILENAME = "training_parameters.json"
 REPORT_DIRECTORY_NAME = "report"
+
+# assess page config
+ASSESS_REFRESH_INTERVAL = 2  # in seconds

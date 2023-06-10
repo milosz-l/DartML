@@ -1,3 +1,5 @@
+import time
+
 import streamlit as st
 
 from src import config
@@ -21,4 +23,16 @@ if not sampled_df_in_session_state():
 else:
     show_info_sidebar()
     show_sampled_df()
-    show_training_results()
+
+    # show training results in real time
+    placeholder = st.empty()
+    try:
+        while (
+            time.time() - st.session_state.training_time_start
+            < st.session_state.automl_trainer.total_time_limit + 20
+        ):
+            with placeholder.container():
+                show_training_results()
+                time.sleep(config.ASSESS_REFRESH_INTERVAL)
+    except AttributeError:
+        st.warning("First you need to start training in the **Modify & Model** tab.")

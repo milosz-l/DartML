@@ -98,3 +98,12 @@ def automl_trainer_in_session_state() -> bool:
     if "automl_trainer" in st.session_state:
         return True
     return False
+
+
+def training_time_start_in_session_state() -> bool:
+    """
+    Returns whether `training_time_start` is in the session state.
+    """
+    if "training_time_start" in st.session_state:
+        return True
+    return False

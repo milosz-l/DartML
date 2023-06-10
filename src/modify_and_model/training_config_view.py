@@ -1,5 +1,6 @@
 import io
 import os
+import time
 import zipfile
 from typing import Literal, Optional
 
@@ -9,12 +10,12 @@ from supervised.exceptions import AutoMLException
 from src import config
 from src.modify_and_model.AutoMLTrainer import AutoMLTrainer
 from src.session_state.session_state_checks import (
+    automl_trainer_in_session_state,
     sampled_df_in_session_state,
     shuffle_in_session_state,
     split_type_in_session_state,
     stratify_in_session_state,
     train_test_split_percentage_in_session_state,
-    automl_trainer_in_session_state
 )
 
 
@@ -230,11 +231,13 @@ def show_training_config() -> None:
         shuffle, stratify = get_shuffle_and_stratify_settings()
 
         if automl_trainer_in_session_state():
-            st.warning("⚠️ You have already clicked the **_Generate new report_** button. Clicking it again will override the report currently available in the 📊 **Assess** tab!")
+            st.warning(
+                "⚠️ You have already clicked the **_Generate new report_** button. Clicking it again will override the report currently available in the 📊 **Assess** tab!"
+            )
 
         if st.button("Generate new report"):
             try:
-                with st.spinner("Training is in progress. Now go to the 📊 **Assess** tab to see the results in real time!"):
+                with st.spinner(""):
                     # clicking the button creates new AutoMLTrainer object, which replaces the old one (if there was any)
                     st.session_state.automl_trainer = AutoMLTrainer(
                         st.session_state.sampled_df,
@@ -251,33 +254,12 @@ def show_training_config() -> None:
                     )
 
                     # run automl training
+                    st.session_state.training_time_start = time.time()
+                    st.write(
+                        "Training is in progress. Now go to the 📊 **Assess** tab to see the results in real time!"
+                    )
                     st.session_state.automl_trainer.train()
 
-                #     with tempfile.TemporaryDirectory() as tmpdirname:
-                #         st.session_state.tmpdirname = tmpdirname
-                #         # run automl training
-                #         train_automl(
-                #             target_col_name,
-                #             tmpdirname,
-                #             problem_type,
-                #             metric,
-                #             algorithms,
-                #             total_time_limit,
-                #             mode,
-                #             redirect_logs,
-                #         )
-
-                #         # clean up directory if the mode is Compete
-                #         if mode == "Compete":
-                #             clean_up_directory_from_png_files(tmpdirname)
-
-                #         # save dir with results as zip to session_state
-                #         st.session_state.explain_zip_buffer = io.BytesIO()
-                #         zip_directory_into_buffer(
-                #             tmpdirname, st.session_state.explain_zip_buffer
-                #         )
-                # st.success("Done! Now you can go to Assess tab to see the results!")
-                # st.experimental_show(st.session_state.tmpdirname)
             except AutoMLException as error:
                 st.warning(
                     "Something went wrong. 😔 Please check if sampled dataframe isn't too small or if train data percentage isn't too high or too low."
