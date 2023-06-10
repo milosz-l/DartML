@@ -1,6 +1,3 @@
-# Created by https://www.toptal.com/developers/gitignore/api/python,jupyternotebooks,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=python,jupyternotebooks,macos
-
 .vscode/
 .vscode
 latest_logs/
@@ -10,6 +7,11 @@ docs/
 # temp dirs
 temp_dirs/*
 !temp_dirs/.gitkeep
+
+
+# Created by https://www.toptal.com/developers/gitignore/api/python,jupyternotebooks,macos
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,jupyternotebooks,macos
+
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
@@ -218,5 +220,3 @@ cython_debug/
 #.idea/
 
 # End of https://www.toptal.com/developers/gitignore/api/python,jupyternotebooks,macos
-
-AutoML*
