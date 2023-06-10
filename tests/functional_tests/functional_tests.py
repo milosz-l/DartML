@@ -33,8 +33,12 @@ class MyTestClass(BaseCase):
             "tests/functional_tests/expected_data/expected_explore_page.png"
         )
 
+        diff_image_path = (
+            "tests/functional_tests/current_data/diff_explore_page.png"
+        )
+
         # assert that the pages are identical
-        assert_identical_images(current_image_path, expected_image_path)
+        assert_identical_images(current_image_path, expected_image_path, diff_image_path)
 
     def test_assess_page(self):
         """
