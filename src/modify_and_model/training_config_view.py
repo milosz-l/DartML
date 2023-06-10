@@ -14,6 +14,7 @@ from src.session_state.session_state_checks import (
     split_type_in_session_state,
     stratify_in_session_state,
     train_test_split_percentage_in_session_state,
+    automl_trainer_in_session_state
 )
 
 
@@ -228,9 +229,12 @@ def show_training_config() -> None:
 
         shuffle, stratify = get_shuffle_and_stratify_settings()
 
+        if automl_trainer_in_session_state():
+            st.warning("⚠️ You have already clicked the **_Generate new report_** button. Clicking it again will override the report currently available in the 📊 **Assess** tab!")
+
         if st.button("Generate new report"):
             try:
-                with st.spinner("Generating report..."):
+                with st.spinner("Training is in progress. Now go to the 📊 **Assess** tab to see the results in real time!"):
                     # clicking the button creates new AutoMLTrainer object, which replaces the old one (if there was any)
                     st.session_state.automl_trainer = AutoMLTrainer(
                         st.session_state.sampled_df,
@@ -272,7 +276,7 @@ def show_training_config() -> None:
                 #         zip_directory_into_buffer(
                 #             tmpdirname, st.session_state.explain_zip_buffer
                 #         )
-                st.success("Done! Now you can go to Assess tab to see the results!")
+                # st.success("Done! Now you can go to Assess tab to see the results!")
                 # st.experimental_show(st.session_state.tmpdirname)
             except AutoMLException as error:
                 st.warning(
