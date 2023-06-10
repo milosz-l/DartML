@@ -272,7 +272,7 @@ def show_training_config() -> None:
                 #         zip_directory_into_buffer(
                 #             tmpdirname, st.session_state.explain_zip_buffer
                 #         )
-                # st.success("Done! Now you can go to Assess tab to see the results!")
+                st.success("Done! Now you can go to Assess tab to see the results!")
                 # st.experimental_show(st.session_state.tmpdirname)
             except AutoMLException as error:
                 st.warning(
