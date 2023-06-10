@@ -7,6 +7,10 @@ latest_logs/
 docs/
 .coverage*
 
+# temp dirs
+temp_dirs/*
+!temp_dirs/.gitkeep
+
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
 # website: http://jupyter.org/

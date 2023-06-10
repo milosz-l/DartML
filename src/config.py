@@ -33,3 +33,7 @@ MODIFY_AND_MODEL_PAGE_TITLE_WITH_COLOR = (
     f"{MODIFY_AND_MODEL_PAGE_EMOJI} :{SEMMA_COLOR}[M]odify & :{SEMMA_COLOR}[M]odel"
 )
 ASSESS_PAGE_TITLE_WITH_COLOR = f"{ASSESS_PAGE_EMOJI} :{SEMMA_COLOR}[A]ssess"
+
+# files names in temporary directory
+DATA_FILENAME = "sampled_df.csv"
+TRAINING_PARAMETERS_FILENAME = "training_parameters.json"

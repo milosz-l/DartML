@@ -1,6 +1,5 @@
 import io
 import os
-import tempfile
 import zipfile
 from typing import Literal, Optional
 
@@ -8,10 +7,12 @@ import streamlit as st
 from supervised.exceptions import AutoMLException
 
 from src import config
-from src.modify_and_model.train_automl import train_automl
+from src.modify_and_model.AutoMLTrainer import AutoMLTrainer
 from src.session_state.session_state_checks import (
     sampled_df_in_session_state,
+    shuffle_in_session_state,
     split_type_in_session_state,
+    stratify_in_session_state,
     train_test_split_percentage_in_session_state,
 )
 
@@ -180,6 +181,16 @@ def logs_visable_checkbox() -> bool:
     return logs_visable
 
 
+def get_shuffle_and_stratify_settings() -> tuple[bool, bool]:
+    """
+    Returns shuffle and stratify settings from session state.
+    """
+    if shuffle_in_session_state() and stratify_in_session_state():
+        return st.session_state.shuffle, st.session_state.stratify
+    else:
+        return True, True
+
+
 def show_training_config() -> None:
     """
     Shows whole AutoML training configuration.
@@ -209,38 +220,60 @@ def show_training_config() -> None:
         else:
             mode = "Compete"
 
-        if config.SINGLE_USER_ADVANCED_APP_VERSION:
-            redirect_logs = logs_visable_checkbox()
-            st.divider()
-        else:
-            redirect_logs = False
+        # if config.SINGLE_USER_ADVANCED_APP_VERSION:
+        #     redirect_logs = logs_visable_checkbox()
+        #     st.divider()
+        # else:
+        #     redirect_logs = False
+
+        shuffle, stratify = get_shuffle_and_stratify_settings()
 
         if st.button("Generate new report"):
             try:
                 with st.spinner("Generating report..."):
-                    with tempfile.TemporaryDirectory() as tmpdirname:
-                        # run automl training
-                        train_automl(
-                            target_col_name,
-                            tmpdirname,
-                            problem_type,
-                            metric,
-                            algorithms,
-                            total_time_limit,
-                            mode,
-                            redirect_logs,
-                        )
+                    # clicking the button creates new AutoMLTrainer object, which replaces the old one (if there was any)
+                    st.session_state.automl_trainer = AutoMLTrainer(
+                        st.session_state.sampled_df,
+                        target_col_name,
+                        problem_type,
+                        metric,
+                        algorithms,
+                        total_time_limit,
+                        mode,
+                        shuffle,
+                        stratify,
+                        st.session_state.split_type,
+                        st.session_state.train_test_split_percentage,
+                    )
 
-                        # clean up directory if the mode is Compete
-                        if mode == "Compete":
-                            clean_up_directory_from_png_files(tmpdirname)
+                    # run automl training
+                    st.session_state.automl_trainer.train()
 
-                        # save dir with results as zip to session_state
-                        st.session_state.explain_zip_buffer = io.BytesIO()
-                        zip_directory_into_buffer(
-                            tmpdirname, st.session_state.explain_zip_buffer
-                        )
-                st.success("Done! Now you can go to Assess tab to see the results!")
+                #     with tempfile.TemporaryDirectory() as tmpdirname:
+                #         st.session_state.tmpdirname = tmpdirname
+                #         # run automl training
+                #         train_automl(
+                #             target_col_name,
+                #             tmpdirname,
+                #             problem_type,
+                #             metric,
+                #             algorithms,
+                #             total_time_limit,
+                #             mode,
+                #             redirect_logs,
+                #         )
+
+                #         # clean up directory if the mode is Compete
+                #         if mode == "Compete":
+                #             clean_up_directory_from_png_files(tmpdirname)
+
+                #         # save dir with results as zip to session_state
+                #         st.session_state.explain_zip_buffer = io.BytesIO()
+                #         zip_directory_into_buffer(
+                #             tmpdirname, st.session_state.explain_zip_buffer
+                #         )
+                # st.success("Done! Now you can go to Assess tab to see the results!")
+                # st.experimental_show(st.session_state.tmpdirname)
             except AutoMLException as error:
                 st.warning(
                     "Something went wrong. 😔 Please check if sampled dataframe isn't too small or if train data percentage isn't too high or too low."

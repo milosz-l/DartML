@@ -89,3 +89,12 @@ def stratify_in_session_state() -> bool:
     if "stratify" in st.session_state:
         return True
     return False
+
+
+def automl_trainer_in_session_state() -> bool:
+    """
+    Returns whether `automl_trainer` is in the session state.
+    """
+    if "automl_trainer" in st.session_state:
+        return True
+    return False
