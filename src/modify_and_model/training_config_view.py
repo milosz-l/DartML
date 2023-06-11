@@ -9,6 +9,9 @@ from supervised.exceptions import AutoMLException
 
 from src import config
 from src.modify_and_model.AutoMLTrainer import AutoMLTrainer
+from src.session_state.already_pressed_check import (
+    already_pressed_based_on_session_state,
+)
 from src.session_state.session_state_checks import (
     automl_trainer_in_session_state,
     sampled_df_in_session_state,
@@ -235,33 +238,36 @@ def show_training_config() -> None:
                 "⚠️ You have already clicked the **_Generate new report_** button. Clicking it again will override the report currently available in the 📊 **Assess** tab!"
             )
 
-        if st.button("Generate new report"):
-            try:
-                with st.spinner(""):
-                    # clicking the button creates new AutoMLTrainer object, which replaces the old one (if there was any)
-                    st.session_state.automl_trainer = AutoMLTrainer(
-                        st.session_state.sampled_df,
-                        target_col_name,
-                        problem_type,
-                        metric,
-                        algorithms,
-                        total_time_limit,
-                        mode,
-                        shuffle,
-                        stratify,
-                        st.session_state.split_type,
-                        st.session_state.train_test_split_percentage,
-                    )
+        if st.button(
+            "Generate new report", disabled=already_pressed_based_on_session_state(), help="If the button is disabled, please wait until the previous training is finished.", type="primary"
+        ):
+            if not already_pressed_based_on_session_state():
+                try:
+                    with st.spinner(""):
+                        # clicking the button creates new AutoMLTrainer object, which replaces the old one (if there was any)
+                        st.session_state.automl_trainer = AutoMLTrainer(
+                            st.session_state.sampled_df,
+                            target_col_name,
+                            problem_type,
+                            metric,
+                            algorithms,
+                            total_time_limit,
+                            mode,
+                            shuffle,
+                            stratify,
+                            st.session_state.split_type,
+                            st.session_state.train_test_split_percentage,
+                        )
 
-                    # run automl training
-                    st.session_state.training_time_start = time.time()
-                    st.write(
-                        "Training is in progress. Now go to the 📊 **Assess** tab to see the results in real time!"
-                    )
-                    st.session_state.automl_trainer.train()
+                        # run automl training
+                        st.session_state.training_time_start = time.time()
+                        st.write(
+                            "Training is in progress. Now go to the 📊 **Assess** tab to see the results in real time!"
+                        )
+                        st.session_state.automl_trainer.train()
 
-            except AutoMLException as error:
-                st.warning(
-                    "Something went wrong. 😔 Please check if sampled dataframe isn't too small or if train data percentage isn't too high or too low."
-                )
-                st.write(error)
+                except AutoMLException as error:
+                    st.warning(
+                        "Something went wrong. 😔 Please check if sampled dataframe isn't too small or if train data percentage isn't too high or too low."
+                    )
+                    st.write(error)

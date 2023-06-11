@@ -41,3 +41,4 @@ REPORT_DIRECTORY_NAME = "report"
 
 # assess page config
 ASSESS_REFRESH_INTERVAL = 2  # in seconds
+ASSESS_REFRESH_OVERHEAD = 20  # in seconds
