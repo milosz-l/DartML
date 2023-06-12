@@ -6,13 +6,13 @@ import streamlit as st
 
 from src import config
 from src.assess.report_view import show_report
+from src.session_state.already_pressed_check import (
+    already_pressed_based_on_session_state,
+)
 from src.session_state.session_state_checks import (
     automl_trainer_in_session_state,
     sampled_df_in_session_state,
     train_test_split_percentage_in_session_state,
-)
-from src.session_state.already_pressed_check import (
-    already_pressed_based_on_session_state,
 )
 
 
@@ -28,7 +28,9 @@ def show_training_results() -> None:
             show_report(tempdirname)
             show_logs(tempdirname)
             if not already_pressed_based_on_session_state():
-                show_download_button(tempdirname)   # show download button after training is finished
+                show_download_button(
+                    tempdirname
+                )  # show download button after training is finished
 
 
 def show_automl_trainer_info() -> None:
@@ -44,7 +46,9 @@ def show_download_button(tempdirname: str) -> None:
     Shows button that allows to download zip file with whole report and all trained models.
     """
 
-    def zip_directory_into_buffer(directory_path: str,) -> None:
+    def zip_directory_into_buffer(
+        directory_path: str,
+    ) -> None:
         """
         Returns directory zipped into buffer.
         args:
@@ -59,7 +63,7 @@ def show_download_button(tempdirname: str) -> None:
                     # Add the file to the zip archive preserving the directory structure
                     zipf.write(file_path, os.path.relpath(file_path, directory_path))
         return buffer
-    
+
     st.download_button(
         "Download data",
         zip_directory_into_buffer(tempdirname).getvalue(),

@@ -74,7 +74,7 @@ pytest tests/functional_tests/functional_tests.py --chrome --headless -k test_ex
 
 ## Project structure
 
-### in English
+<!-- ### in English -->
 ```
 .
 ├── 0_🏠_Home.py                    # Home page streamlit view.
@@ -95,9 +95,14 @@ pytest tests/functional_tests/functional_tests.py --chrome --headless -k test_ex
 │   ├── functional_tests            # Functional tests.
 │   └── load_tests                  # Load tests.
 │   └── unit_tests                  # Unit tests.
+├── temp_dirs                       # Temporary directories used to store training results.
+│   └── .gitkeep                    # Empty file to make sure the directory is tracked by git.
 ├── docs                            # Documentation for the app.
 ├── example_data                    # Example data used in the app.
 ├── README.md                       # project description you are reading right now
+├── .pre-commit-config.yaml         # pre-commit configuration
+├── .flake8                         # flake8 configuration (run by pre-commit)
+├── .isort.cfg                      # isort configuration (run by pre-commit)
 ├── requirements.txt                # dependencies for pip
 └── .streamlit                      # configurations for streamlit (theme)
     └── config.toml                 # configurations for streamlit (theme)
@@ -124,9 +129,14 @@ pytest tests/functional_tests/functional_tests.py --chrome --headless -k test_ex
 │   ├── functional_tests            # Testy funkcjonalne.
 │   └── load_tests                  # Testy obciążeniowe.
 │   └── unit_tests                  # Testy jednostkowe.
+├── temp_dirs                       # Tymczasowe katalogi używane do przechowywania wyników tranowania modeli.
+│   └── .gitkeep                    # Plik, który sprawia, że katalog jest śledzony przez git (mimo, że jest pusty).
 ├── docs                            # Dokumentacja wygenerowana z komentarzy w kodzie.
 ├── example_data                    # Przykładowe dane używane w aplikacji.
 ├── README.md                       # Opis projektu, który właśnie czytasz.
+├── .pre-commit-config.yaml         # Konfiguracja pre-commit.
+├── .flake8                         # Konfiguracja flake8 (uruchamiane przez pre-commit).
+├── .isort.cfg                      # Konfiguracja isort (uruchamiane przez pre-commit).
 ├── requirements.txt                # Zależności dla pip.
 └── .streamlit                      # Konfiguracja streamlit (motyw).
     └── config.toml                 # Konfiguracja streamlit (motyw).
@@ -148,3 +158,8 @@ pdoc src
 ```bash
 pre-commit run --all-files
 ```
+Command above runs the following:
+1. `black` - general code autoformatting
+2. `flake8` - code quality check
+3. `isort` - imports autoformatting (alphabetical order)
+4. `interrogate` - check code for missing docstrings

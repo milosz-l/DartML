@@ -1,4 +1,3 @@
-import os
 import time
 from typing import Literal, Optional
 
@@ -113,7 +112,13 @@ def total_time_limit_slider() -> int:
         seconds = seconds % 60
         return minutes, seconds
 
-    total_time_limit = st.slider("Total time limit (in seconds)", config.TRAINING_MIN, config.TRAINING_MAX, config.TRAINING_MIN, 15)
+    total_time_limit = st.slider(
+        "Total time limit (in seconds)",
+        config.TRAINING_MIN,
+        config.TRAINING_MAX,
+        config.TRAINING_MIN,
+        15,
+    )
     minutes, seconds = get_minutes_and_seconds(total_time_limit)
     st.caption(
         f"The maximum training time will be {minutes} minutes and {seconds} seconds."
