@@ -56,15 +56,14 @@ class MyTestClass(BaseCase):
 
         # wait for the report to be generated
         self.wait_for_element(
-            'p:contains("Training is in progress. Now go to the")',
-            # timeout=config.MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME,
+            'p:contains("Training is in progress. Now go to the")'
         )
 
         # go to Assess page
         self.click_partial_link("Assess")
 
         # assert that there is Download data button
-        self.assert_element('p:contains("Download data")')
+        self.assert_element('p:contains("Download data")', timeout=config.MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME)
 
         if config.DOWNLOAD_REPORTS_FROM_ASSESS_PAGE:
             self.click('p:contains("Download data")')

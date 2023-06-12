@@ -74,7 +74,7 @@ def show_logs(tempdirname: str) -> None:
     args:
         tempdirname: name of temporary directory with training results
     """
-    with st.expander("Logs", expanded=False):
+    with st.expander("Logs", expanded=True):
         try:
             with open(f"{tempdirname}/{config.LOGS_FILENAME}", "r") as f:
                 st.text(f.read())
