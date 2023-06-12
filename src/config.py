@@ -8,9 +8,6 @@ ALTAIR_PLOTS_HEIGHT = 500
 ALTAIR_PLOTS_WIDTH = 500
 
 # adjustable variables
-## app version
-SINGLE_USER_ADVANCED_APP_VERSION = True
-
 ## training time limit slider
 TRAINING_MIN = 30
 TRAINING_MAX = 300
