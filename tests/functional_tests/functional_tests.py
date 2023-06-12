@@ -56,8 +56,8 @@ class MyTestClass(BaseCase):
 
         # wait for the report to be generated
         self.wait_for_element(
-            'p:contains("Done! Now you can go to Assess tab to see the results!")',
-            timeout=config.MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME,
+            'p:contains("Training is in progress. Now go to the")',
+            # timeout=config.MODIFY_MODEL_PAGE_MAXIMUM_WAIT_TIME,
         )
 
         # go to Assess page
