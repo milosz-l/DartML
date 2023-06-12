@@ -18,13 +18,9 @@ def show_training_results() -> None:
     Shows training results saved in session_state.
     """
     if sampled_df_in_session_state() and train_test_split_percentage_in_session_state():
-        # if explain_zip_buffer_in_session_state():
-        #     show_report()
-        #     show_logs()
-        #     show_zip_download_button()
 
         if automl_trainer_in_session_state():
-            show_automl_trainer_info()
+            # show_automl_trainer_info()
             tempdirname = st.session_state.automl_trainer.tempdir.name
             show_report(tempdirname)
             show_logs(tempdirname)
