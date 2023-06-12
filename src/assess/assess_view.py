@@ -6,9 +6,6 @@ import streamlit as st
 
 from src import config
 from src.assess.report_view import show_report
-from src.session_state.already_pressed_check import (
-    already_pressed_based_on_session_state,
-)
 from src.session_state.session_state_checks import (
     automl_trainer_in_session_state,
     sampled_df_in_session_state,
@@ -27,10 +24,10 @@ def show_training_results() -> None:
             tempdirname = st.session_state.automl_trainer.tempdir.name
             show_report(tempdirname)
             show_logs(tempdirname)
-            if not already_pressed_based_on_session_state():
-                show_download_button(
-                    tempdirname
-                )  # show download button after training is finished
+            # if not already_pressed_based_on_session_state():
+            #     show_download_button(
+            #         tempdirname
+            #     )  # show download button after training is finished
 
 
 def show_automl_trainer_info() -> None:
