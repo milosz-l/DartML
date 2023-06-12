@@ -52,7 +52,7 @@ class MyTestClass(BaseCase):
         self.click('span:contains("Modify & Model")')
 
         # click Generate new report button
-        self.click('p:contains("Generate new report")')
+        self.click('p:contains("Generate new report")', timeout=config.GENERATE_NEW_REPORT_TIMEOUT)
 
         # wait for the report to be generated
         self.wait_for_element(
