@@ -12,7 +12,7 @@ ALTAIR_PLOTS_WIDTH = 500
 SINGLE_USER_ADVANCED_APP_VERSION = True
 
 ## training time limit slider
-TRAINING_MIN = 60
+TRAINING_MIN = 30
 TRAINING_MAX = 300
 
 ## emojis
