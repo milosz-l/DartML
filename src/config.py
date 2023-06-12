@@ -11,6 +11,10 @@ ALTAIR_PLOTS_WIDTH = 500
 ## app version
 SINGLE_USER_ADVANCED_APP_VERSION = True
 
+## training time limit slider
+TRAINING_MIN = 60
+TRAINING_MAX = 300
+
 ## emojis
 APP_TITLE = "DartML"
 APP_FAVICON = "🎯"
