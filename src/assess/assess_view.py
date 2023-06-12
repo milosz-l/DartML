@@ -9,6 +9,7 @@ from src.session_state.session_state_checks import (
     sampled_df_in_session_state,
     train_test_split_percentage_in_session_state,
 )
+from src import config
 
 
 def show_training_results() -> None:
@@ -25,7 +26,7 @@ def show_training_results() -> None:
             show_automl_trainer_info()
             tempdirname = st.session_state.automl_trainer.tempdir.name
             show_report(tempdirname)
-            # show_logs()   # TODO
+            show_logs(tempdirname)
             # show_download_button()    # TODO
 
 
@@ -51,11 +52,15 @@ def show_zip_download_button() -> None:
     )
 
 
-def show_logs() -> None:
+def show_logs(tempdirname: str) -> None:
     """
     Shows logs from training in expander.
+    args:
+        tempdirname: name of temporary directory with training results
     """
     with st.expander("Logs", expanded=False):
-        if redirected_training_output_in_session_state():
-            if st.session_state.redirected_training_output is not None:
-                st.text(st.session_state.redirected_training_output)
+        try:
+            with open(f"{tempdirname}/{config.LOGS_FILENAME}", "r") as f:
+                st.text(f.read())
+        except FileNotFoundError:
+            st.write("No logs to show")

@@ -86,7 +86,7 @@ class AutoMLTrainer:
         os.mkdir(f"{self.tempdir.name}/{config.REPORT_DIRECTORY_NAME}")
 
         # run automl_training_script.py in a subprocess
-        with open(f"{self.tempdir.name}/automl_logs.txt", "w") as f:
+        with open(f"{self.tempdir.name}/{config.LOGS_FILENAME}", "w") as f:
             subprocess.run(
                 [f"{sys.executable}", "automl_training_script.py", self.tempdir.name],
                 stdout=f,
