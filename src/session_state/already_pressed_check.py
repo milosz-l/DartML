@@ -1,6 +1,9 @@
-import streamlit as st
 import time
+
+import streamlit as st
+
 from src import config
+
 
 def already_pressed_based_on_session_state() -> bool:
     """
@@ -16,7 +19,10 @@ def already_pressed_based_on_session_state() -> bool:
     except AttributeError:
         return False
 
-def already_pressed(current_time: int, training_time_start: int, total_time_limit: int, overhead: int) -> bool:
+
+def already_pressed(
+    current_time: int, training_time_start: int, total_time_limit: int, overhead: int
+) -> bool:
     """
     Returns whether `Generate new report` button has been pressed within the time limit + overhead.
     """

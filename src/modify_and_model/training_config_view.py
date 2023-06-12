@@ -1,7 +1,5 @@
-import io
 import os
 import time
-import zipfile
 from typing import Literal, Optional
 
 import streamlit as st
@@ -20,22 +18,6 @@ from src.session_state.session_state_checks import (
     stratify_in_session_state,
     train_test_split_percentage_in_session_state,
 )
-
-
-def zip_directory_into_buffer(directory_path: str, buffer: io.BytesIO) -> None:
-    """
-    Zips the directory into given buffer.
-    args:
-        directory_path: path to the directory to zip
-        buffer: buffer to zip the directory into
-    """
-    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zipf:
-        # Iterate over all the files and subdirectories in the directory
-        for root, _, files in os.walk(directory_path):
-            for file in files:
-                file_path = os.path.join(root, file)
-                # Add the file to the zip archive preserving the directory structure
-                zipf.write(file_path, os.path.relpath(file_path, directory_path))
 
 
 def simple_target_column_selectbox() -> str:
@@ -239,7 +221,10 @@ def show_training_config() -> None:
             )
 
         if st.button(
-            "Generate new report", disabled=already_pressed_based_on_session_state(), help="If the button is disabled, please wait until the previous training is finished.", type="primary"
+            "Generate new report",
+            disabled=already_pressed_based_on_session_state(),
+            help="If the button is disabled, please wait until the previous training is finished.",
+            type="primary",
         ):
             if not already_pressed_based_on_session_state():
                 try:
