@@ -11,6 +11,9 @@ from src.session_state.session_state_checks import (
     sampled_df_in_session_state,
     train_test_split_percentage_in_session_state,
 )
+from src.session_state.already_pressed_check import (
+    already_pressed_based_on_session_state,
+)
 
 
 def show_training_results() -> None:
@@ -24,7 +27,8 @@ def show_training_results() -> None:
             tempdirname = st.session_state.automl_trainer.tempdir.name
             show_report(tempdirname)
             show_logs(tempdirname)
-            show_download_button(tempdirname)
+            if not already_pressed_based_on_session_state():
+                show_download_button(tempdirname)   # show download button after training is finished
 
 
 def show_automl_trainer_info() -> None:
@@ -40,13 +44,13 @@ def show_download_button(tempdirname: str) -> None:
     Shows button that allows to download zip file with whole report and all trained models.
     """
 
-    def zip_directory_into_buffer(directory_path: str, buffer: io.BytesIO) -> None:
+    def zip_directory_into_buffer(directory_path: str,) -> None:
         """
-        Zips the directory into given buffer.
+        Returns directory zipped into buffer.
         args:
             directory_path: path to the directory to zip
-            buffer: buffer to zip the directory into
         """
+        buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zipf:
             # Iterate over all the files and subdirectories in the directory
             for root, _, files in os.walk(directory_path):
@@ -54,13 +58,11 @@ def show_download_button(tempdirname: str) -> None:
                     file_path = os.path.join(root, file)
                     # Add the file to the zip archive preserving the directory structure
                     zipf.write(file_path, os.path.relpath(file_path, directory_path))
-
-    # directory to zip
-    zipped_dir_buffer = io.BytesIO()
-    zip_directory_into_buffer(tempdirname, zipped_dir_buffer)
+        return buffer
+    
     st.download_button(
         "Download data",
-        zipped_dir_buffer.getvalue(),
+        zip_directory_into_buffer(tempdirname).getvalue(),
         f"automl_report_{tempdirname.split('/')[-1]}.zip",
         help="Download data from last experiment (whole report and all trained models)",
     )
