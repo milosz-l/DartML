@@ -154,7 +154,14 @@ doxygen
 pdoc src
 ```
 
-## Manually run autoformat and code quality check
+## pre-commit
+
+### Install the `pre-commit` Git hook to run it automatically before each commit
+```bash
+pre-commit install
+```
+
+### Manually run autoformat and code quality check
 ```bash
 pre-commit run --all-files
 ```
