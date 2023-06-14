@@ -111,7 +111,7 @@ def test_AutoMLTrainer_save_parameters_to_json_file():
     auto_ml_trainer = example_AutoMLTRainer(
         type="simple",
         problem_type=test_parameters["problem_type"],
-        metric=test_parameters["metric"],
+        eval_metric=test_parameters["eval_metric"],
         algorithms=test_parameters["algorithms"],
         total_time_limit=test_parameters["total_time_limit"],
         mode=test_parameters["mode"],

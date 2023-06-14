@@ -197,7 +197,7 @@ def show_training_config() -> None:
         st.divider()
 
         problem_type = problem_type_selectbox()
-        metric = metric_selectbox(problem_type)
+        eval_metric = metric_selectbox(problem_type)
         st.divider()
 
         algorithms = algorithms_selectbox()
@@ -230,7 +230,7 @@ def show_training_config() -> None:
                             st.session_state.sampled_df,
                             target_col_name,
                             problem_type,
-                            metric,
+                            eval_metric,
                             algorithms,
                             total_time_limit,
                             mode,

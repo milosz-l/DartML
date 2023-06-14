@@ -32,7 +32,7 @@ def example_AutoMLTRainer(
     problem_type: Literal[
         "binary classification", "multiclass classification", "regression", "auto"
     ] = "auto",
-    metric: str = "",
+    eval_metric: str = "",
     algorithms: list[str] = [
         "Baseline",
         "Linear",
@@ -62,7 +62,7 @@ def example_AutoMLTRainer(
         df=df,
         target_col_name=df.columns[-1],
         problem_type=problem_type,
-        metric=metric,
+        eval_metric=eval_metric,
         algorithms=algorithms,
         total_time_limit=total_time_limit,
         mode=mode,
@@ -80,7 +80,7 @@ def example_automl_trainer_parameters() -> dict:
     return {
         "target_col_name": "e",
         "problem_type": "auto",
-        "metric": None,
+        "eval_metric": "",
         "algorithms": [
             "Baseline",
             "Linear",

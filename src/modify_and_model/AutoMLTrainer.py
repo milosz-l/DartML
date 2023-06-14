@@ -24,7 +24,7 @@ class AutoMLTrainer:
         problem_type: Literal[
             "binary classification", "multiclass classification", "regression", "auto"
         ],
-        metric: str,
+        eval_metric: str,
         algorithms: list[str],
         total_time_limit: int,
         mode: Literal["Explain", "Perform", "Compete"],
@@ -36,7 +36,7 @@ class AutoMLTrainer:
         # save parameters
         self.target_col_name = target_col_name
         self.problem_type = problem_type
-        self.metric = metric
+        self.eval_metric = eval_metric
         self.algorithms = algorithms
         self.total_time_limit = total_time_limit
         self.mode = mode
@@ -47,7 +47,7 @@ class AutoMLTrainer:
 
         # create temporary directory
         self.tempdir = tempfile.TemporaryDirectory(
-            dir="temp_dirs",
+            dir=config.TEMP_DIRS_DIRECTORY_NAME,
             # ignore_cleanup_errors=True    # only python 3.10+
         )
 
@@ -61,7 +61,7 @@ class AutoMLTrainer:
         parameters = {
             "target_col_name": self.target_col_name,
             "problem_type": self.problem_type,
-            "metric": self.metric,
+            "eval_metric": self.eval_metric,
             "algorithms": self.algorithms,
             "total_time_limit": self.total_time_limit,
             "mode": self.mode,
@@ -94,7 +94,7 @@ class AutoMLTrainer:
             )
 
     def __repr__(self) -> str:
-        return f"AutoMLTrainer(tempdir={self.tempdir.name}, target_col_name={self.target_col_name}, problem_type={self.problem_type}, metric={self.metric}, algorithms={self.algorithms}, total_time_limit={self.total_time_limit}, mode={self.mode}, shuffle={self.shuffle}, stratify={self.stratify})"
+        return f"AutoMLTrainer(tempdir={self.tempdir.name}, target_col_name={self.target_col_name}, problem_type={self.problem_type}, eval_metric={self.eval_metric}, algorithms={self.algorithms}, total_time_limit={self.total_time_limit}, mode={self.mode}, shuffle={self.shuffle}, stratify={self.stratify})"
 
     def __del__(self):
         # delete temporary directory

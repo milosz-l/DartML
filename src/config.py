@@ -38,6 +38,7 @@ ASSESS_PAGE_TITLE_WITH_COLOR = f"{ASSESS_PAGE_EMOJI} :{SEMMA_COLOR}[A]ssess"
 # files names in temporary directory
 DATA_FILENAME = "sampled_df.csv"
 TRAINING_PARAMETERS_FILENAME = "training_parameters.json"
+TEMP_DIRS_DIRECTORY_NAME = "temp_dirs"
 REPORT_DIRECTORY_NAME = "report"
 
 # assess page config

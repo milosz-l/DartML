@@ -104,7 +104,7 @@ def main():
     # access the parameters
     target_col_name = training_parameters["target_col_name"]
     problem_type = training_parameters["problem_type"]
-    metric = training_parameters["metric"]
+    eval_metric = training_parameters["eval_metric"]
     algorithms = training_parameters["algorithms"]
     total_time_limit = training_parameters["total_time_limit"]
     mode = training_parameters["mode"]
@@ -122,7 +122,7 @@ def main():
         target_col_name=target_col_name,
         tmpdirname=f"{tempdirname}/{config.REPORT_DIRECTORY_NAME}",
         problem_type=problem_type,
-        eval_metric=metric,
+        eval_metric=eval_metric,
         algorithms=algorithms,
         total_time_limit=total_time_limit,
         mode=mode,
