@@ -136,24 +136,7 @@ def mode_selectbox() -> str:
         ["Compete", "Perform", "Explain"],
         help="Compete mode is dedicated for training best models. Explain mode is for generating visualizations (e.g. SHAP plots). Perform mode is something in between.",
     )
-    # if mode == "Explain" or mode == "Perform":
-    #     st.caption(
-    #         "Note: Visualizations generated for Explain and Perform modes may be incorrect if the app is under heavy load. If the app may be used by many users, is is advised to use the Compete mode."
-    #     )
     return mode
-
-
-# def clean_up_directory_from_png_files(tmpdirname: str) -> None:
-#     """
-#     Removes all png files for given directory and its subdirectories.
-#     Used in Compete mode (png files are removed for multi-user purposes).
-#     args:
-#         tmpdirname: path to the directory to clean up
-#     """
-#     for root, dirs, files in os.walk(tmpdirname):
-#         for file in files:
-#             if file.endswith(".png"):
-#                 os.remove(os.path.join(root, file))
 
 
 def logs_visable_checkbox() -> bool:
