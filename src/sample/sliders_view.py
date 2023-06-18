@@ -20,8 +20,6 @@ def show_data_sample_slider() -> None:
     Value chosen by the user is saved in the session_state.
     """
     default_slider_value = 100
-    # if sample_percentage_in_session_state():  # TODO: issue number 1289
-    #     default_slider_value = round(st.session_state.data_sample_percentage * 100)
     st.session_state.data_sample_percentage = (
         st.slider(
             "Sample data:",
@@ -48,8 +46,6 @@ def show_train_test_split_slider(disabled=False) -> None:
     Value chosen by the user is saved in the session_state.
     """
     default_slider_value = 75
-    # if train_test_split_percentage_in_session_state():    # TODO: issue number 1289
-    #     default_slider_value = round(st.session_state.train_test_split_percentage * 100)
 
     # show slider
     st.session_state.train_test_split_percentage = (
