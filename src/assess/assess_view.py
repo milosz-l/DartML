@@ -18,16 +18,11 @@ def show_training_results() -> None:
     Shows training results saved in session_state.
     """
     if sampled_df_in_session_state() and train_test_split_percentage_in_session_state():
-
         if automl_trainer_in_session_state():
             # show_automl_trainer_info()
             tempdirname = st.session_state.automl_trainer.tempdir.name
             show_report(tempdirname)
             show_logs(tempdirname)
-            # if not already_pressed_based_on_session_state():
-            #     show_download_button(
-            #         tempdirname
-            #     )  # show download button after training is finished
 
 
 def show_automl_trainer_info() -> None:
