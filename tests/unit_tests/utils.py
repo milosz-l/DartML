@@ -40,7 +40,7 @@ def example_AutoMLTRainer(
         "Random Forest",
         "Xgboost",
     ],
-    total_time_limit: int = 30,
+    total_time_limit: int = 3,
     mode: Literal["Explain", "Perform", "Compete"] = "Compete",
     shuffle: bool = True,
     stratify: bool = False,
