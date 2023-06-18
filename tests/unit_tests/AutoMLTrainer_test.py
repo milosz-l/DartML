@@ -140,3 +140,29 @@ def test_AutoMLTrainer_save_parameters_to_json_file():
 
     # delete AutoMLTrainer object
     del auto_ml_trainer
+
+
+# training test
+def test_AutoMLTrainer_train():
+    """
+    Test if train method creates `leaderboard.csv` file
+    """
+    # create AutoMLTrainer object
+    auto_ml_trainer = example_AutoMLTRainer()
+
+    # train AutoMLTrainer object
+    auto_ml_trainer.train()
+
+    # check if `leaderboard.csv` file exists
+    path_to_leaderboard_file = os.path.join(
+        auto_ml_trainer.tempdir.name,
+        src_config.REPORT_DIRECTORY_NAME,
+        "leaderboard.csv",
+    )
+    assert os.path.isfile(path_to_leaderboard_file)
+
+    # delete AutoMLTrainer object
+    del auto_ml_trainer
+
+    # make sure that file no longer exists
+    assert not os.path.isfile(path_to_leaderboard_file)
