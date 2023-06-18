@@ -58,14 +58,6 @@ def target_column_selectbox_sidebar() -> None:
     Shows the target column selectbox in the sidebar.
     """
     columns_list = st.session_state.sampled_df.columns.tolist()
-    # if target_column_in_session_state():  TODO: issue number 1289
-    #     if st.session_state.target_column_name in columns_list:
-    #         selectbox_default_index = columns_list.index(st.session_state.target_column_name)
-    #     else:
-    #         selectbox_default_index = 0
-    #     # st.experimental_show(selectbox_default_index)
-    # else:
-    #     selectbox_default_index = 0
     selectbox_default_index = len(columns_list) - 1
     st.session_state.target_column_name = st.sidebar.selectbox(
         "Target column", columns_list, index=selectbox_default_index
