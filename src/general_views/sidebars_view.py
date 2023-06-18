@@ -85,11 +85,6 @@ def show_info_sidebar(target_column_selection: bool = False) -> None:
     args:
         target_column_selection: boolean that indicates if the target column selection should be shown
     """
-    # if df_in_session_state():
-    #     df_info = {}
-    #     df_info["row_num"] = len(st.session_state.df.index)
-    #     df_info["col_num"] = len(st.session_state.df.columns)
-    #     df_info_sidebar(df_info)
 
     if sample_percentage_in_session_state() and sampled_df_in_session_state():
         sampled_df_info = {}
