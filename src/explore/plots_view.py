@@ -61,105 +61,106 @@ def show_plots(expanded: bool = False) -> None:
 
 # altair
 ## numerical columns visualizations
-def get_binned(df: pd.DataFrame, columns_to_drop: list[str]) -> pd.DataFrame:
+def compute_2d_binned_histogram(
+    var1: str, var2: str, df: pd.DataFrame, density: bool = True
+) -> pd.DataFrame:
     """
-    Returns a dataframe with the binned data.
+    Returns a dataframe with the 2d binned histogram for the given combination of the numerical columns.
+    """
+    # compute the 2d binned histogram of two given columns
+    H, xedges, yedges = np.histogram2d(df[var1], df[var2], density=density)
+    H[H == 0] = np.nan
+
+    # generate bin boundaries
+    xedges = pd.Series(["{0:.4g}".format(num) for num in xedges])
+    xedges = (
+        pd.DataFrame({"a": xedges.shift(), "b": xedges})
+        .dropna()
+        .agg(" - ".join, axis=1)
+    )
+    yedges = pd.Series(["{0:.4g}".format(num) for num in yedges])
+    yedges = (
+        pd.DataFrame({"a": yedges.shift(), "b": yedges})
+        .dropna()
+        .agg(" - ".join, axis=1)
+    )
+
+    # unpivot - cast from wide to long format using melt
+    res = (
+        pd.DataFrame(H, index=yedges, columns=xedges)
+        .reset_index()
+        .melt(id_vars="index")
+        .rename(columns={"index": "value2", "value": "count", "variable": "value"})
+    )
+
+    # add the raw left boundary of the bin as a column, will be used to sort the axis labels later
+    res["raw_left_value"] = (
+        res["value"].str.split(" - ").map(lambda x: x[0]).astype(float)
+    )
+    res["raw_left_value2"] = (
+        res["value2"].str.split(" - ").map(lambda x: x[0]).astype(float)
+    )
+    res["variable"] = var1
+    res["variable2"] = var2
+    return res.dropna()  # drop all combinations for which no values where found
+
+
+def transform_df_to_2d_binned_histograms(
+    df: pd.DataFrame, columns_to_drop: list[str]
+) -> pd.DataFrame:
+    """
+    Returns a dataframe with the 2d binned histograms for all the combinations of the numerical columns.
     args:
-        df: the dataframe
-        columns_to_drop: list of the columns to drop
+        df: the dataframe with data (and all columns - both numerical and categorical)
+        columns_to_drop: list of the columns to drop (categorical columns)
     """
-
-    def compute_2d_histogram(var1, var2, df, density=True):
-        H, xedges, yedges = np.histogram2d(df[var1], df[var2], density=density)
-        H[H == 0] = np.nan
-
-        # Create a nice variable that shows the bin boundaries
-        xedges = pd.Series(["{0:.4g}".format(num) for num in xedges])
-        xedges = (
-            pd.DataFrame({"a": xedges.shift(), "b": xedges})
-            .dropna()
-            .agg(" - ".join, axis=1)
-        )
-        yedges = pd.Series(["{0:.4g}".format(num) for num in yedges])
-        yedges = (
-            pd.DataFrame({"a": yedges.shift(), "b": yedges})
-            .dropna()
-            .agg(" - ".join, axis=1)
-        )
-
-        # Cast to long format using melt
-        res = (
-            pd.DataFrame(H, index=yedges, columns=xedges)
-            .reset_index()
-            .melt(id_vars="index")
-            .rename(columns={"index": "value2", "value": "count", "variable": "value"})
-        )
-
-        # Also add the raw left boundary of the bin as a column, will be used to sort the axis labels later
-        res["raw_left_value"] = (
-            res["value"].str.split(" - ").map(lambda x: x[0]).astype(float)
-        )
-        res["raw_left_value2"] = (
-            res["value2"].str.split(" - ").map(lambda x: x[0]).astype(float)
-        )
-        res["variable"] = var1
-        res["variable2"] = var2
-        return res.dropna()  # Drop all combinations for which no values where found
-
-    # Use the function for each combination of variables.
     value_columns = df.columns.drop(columns_to_drop)
-    data_2dbinned = pd.concat(
+    df_as_2d_binned_histograms = pd.concat(
         [
-            compute_2d_histogram(var1, var2, df)
+            compute_2d_binned_histogram(var1, var2, df)
             for var1 in value_columns
             for var2 in value_columns
         ]
     )
-    return data_2dbinned
+    return df_as_2d_binned_histograms
 
 
-def get_corr_data(df: pd.DataFrame) -> pd.DataFrame:
+def compute_correlations(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Returns a dataframe with the correlation data.
+    Returns a dataframe with the correlations between all the numerical columns.
     args:
         df: the dataframe
     """
-    cor_data = (
+    correlations = (
         df.corr()
         .stack()
-        .reset_index()  # The stacking results in an index on the correlation values, we need the index as normal columns for Altair
+        .reset_index()
         .rename(
             columns={0: "correlation", "level_0": "variable", "level_1": "variable2"}
         )
     )
-    cor_data["correlation_label"] = cor_data["correlation"].map(
+    correlations["correlation_label"] = correlations["correlation"].map(
         "{:.2f}".format
-    )  # Round to 2 decimal
-    return cor_data
+    )  # round to 2 decimal
+    return correlations
 
 
 def altair_interactive_corr_heatmap(
-    df: pd.DataFrame, data_2dbinned: pd.DataFrame
+    df: pd.DataFrame, df_as_2d_binned_histograms: pd.DataFrame
 ) -> None:
     """
     Returns an interactive correlation heatmap.
     args:
         df: the dataframe
-        data_2dbinned: the 2d binned dataframe
+        df_as_2d_binned_histograms: 2d binned histograms data
     """
-    # Based on https://towardsdatascience.com/altair-plot-deconstruction-visualizing-the-correlation-structure-of-weather-data-38fb5668c5b1
+    # based on https://towardsdatascience.com/altair-plot-deconstruction-visualizing-the-correlation-structure-of-weather-data-38fb5668c5b1
 
-    # Define selector
-    var_sel_cor = at.selection_single(
-        fields=["variable", "variable2"],
-        clear=False,
-        init={"variable": "mock_col1", "variable2": "mock_col2"},
-    )
+    # correlation heatmap
+    correlations = compute_correlations(df)
+    base = at.Chart(correlations).encode(x="variable2:O", y="variable:O")
 
-    cor_data = get_corr_data(df)
-    # Define correlation heatmap
-    base = at.Chart(cor_data).encode(x="variable2:O", y="variable:O")
-
+    # labels for correlation heatmap
     text = base.mark_text().encode(
         text="correlation_label",
         color=at.condition(
@@ -167,15 +168,23 @@ def altair_interactive_corr_heatmap(
         ),
     )
 
+    # selector
+    var_sel_cor = at.selection_single(
+        fields=["variable", "variable2"],
+        clear=False,
+        init={"variable": "mock_col1", "variable2": "mock_col2"},
+    )
+
+    # correlation heatmap with selector
     cor_plot = (
         base.mark_rect()
         .encode(color=at.condition(var_sel_cor, at.value("pink"), "correlation:Q"))
         .add_selection(var_sel_cor)
     )
 
-    # Define 2d binned histogram plot
+    # 2d binned histogram plot
     scat_plot = (
-        at.Chart(data_2dbinned)
+        at.Chart(df_as_2d_binned_histograms)
         .transform_filter(var_sel_cor)
         .mark_rect()
         .encode(
@@ -188,7 +197,7 @@ def altair_interactive_corr_heatmap(
         )
     )
 
-    # Combine all plots. hconcat plots both side-by-side
+    # combine all plots vertically
     return at.vconcat(
         (cor_plot + text).properties(
             width=config.ALTAIR_PLOTS_WIDTH, height=config.ALTAIR_PLOTS_HEIGHT
@@ -213,8 +222,10 @@ def generate_interactive_altair_corr_heatmap(df: pd.DataFrame) -> at.Chart:
         ]
         return non_numeric_cols
 
-    data_2dbinned = get_binned(df, get_non_numeric_columns_names(df))
-    return altair_interactive_corr_heatmap(df, data_2dbinned)
+    df_as_2d_binned_histograms = transform_df_to_2d_binned_histograms(
+        df=df, columns_to_drop=get_non_numeric_columns_names(df)
+    )
+    return altair_interactive_corr_heatmap(df, df_as_2d_binned_histograms)
 
 
 def show_numerical_columns_visualizations(show_time: bool = False) -> None:
