@@ -19,6 +19,7 @@ You can change `new_env_name` to any name you like.
 
 ```bash
 conda create --name new_env_name python=3.9
+conda activate new_env_name
 pip install -r requirements.txt
 ```
 
