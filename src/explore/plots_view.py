@@ -69,7 +69,7 @@ def compute_2d_binned_histogram(
     """
     # compute the 2d binned histogram of two given columns
     H, xedges, yedges = np.histogram2d(df[var1], df[var2], density=density)
-    H[H == 0] = np.nan
+    H[H == 0] = np.nan  # later it will allow to get rid of empty rows
 
     # generate bin boundaries
     xedges = pd.Series(["{0:.4g}".format(num) for num in xedges])
@@ -86,7 +86,7 @@ def compute_2d_binned_histogram(
     )
 
     # unpivot - cast from wide to long format using melt
-    res = (
+    histogram = (
         pd.DataFrame(H, index=yedges, columns=xedges)
         .reset_index()
         .melt(id_vars="index")
@@ -94,15 +94,15 @@ def compute_2d_binned_histogram(
     )
 
     # add the raw left boundary of the bin as a column, will be used to sort the axis labels later
-    res["raw_left_value"] = (
-        res["value"].str.split(" - ").map(lambda x: x[0]).astype(float)
+    histogram["raw_left_value"] = (
+        histogram["value"].str.split(" - ").map(lambda x: x[0]).astype(float)
     )
-    res["raw_left_value2"] = (
-        res["value2"].str.split(" - ").map(lambda x: x[0]).astype(float)
+    histogram["raw_left_value2"] = (
+        histogram["value2"].str.split(" - ").map(lambda x: x[0]).astype(float)
     )
-    res["variable"] = var1
-    res["variable2"] = var2
-    return res.dropna()  # drop all combinations for which no values where found
+    histogram["variable"] = var1
+    histogram["variable2"] = var2
+    return histogram.dropna()  # drop all combinations for which no values where found
 
 
 def transform_df_to_2d_binned_histograms(
@@ -114,12 +114,12 @@ def transform_df_to_2d_binned_histograms(
         df: the dataframe with data (and all columns - both numerical and categorical)
         columns_to_drop: list of the columns to drop (categorical columns)
     """
-    value_columns = df.columns.drop(columns_to_drop)
+    numerical_columns = df.columns.drop(columns_to_drop)
     df_as_2d_binned_histograms = pd.concat(
         [
             compute_2d_binned_histogram(var1, var2, df)
-            for var1 in value_columns
-            for var2 in value_columns
+            for var1 in numerical_columns
+            for var2 in numerical_columns
         ]
     )
     return df_as_2d_binned_histograms
@@ -139,9 +139,7 @@ def compute_correlations(df: pd.DataFrame) -> pd.DataFrame:
             columns={0: "correlation", "level_0": "variable", "level_1": "variable2"}
         )
     )
-    correlations["correlation_label"] = correlations["correlation"].map(
-        "{:.2f}".format
-    )  # round to 2 decimal
+    correlations["correlation_label"] = correlations["correlation"].map("{:.2f}".format)
     return correlations
 
 
