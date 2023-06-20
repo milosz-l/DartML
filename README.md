@@ -72,6 +72,14 @@ pytest tests/functional_tests/functional_tests.py --chrome --headless -k test_ex
 - You can highlight assertions by adding `--demo` flag.
 - You can add `-k <test_name>` flag to run only specific test.
 
+### Unit tests
+- These tests check whether individual functions work as expected.
+
+#### Run unit tests
+```bash
+pytest tests/unit_tests
+```
+
 ## Project structure
 
 <!-- ### in English -->
