@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import streamlit as st
 
@@ -20,7 +22,9 @@ def show_use_example_data_button() -> None:
     """
     if st.button("Use example data"):
         try:
-            st.session_state.df = pd.read_csv("example_data/Hotel_Reservations.csv")
+            st.session_state.df = pd.read_csv(
+                os.path.join("example_data", "Hotel_Reservations.csv")
+            )
         except FileNotFoundError:
             st.error(
                 "Couldn't load the example data, but it can be downloaded here: https://www.kaggle.com/datasets/ahsan81/hotel-reservations-classification-dataset"

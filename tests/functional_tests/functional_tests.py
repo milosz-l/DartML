@@ -1,3 +1,4 @@
+import os
 import time
 
 from seleniumbase import BaseCase
@@ -24,16 +25,18 @@ class MyTestClass(BaseCase):
         # wait for the visualizations to be rendered
         time.sleep(config.EXPLORE_PAGE_VISUALIZATION_TIME_SLEEP)
         # save screenshot of the page
-        current_image_path = (
-            "tests/functional_tests/current_data/current_explore_page.png"
+        current_image_path = os.path.join(
+            "tests", "functional_tests", "current_data", "current_explore_page.png"
         )
         self.save_screenshot(current_image_path)
 
-        expected_image_path = (
-            "tests/functional_tests/expected_data/expected_explore_page.png"
+        expected_image_path = os.path.join(
+            "tests", "functional_tests", "expected_data", "expected_explore_page.png"
         )
 
-        diff_image_path = "tests/functional_tests/current_data/diff_explore_page.png"
+        diff_image_path = os.path.join(
+            "tests", "functional_tests", "current_data", "diff_explore_page.png"
+        )
 
         # assert that the pages are identical
         assert_identical_images(

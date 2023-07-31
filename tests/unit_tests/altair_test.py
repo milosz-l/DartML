@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
@@ -8,7 +10,7 @@ from src.explore.plots_view import (
     transform_df_to_2d_binned_histograms,
 )
 
-UNIT_TESTS_EXPECTED_DATA_PATH = "tests/unit_tests/expected_data"
+UNIT_TESTS_EXPECTED_DATA_PATH = os.path.join("tests", "unit_tests", "expected_data")
 
 
 def test_df_after_generating_altair_plot_is_the_same():
@@ -37,7 +39,10 @@ def test_compute_2d_binned_histogram():
         }
     )
     expected_df = pd.read_csv(
-        f"{UNIT_TESTS_EXPECTED_DATA_PATH}/expected_test_compute_2d_binned_histogram.csv",
+        os.path.join(
+            UNIT_TESTS_EXPECTED_DATA_PATH,
+            "expected_test_compute_2d_binned_histogram.csv",
+        ),
         index_col=0,
     )
     actual_df = compute_2d_binned_histogram(
@@ -59,7 +64,10 @@ def test_transform_df_to_2d_binned_histograms():
         }
     )
     expected_df = pd.read_csv(
-        f"{UNIT_TESTS_EXPECTED_DATA_PATH}/expected_test_transform_df_to_2d_binned_histograms.csv",
+        os.path.join(
+            UNIT_TESTS_EXPECTED_DATA_PATH,
+            "expected_test_transform_df_to_2d_binned_histograms.csv",
+        ),
         index_col=0,
     )
 
@@ -83,7 +91,9 @@ def test_compute_correlations():
         }
     )
     expected_df = pd.read_csv(
-        f"{UNIT_TESTS_EXPECTED_DATA_PATH}/expected_test_compute_correlations.csv",
+        os.path.join(
+            UNIT_TESTS_EXPECTED_DATA_PATH, "expected_test_compute_correlations.csv"
+        ),
         index_col=0,
     )
     actual_df = compute_correlations(df=example_df)

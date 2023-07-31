@@ -59,10 +59,15 @@ def show_download_button(tempdirname: str) -> None:
                     zipf.write(file_path, os.path.relpath(file_path, directory_path))
         return buffer
 
+    # get the last part of the path using os.path.basename
+    filename_part = os.path.basename(tempdirname)
+
+    filename = f"automl_report_{filename_part}.zip"
+
     st.download_button(
         "Download data",
         zip_directory_into_buffer(tempdirname).getvalue(),
-        f"automl_report_{tempdirname.split('/')[-1]}.zip",
+        filename,
         help="Download data from last experiment (whole report and all trained models)",
     )
 
@@ -75,7 +80,7 @@ def show_logs(tempdirname: str) -> None:
     """
     with st.expander("Logs", expanded=True):
         try:
-            with open(f"{tempdirname}/{config.LOGS_FILENAME}", "r") as f:
+            with open(os.path.join(tempdirname, config.LOGS_FILENAME), "r") as f:
                 st.text(f.read())
         except FileNotFoundError:
             st.write("No logs to show")

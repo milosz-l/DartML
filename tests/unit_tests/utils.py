@@ -1,3 +1,4 @@
+import os
 from typing import Literal
 
 import pandas as pd
@@ -12,7 +13,7 @@ def example_dataframe(type: Literal["real", "simple"]) -> pd.DataFrame:
         type: "real" is Hotel_Reservations.csv, "simple" is a simple dataframe
     """
     if type == "real":
-        return pd.read_csv("example_data/Hotel_Reservations.csv")
+        return pd.read_csv(os.path.join("example_data", "Hotel_Reservations.csv"))
     elif type == "simple":
         return pd.DataFrame(
             {

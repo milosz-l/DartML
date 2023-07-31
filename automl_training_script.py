@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 from typing import Literal
 
@@ -98,7 +99,7 @@ def main():
     tempdirname = sys.argv[1]
 
     # get parameters from json file
-    with open(f"{tempdirname}/{config.TRAINING_PARAMETERS_FILENAME}") as f:
+    with open(os.path.join(tempdirname, config.TRAINING_PARAMETERS_FILENAME)) as f:
         training_parameters = json.load(f)
 
     # access the parameters
@@ -114,13 +115,13 @@ def main():
     train_ratio = training_parameters["train_ratio"]
 
     # get data from csv file
-    df = pd.read_csv(f"{tempdirname}/{config.DATA_FILENAME}")
+    df = pd.read_csv(os.path.join(tempdirname, config.DATA_FILENAME))
 
     # train automl
     train_automl(
         df=df,
         target_col_name=target_col_name,
-        tmpdirname=f"{tempdirname}/{config.REPORT_DIRECTORY_NAME}",
+        tmpdirname=os.path.join(tempdirname, config.REPORT_DIRECTORY_NAME),
         problem_type=problem_type,
         eval_metric=eval_metric,
         algorithms=algorithms,

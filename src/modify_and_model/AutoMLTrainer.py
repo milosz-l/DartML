@@ -52,7 +52,7 @@ class AutoMLTrainer:
         )
 
         # save dataframe to csv inside temporary directory
-        df.to_csv(f"{self.tempdir.name}/{config.DATA_FILENAME}")
+        df.to_csv(os.path.join(self.tempdir.name, config.DATA_FILENAME))
 
     def _save_parameters_to_json_file(self) -> None:
         """
@@ -71,7 +71,7 @@ class AutoMLTrainer:
             "train_ratio": self.train_ratio,
         }
         with open(
-            f"{self.tempdir.name}/{config.TRAINING_PARAMETERS_FILENAME}", "w"
+            os.path.join(self.tempdir.name, config.TRAINING_PARAMETERS_FILENAME), "w"
         ) as f:
             json.dump(parameters, f)
 
@@ -83,14 +83,17 @@ class AutoMLTrainer:
         self._save_parameters_to_json_file()
 
         # create an empty directory for generated report
-        os.mkdir(f"{self.tempdir.name}/{config.REPORT_DIRECTORY_NAME}")
+        os.mkdir(os.path.join(self.tempdir.name, config.REPORT_DIRECTORY_NAME))
 
         # run automl_training_script.py in a subprocess
-        with open(f"{self.tempdir.name}/{config.LOGS_FILENAME}", "w") as f:
+        with open(os.path.join(self.tempdir.name, config.LOGS_FILENAME), "w") as f:
             subprocess.run(
-                [f"{sys.executable}", "automl_training_script.py", self.tempdir.name],
+                [sys.executable, "automl_training_script.py", self.tempdir.name],
                 stdout=f,
                 stderr=f,
+                shell=(
+                    sys.platform == "win32"
+                ),  # Adding this line for Windows compatibility
             )
 
     def __repr__(self) -> str:

@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import streamlit as st
 from PIL import Image, UnidentifiedImageError
@@ -53,25 +55,27 @@ def show_report(path: str) -> None:
     with st.expander("Report", expanded=True):
         # show leaderboard
         show_csv_from_path(
-            f"{path}/{config.REPORT_DIRECTORY_NAME}/leaderboard.csv",
+            os.path.join(path, config.REPORT_DIRECTORY_NAME, "leaderboard.csv"),
             header="# AutoML Leaderboard",
         )
 
         # show images
         show_image_from_path(
-            f"{path}/{config.REPORT_DIRECTORY_NAME}/ldb_performance.png",
+            os.path.join(path, config.REPORT_DIRECTORY_NAME, "ldb_performance.png"),
             header="### AutoML Performance",
         )
         show_image_from_path(
-            f"{path}/{config.REPORT_DIRECTORY_NAME}/ldb_performance_boxplot.png",
+            os.path.join(
+                path, config.REPORT_DIRECTORY_NAME, "ldb_performance_boxplot.png"
+            ),
             header="### AutoML Performance Boxplot",
         )
         show_image_from_path(
-            f"{path}/{config.REPORT_DIRECTORY_NAME}/features_heatmap.png",
+            os.path.join(path, config.REPORT_DIRECTORY_NAME, "features_heatmap.png"),
             header="### Features Importance",
         )
         show_image_from_path(
-            f"{path}/{config.REPORT_DIRECTORY_NAME}/correlation_heatmap.png",
+            os.path.join(path, config.REPORT_DIRECTORY_NAME, "correlation_heatmap.png"),
             header="### Spearman Correlation of Models",
         )
 

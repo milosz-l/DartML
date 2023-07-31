@@ -43,7 +43,7 @@ def test_AutoMLTrainer_destructor_when_temporary_directory_in_use():
     assert os.path.exists(tempdir_path)
 
     # create a file inside temporary directory and keep it open
-    with open(f"{tempdir_path}/test_file.txt", "w") as f:
+    with open(os.path.join(tempdir_path, "test_file.txt"), "w") as f:
         f.write("test")
 
         # delete AutoMLTrainer object
@@ -90,7 +90,7 @@ def test_AutoMLTrainer_destructor_when_temporary_directory_is_not_empty():
     assert os.path.exists(tempdir_path)
 
     # create a file inside temporary directory
-    with open(f"{tempdir_path}/test_file.txt", "w") as f:
+    with open(os.path.join(tempdir_path, "test_file.txt"), "w") as f:
         f.write("test")
 
     # delete AutoMLTrainer object
@@ -124,8 +124,8 @@ def test_AutoMLTrainer_save_parameters_to_json_file():
     # save parameters to json file
     auto_ml_trainer._save_parameters_to_json_file()
 
-    json_file_name = (
-        f"{auto_ml_trainer.tempdir.name}/{src_config.TRAINING_PARAMETERS_FILENAME}"
+    json_file_name = os.path.join(
+        auto_ml_trainer.tempdir.name, src_config.TRAINING_PARAMETERS_FILENAME
     )
 
     # check if json file exists
