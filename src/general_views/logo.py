@@ -3,7 +3,7 @@ import streamlit as st
 
 def show_logo() -> None:
     """
-    Shows the app logo on top of the sidebar.
+    Shows the app logo on top of the sidebar and hides unnecessary footer.
     """
     st.markdown(
         """
@@ -14,6 +14,9 @@ def show_logo() -> None:
                 margin-top: 20px;
                 font-size: 30px;
                 top: 100px;
+            }
+            footer {
+                visibility: hidden;
             }
         </style>
         """,
