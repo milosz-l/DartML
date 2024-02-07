@@ -2,8 +2,9 @@
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 
 # 🎯 DartML
-Welcome to **DartML**! This app lets you build Machine Learning models **without writing a single line of code**!
+Welcome to **DartML: Machine Learning for Everyone**! This app lets you build Machine Learning models **without writing a single line of code**!
 
+[![DartML Demo](https://img.youtube.com/vi/D3S5LiM3RZY/0.jpg)](https://youtu.be/D3S5LiM3RZY?si=_S6iBEaEguXkg3L6 "Watch the DartML Demo")
 
 # How to install and run the app
 
