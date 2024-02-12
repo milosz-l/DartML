@@ -4,6 +4,33 @@
 # 🎯 DartML
 Welcome to **DartML: Machine Learning for Everyone**! This app lets you build Machine Learning models **without writing a single line of code**.
 
+- **Step 1: Upload your data**
+	- Specify sample size
+	- Choose between train/test split and cross validation
+	- Define shuffle and stratify options
+	![Step 1 Image](assets/dartml2.png)
+- **Step 2: Explore the data**
+	- Numerical data exploration ![Numerical data exploration](assets/dartml3.png)
+	- Categorical data exploration ![Categorical data exploration](assets/dartml4.png)
+- **Step 3: Build the model**
+	- Choose the target column
+	- Select the problem type (can be also automatically detected)
+	- Define metric (e.g. accuracy, f1 score, etc.)
+	- Choose algorithms
+	- Specify total training time
+	![Step 3 Image](assets/dartml5.png)
+- **Step 4: Evaluate the trained models**
+	- **NOTE:** All the tables and plots shown below are being **updated in real time** during the training!
+	- Leaderboard ![Leaderboard](assets/dartml6.png)
+	- Performance Boxplot ![Performance Boxplot](assets/dartml7.png)
+	- Features Importance (eXplainable AI) ![Features Importance](assets/dartml8.png)
+	- Spearman Correlation of Models ![Spearman Correlation of Models](assets/dartml9.png)
+	- Logs ![Logs](assets/dartml10.png)
+- At last, you can download report with all trained models and more detailed information about them (e.g. `SHAP` or `dtreeviz` visualizations).
+	- SHAP values for 10 worst predictions ![SHAP values for 10 worst predictions](assets/dartml11.png)
+	- dtreeviz visualization ![dtreeviz visualization](assets/dartml12.png)
+
+## Demo video
 [![DartML Demo](assets/play_video_thumbnail.png)](https://youtu.be/D3S5LiM3RZY "Watch the DartML Demo")
 ***Click above to watch the demo!***
 
